@@ -58,7 +58,12 @@ export default function PromptGenerator() {
     version: "--v 7.0",
     includeStylize: true,
     stylize: "s100",
-    customSuffix: ''
+    customSuffix: '',
+    // 人種と性別の初期値
+    includeEthnicity: false,
+    ethnicity: 'ランダム',
+    includeGender: false,
+    gender: 'ランダム'
   });
   const [activeTab, setActiveTab] = useState<'prompts' | 'favorites' | 'history'>('prompts');
   const [isLoading, setIsLoading] = useState(true);

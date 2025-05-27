@@ -116,6 +116,45 @@ function filterBrands(brands: Brand[], filters?: FilterOptions): Brand[] {
 }
 
 /**
+ * 人種のテキストを取得する
+ */
+function getEthnicityText(includeEthnicity: boolean, ethnicity: string): string {
+  if (!includeEthnicity) return '';
+  
+  switch (ethnicity) {
+    case '白人':
+      return 'Caucasian';
+    case '黒人':
+      return 'African American';
+    case 'アジア人':
+      return 'Asian';
+    case 'ランダム':
+      const ethnicities = ['Caucasian', 'African American', 'Asian', 'Hispanic', 'Middle Eastern'];
+      return getRandomElement(ethnicities);
+    default:
+      return '';
+  }
+}
+
+/**
+ * 性別のテキストを取得する
+ */
+function getGenderText(includeGender: boolean, gender: string): string {
+  if (!includeGender) return '';
+  
+  switch (gender) {
+    case '男':
+      return 'male';
+    case '女':
+      return 'female';
+    case 'ランダム':
+      return Math.random() > 0.5 ? 'male' : 'female';
+    default:
+      return '';
+  }
+}
+
+/**
  * ブランドの年代文字列から数値を抽出する
  */
 function parseBrandYear(yearString: string): number {
@@ -259,9 +298,20 @@ export function generateSinglePrompt(options: GenerateOptions): Prompt {
       background = "with a clean professional background";
     }
     
-    // プロンプトの基本部分を構築 - 形式を再度変更
-    // 修正: 文頭に年代、次に"A full-body shot of"を配置
-    let promptBase = `${era}, A full-body shot of ${brand.name} style, featuring ${element} ${silhouette} made of ${material}`;
+    // プロンプトの基本部分を構築 - 人種・性別を反映
+    // 人種と性別の設定を取得
+    const ethnicityText = getEthnicityText(settings.includeEthnicity, settings.ethnicity);
+    const genderText = getGenderText(settings.includeGender, settings.gender);
+    
+    // 人物描写を作成
+    let personDescription = '';
+    if (ethnicityText || genderText) {
+      const parts = [ethnicityText, genderText].filter(Boolean);
+      personDescription = parts.length > 0 ? `${parts.join(' ')} ` : '';
+    }
+    
+    // 修正: 文頭に年代、次に"A full-body shot of"、人物情報を配置
+    let promptBase = `${era}, A full-body shot of ${personDescription}${brand.name} style, featuring ${element} ${silhouette} made of ${material}`;
     
     // 背景・設定を追加
     if (settingBackgroundDetail) {

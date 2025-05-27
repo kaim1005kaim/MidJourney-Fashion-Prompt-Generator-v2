@@ -18,6 +18,11 @@ const DEFAULT_SETTINGS: AppSettings = {
   includeStylize: true,
   stylize: "s100",
   customSuffix: '',
+  // 人種と性別のデフォルト設定
+  includeEthnicity: false,
+  ethnicity: 'ランダム',
+  includeGender: false,
+  gender: 'ランダム'
 };
 
 // アスペクト比オプション
@@ -44,6 +49,21 @@ export const STYLIZE_OPTIONS = [
 export const VERSION_OPTIONS = [
   { label: "v7.0 (最新版)", value: "--v 7.0" },
   { label: "v6.1 (旧バージョン)", value: "--v 6.1" },
+];
+
+// 人種オプション
+export const ETHNICITY_OPTIONS = [
+  { label: "ランダム", value: "ランダム" },
+  { label: "白人", value: "白人" },
+  { label: "黒人", value: "黒人" },
+  { label: "アジア人", value: "アジア人" },
+];
+
+// 性別オプション
+export const GENDER_OPTIONS = [
+  { label: "ランダム", value: "ランダム" },
+  { label: "男性", value: "男" },
+  { label: "女性", value: "女" },
 ];
 
 // グローバルデータキャッシュ
