@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { 
   getDatabaseStatus, 
-  loadBrandChunk,
-  loadAllChunks,
-  resetDatabase,
-  loadInitialData
+  loadInitialData,
+  resetDatabase
 } from '../../services/dataService';
 
-interface DatabaseStatusProps {
+interface DatabaseManagerProps {
   onDataUpdate: () => void;
 }
 
-const DatabaseManager: React.FC<DatabaseStatusProps> = ({ onDataUpdate }) => {
+const DatabaseManager: React.FC<DatabaseManagerProps> = ({ onDataUpdate }) => {
   const [status, setStatus] = useState<{
     totalBrands: number;
     loadedBrands: number;
-    totalChunks: number;
-    loadedChunks: number[];
     lastUpdated: string;
   } | null>(null);
   
@@ -27,7 +23,11 @@ const DatabaseManager: React.FC<DatabaseStatusProps> = ({ onDataUpdate }) => {
   const loadStatus = async () => {
     try {
       const dbStatus = await getDatabaseStatus();
-      setStatus(dbStatus);
+      setStatus({
+        totalBrands: dbStatus.totalBrands,
+        loadedBrands: dbStatus.loadedBrands,
+        lastUpdated: dbStatus.lastUpdated
+      });
     } catch (error) {
       console.error('データベース状態の取得エラー:', error);
       setMessage('データベース状態の取得に失敗しました');
@@ -39,41 +39,23 @@ const DatabaseManager: React.FC<DatabaseStatusProps> = ({ onDataUpdate }) => {
     loadStatus();
   }, []);
   
-  // 特定のチャンクを読み込む
-  const handleLoadChunk = async (chunkId: number) => {
+  // データベースを再読み込み
+  const handleReloadData = async () => {
     if (loading) return;
     
     setLoading(true);
-    setMessage(`チャンク ${chunkId} を読み込み中...`);
+    setMessage('データベースを再読み込み中...');
     
     try {
-      await loadBrandChunk(chunkId);
+      // データをリセットしてから再読み込み
+      resetDatabase();
+      await loadInitialData();
       await loadStatus();
       onDataUpdate();
-      setMessage(`チャンク ${chunkId} を読み込みました`);
+      setMessage('データベースを再読み込みしました');
     } catch (error) {
-      console.error(`チャンク ${chunkId} の読み込みエラー:`, error);
-      setMessage(`チャンク ${chunkId} の読み込みに失敗しました`);
-    } finally {
-      setLoading(false);
-    }
-  };
-  
-  // すべてのチャンクを読み込む
-  const handleLoadAllChunks = async () => {
-    if (loading) return;
-    
-    setLoading(true);
-    setMessage('すべてのチャンクを読み込み中...');
-    
-    try {
-      await loadAllChunks();
-      await loadStatus();
-      onDataUpdate();
-      setMessage('すべてのチャンクを読み込みました');
-    } catch (error) {
-      console.error('全チャンク読み込みエラー:', error);
-      setMessage('すべてのチャンクの読み込みに失敗しました');
+      console.error('データ再読み込みエラー:', error);
+      setMessage('データベースの再読み込みに失敗しました');
     } finally {
       setLoading(false);
     }
@@ -83,7 +65,7 @@ const DatabaseManager: React.FC<DatabaseStatusProps> = ({ onDataUpdate }) => {
   const handleResetDatabase = async () => {
     if (loading) return;
     
-    if (!window.confirm('データベースをリセットしますか？すべての読み込み済みデータがクリアされます。')) {
+    if (!window.confirm('データベースをリセットしますか？データが再読み込みされます。')) {
       return;
     }
     
@@ -118,14 +100,9 @@ const DatabaseManager: React.FC<DatabaseStatusProps> = ({ onDataUpdate }) => {
     );
   }
   
-  // すべてのチャンクが読み込まれているかチェック
-  const allChunksLoaded = status.loadedChunks.length === status.totalChunks;
-  
-  // 読み込まれていないチャンクIDのリスト
-  const unloadedChunks = Array.from(
-    { length: status.totalChunks }, 
-    (_, i) => i + 1
-  ).filter(id => !status.loadedChunks.includes(id));
+  // パーセンテージ計算（安全に）
+  const percentage = status.totalBrands > 0 ? 
+    Math.round((status.loadedBrands / status.totalBrands) * 100) : 0;
   
   return (
     <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow mb-4">
@@ -136,12 +113,7 @@ const DatabaseManager: React.FC<DatabaseStatusProps> = ({ onDataUpdate }) => {
       <div className="mb-4">
         <p className="text-sm text-gray-600 dark:text-gray-400">
           <span className="font-medium">ブランド：</span> 
-          {status.loadedBrands} / {status.totalBrands} 件読み込み済み 
-          ({Math.round((status.loadedBrands / status.totalBrands) * 100)}%)
-        </p>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          <span className="font-medium">チャンク：</span> 
-          {status.loadedChunks.length} / {status.totalChunks} 件読み込み済み
+          {status.loadedBrands} 件読み込み済み ({percentage}%)
         </p>
         <p className="text-sm text-gray-600 dark:text-gray-400">
           <span className="font-medium">最終更新：</span> 
@@ -159,17 +131,15 @@ const DatabaseManager: React.FC<DatabaseStatusProps> = ({ onDataUpdate }) => {
         </div>
       )}
       
-      <div className="flex flex-wrap gap-2 mb-4">
-        {/* すべてのチャンクを読み込むボタン */}
-        {!allChunksLoaded && (
-          <button
-            onClick={handleLoadAllChunks}
-            disabled={loading}
-            className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded disabled:opacity-50"
-          >
-            すべてのブランドを読み込む
-          </button>
-        )}
+      <div className="flex flex-wrap gap-2">
+        {/* データ再読み込みボタン */}
+        <button
+          onClick={handleReloadData}
+          disabled={loading}
+          className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded disabled:opacity-50"
+        >
+          {loading ? '読み込み中...' : 'データ再読み込み'}
+        </button>
         
         {/* データベースリセットボタン */}
         <button
@@ -180,27 +150,6 @@ const DatabaseManager: React.FC<DatabaseStatusProps> = ({ onDataUpdate }) => {
           リセット
         </button>
       </div>
-      
-      {/* 個別チャンク読み込みボタン */}
-      {unloadedChunks.length > 0 && (
-        <div>
-          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            未読み込みチャンク:
-          </h3>
-          <div className="flex flex-wrap gap-1">
-            {unloadedChunks.map(chunkId => (
-              <button
-                key={chunkId}
-                onClick={() => handleLoadChunk(chunkId)}
-                disabled={loading}
-                className="px-2 py-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 text-xs rounded disabled:opacity-50"
-              >
-                チャンク {chunkId}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 };

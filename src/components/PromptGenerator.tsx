@@ -71,25 +71,17 @@ export default function PromptGenerator() {
       setIsLoading(true);
       setError(null); // エラーをクリア
       
-      // 分割データベースから初期データを読み込む
+      // データベースから初期データを読み込む
       const data = await loadInitialData();
       
-      console.log('初期データが読み込まれました:', {
+      console.log('データが読み込まれました:', {
         brandsCount: data.brands.length,
         hasPhraseVariations: !!data.phraseVariations,
         phraseVariationsKeys: data.phraseVariations ? Object.keys(data.phraseVariations) : []
       });
       
-      // データが空の場合は元の全体JSONの読み込みを試す
-      if (data.brands.length === 0) {
-        console.log('チャンクからの読み込みが失敗したため、レガシーデータを読み込みます');
-        const legacyData = await loadLegacyFashionData();
-        setBrands(legacyData.brands);
-        setPhraseVariations(legacyData.phraseVariations);
-      } else {
-        setBrands(data.brands);
-        setPhraseVariations(data.phraseVariations);
-      }
+      setBrands(data.brands);
+      setPhraseVariations(data.phraseVariations);
       
       // ローカルストレージからデータを読み込み
       const savedFavorites = loadFavorites();
@@ -101,42 +93,18 @@ export default function PromptGenerator() {
       setSettings(savedSettings);
       
       setIsLoading(false);
+      
+      if (data.brands.length > 0) {
+        setSuccessMessage(`${data.brands.length}件のブランドデータを読み込みました`);
+      }
     } catch (err) {
       console.error('データ読み込みエラー:', err);
-      // より詳細なエラー情報を表示
       if (err instanceof Error) {
         setError(`データの読み込みエラー: ${err.message}`);
-        console.error('エラースタック:', err.stack);
       } else {
-        setError('データの読み込みに失敗しました。詳細不明のエラーが発生しました。');
+        setError('データの読み込みに失敗しました。');
       }
       setIsLoading(false);
-      
-      // エラー時にレガシーデータの読み込みを試す
-      try {
-        console.log('エラー発生のため、レガシーデータの読み込みを試みます');
-        const legacyData = await loadLegacyFashionData();
-        console.log('レガシーデータ読み込み結果:', {
-          brandsCount: legacyData.brands.length,
-          hasPhraseVariations: !!legacyData.phraseVariations,
-          phraseVariationsKeys: legacyData.phraseVariations ? Object.keys(legacyData.phraseVariations) : []
-        });
-        setBrands(legacyData.brands);
-        setPhraseVariations(legacyData.phraseVariations);
-        
-        // 一部のデータが読み込まれた場合はエラーを解除
-        if (legacyData.brands.length > 0) {
-          setError(null);
-          setSuccessMessage('レガシーデータから読み込みました');
-        }
-      } catch (legacyErr) {
-        console.error('レガシーデータの読み込みにも失敗しました:', legacyErr);
-        // より詳細なレガシーエラー情報を表示
-        if (legacyErr instanceof Error) {
-          setError(`レガシーデータの読み込みにも失敗: ${legacyErr.message}`);
-          console.error('レガシーエラースタック:', legacyErr.stack);
-        }
-      }
     }
   };
 
@@ -147,21 +115,8 @@ export default function PromptGenerator() {
   
   // データベース更新時のハンドラ
   const handleDatabaseUpdate = async () => {
-    try {
-      setIsLoading(true);
-      
-      // データベースからデータを再読み込み
-      const data = await loadInitialData();
-      setBrands(data.brands);
-      setPhraseVariations(data.phraseVariations);
-      
-      setIsLoading(false);
-      setSuccessMessage('データベースを更新しました');
-    } catch (err) {
-      console.error('データベース更新エラー:', err);
-      setError('データベースの更新に失敗しました。');
-      setIsLoading(false);
-    }
+    // データ再読み込みと同じ処理
+    await loadData();
   };
   
   // ダークモード設定の反映

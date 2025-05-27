@@ -32,7 +32,7 @@ const DatabaseStatus: React.FC<DatabaseStatusProps> = ({ className }) => {
     return null;
   }
   
-  const percentage = Math.round((status.loadedBrands / status.totalBrands) * 100);
+  const percentage = status.totalBrands > 0 ? Math.round((status.loadedBrands / status.totalBrands) * 100) : 0;
   
   return (
     <div className={`text-xs text-gray-500 dark:text-gray-400 ${className || ''}`}>
