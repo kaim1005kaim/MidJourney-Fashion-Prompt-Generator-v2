@@ -23,7 +23,7 @@ function isDuplicatePrompt(prompt: Prompt, existingPrompts: Prompt[] = []): bool
 }
 
 /**
- * フィルター条件に一致するブランドを抽出する
+ * フィルター条件に一致するブランドを抽出する（改良版）
  */
 function filterBrands(brands: Brand[], filters?: FilterOptions): Brand[] {
   if (!filters) return brands;
@@ -34,36 +34,34 @@ function filterBrands(brands: Brand[], filters?: FilterOptions): Brand[] {
       return false;
     }
     
-    // 時代でフィルタリング
+    // 時代でフィルタリング（改良版）
     if (filters.eras?.length > 0) {
-      const brandEra = formatEra(brand.eraStart);
-      const brandStartYear = parseInt(brand.eraStart.replace('s', ''));
-      
-      // 年代のフィルタリングに対応
       let matchesEra = false;
       
+      // ブランドの開始年と終了年を取得
+      const brandStartYear = parseInt(brand.eraStart.replace(/[^0-9]/g, ''));
+      const brandEndYear = brand.eraEnd === 'present' ? 
+        new Date().getFullYear() : 
+        parseInt(brand.eraEnd.replace(/[^0-9]/g, ''));
+      
       for (const filterEra of filters.eras) {
-        // 年代が一致するか確認
-        if (filterEra === brandEra) {
-          matchesEra = true;
-          break;
-        }
-        
-        // 2010年以降の年単位フィルタの場合
-        if (!filterEra.endsWith('s')) {
-          const yearFilter = parseInt(filterEra);
+        if (filterEra.endsWith('s')) {
+          // 年代フィルター（例：2000s）
+          const decadeStart = parseInt(filterEra.replace('s', ''));
+          const decadeEnd = decadeStart + 9;
           
-          // 年ごとの確認
-          if (!isNaN(yearFilter) && !isNaN(brandStartYear)) {
-            // ブランドの活動年代内か確認
-            const brandEndYear = brand.eraEnd === 'present' ? 
-              new Date().getFullYear() : 
-              parseInt(brand.eraEnd.replace('s', '')) + 9;
-            
-            if (yearFilter >= brandStartYear && yearFilter <= brandEndYear) {
-              matchesEra = true;
-              break;
-            }
+          // ブランドの活動期間と年代が重複するかチェック
+          if (brandStartYear <= decadeEnd && brandEndYear >= decadeStart) {
+            matchesEra = true;
+            break;
+          }
+        } else {
+          // 年単位フィルター（例：2010, 2011）
+          const year = parseInt(filterEra);
+          
+          if (!isNaN(year) && year >= brandStartYear && year <= brandEndYear) {
+            matchesEra = true;
+            break;
           }
         }
       }

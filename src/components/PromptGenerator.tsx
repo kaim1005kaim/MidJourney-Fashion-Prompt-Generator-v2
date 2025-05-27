@@ -164,7 +164,9 @@ export default function PromptGenerator() {
         brandsCount: brands.length,
         phraseVariations,
         filters,
-        settings
+        settings,
+        selectedErasCount: filters.eras.length,
+        selectedEras: filters.eras
       });
       
       const newPrompts = generatePrompts(
@@ -189,7 +191,8 @@ export default function PromptGenerator() {
       setActiveTab('prompts');
       
       // 成功メッセージを表示
-      setSuccessMessage('重複のないプロンプトを生成しました');
+      const filterInfo = filters.eras.length > 0 ? `（${filters.eras.length}件の年代フィルター適用）` : '';
+      setSuccessMessage(`${newPrompts.length}件のプロンプトを生成しました${filterInfo}`);
     } catch (err) {
       console.error('プロンプト生成エラー:', err);
       setError('プロンプトの生成に失敗しました。');
