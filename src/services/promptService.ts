@@ -53,6 +53,12 @@ function filterBrands(brands: Brand[], filters?: FilterOptions): Brand[] {
         new Date().getFullYear() : 
         parseBrandYear(brand.eraEnd);
       
+      // 古いブランドを除外するためのチェック
+      if (brandStartYear < 1980) {
+        console.log(`ブランド ${brand.name}: 古すぎるため除外 (${brand.eraStart})`);
+        return false;
+      }
+      
       console.log(`ブランド ${brand.name}: ${brand.eraStart}(${brandStartYear}) - ${brand.eraEnd}(${brandEndYear})`);
       
       for (const filterEra of filters.eras) {
@@ -62,7 +68,8 @@ function filterBrands(brands: Brand[], filters?: FilterOptions): Brand[] {
           const decadeEnd = decadeStart + 9;
           
           // ブランドの活動期間と年代が重複するかチェック
-          if (brandStartYear <= decadeEnd && brandEndYear >= decadeStart) {
+          // より厳密なチェック: ブランドがその年代に活動していたか
+          if (brandEndYear >= decadeStart && brandStartYear <= decadeEnd) {
             console.log(`  -> マッチ: ${filterEra} (${decadeStart}-${decadeEnd})`);
             matchesEra = true;
             break;
@@ -147,7 +154,8 @@ export function generateSinglePrompt(options: GenerateOptions): Prompt {
         totalBrands: brands.length,
         filteredBrands: filteredBrands.length,
         selectedFilters: filters?.eras || [],
-        filteredBrandNames: filteredBrands.map(b => `${b.name} (${b.eraStart}-${b.eraEnd})`)
+        filteredBrandNames: filteredBrands.map(b => `${b.name} (${b.eraStart}-${b.eraEnd})`).slice(0, 10),
+        sampleBrands: filteredBrands.length > 10 ? `...他${filteredBrands.length - 10}件` : ''
       });
     }
     

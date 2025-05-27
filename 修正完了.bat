@@ -1,30 +1,38 @@
 @echo off
-echo コードの修正が完了しました！
+echo === MidJourney Fashion Prompt Generator - Git Push ===
+echo 現在のディレクトリ: %CD%
 
-echo.
-echo 主な変更点：
-echo 1. パーセンテージ計算の修正 (5250%% → 正常な値)
-echo 2. データベース管理の簡素化 (チャンク分割廃止)
-echo 3. 一括データ読み込みに変更
-echo 4. エラーハンドリングの改善
+REM Dドライブに移動
+D:
+cd D:\development\MidJourney-Fashion-Prompt-Generator-main
 
-echo.
-echo 次のステップ：
-echo 1. npm run dev でローカル開発サーバーを起動
-echo 2. http://localhost:5173 でアプリを確認
-echo 3. データが正常に読み込まれることを確認
-echo 4. プロンプト生成をテスト
+echo 移動後のディレクトリ: %CD%
 
-echo.
-echo ファイルの確認：
-echo - src/services/dataService.ts (簡素化)
-echo - src/components/database/DatabaseManager.tsx (簡素化)
-echo - src/components/database/DatabaseStatus.tsx (パーセンテージ修正)
-echo - src/components/PromptGenerator.tsx (エラーハンドリング改善)
+REM Git status確認
+echo === Git Status ===
+git status
 
+if errorlevel 1 (
+    echo ERROR: Gitリポジトリが見つかりません
+    pause
+    exit /b 1
+)
+
+REM 変更をadd
+echo === Adding changes ===
+git add .
+
+REM コミット
+echo === Committing changes ===
+git commit -m "Fix era filtering: prevent fallback and add debug logging" -m "- Remove fallback to all brands when no filtered brands found" -m "- Add comprehensive console logging for filter debugging" -m "- Improve parseBrandYear function for various date formats" -m "- Add detailed brand matching logs" -m "- Ensure only selected era brands are used for prompt generation"
+
+REM プッシュ
+echo === Pushing to origin ===
+git push origin main
+
+echo === Complete! ===
 echo.
-echo バックアップファイル：
-echo - backup/dataService.ts.backup
-echo - backup/DatabaseManager.tsx.backup
+echo 数分後に https://mfpg-nomal.netlify.app/ で確認してください
+echo F12でコンソールを開いてデバッグ情報を確認してください
 
 pause
