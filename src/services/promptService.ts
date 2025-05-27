@@ -26,9 +26,18 @@ function isDuplicatePrompt(prompt: Prompt, existingPrompts: Prompt[] = []): bool
  * フィルター条件に一致するブランドを抽出する（改良版）
  */
 function filterBrands(brands: Brand[], filters?: FilterOptions): Brand[] {
-  if (!filters) return brands;
+  if (!filters || !filters.eras || filters.eras.length === 0) {
+    // フィルターがない場合は全ブランドを返す
+    return brands;
+  }
   
-  return brands.filter(brand => {
+  console.log('フィルター処理開始:', {
+    totalBrands: brands.length,
+    filterEras: filters.eras,
+    sampleBrands: brands.slice(0, 3).map(b => ({ name: b.name, eraStart: b.eraStart, eraEnd: b.eraEnd }))
+  });
+  
+  const result = brands.filter(brand => {
     // ブランドIDでフィルタリング
     if (filters.brands?.length > 0 && !filters.brands.includes(brand.id)) {
       return false;
@@ -38,11 +47,13 @@ function filterBrands(brands: Brand[], filters?: FilterOptions): Brand[] {
     if (filters.eras?.length > 0) {
       let matchesEra = false;
       
-      // ブランドの開始年と終了年を取得
-      const brandStartYear = parseInt(brand.eraStart.replace(/[^0-9]/g, ''));
+      // ブランドの開始年と終了年を解析
+      const brandStartYear = parseBrandYear(brand.eraStart);
       const brandEndYear = brand.eraEnd === 'present' ? 
         new Date().getFullYear() : 
-        parseInt(brand.eraEnd.replace(/[^0-9]/g, ''));
+        parseBrandYear(brand.eraEnd);
+      
+      console.log(`ブランド ${brand.name}: ${brand.eraStart}(${brandStartYear}) - ${brand.eraEnd}(${brandEndYear})`);
       
       for (const filterEra of filters.eras) {
         if (filterEra.endsWith('s')) {
@@ -52,6 +63,7 @@ function filterBrands(brands: Brand[], filters?: FilterOptions): Brand[] {
           
           // ブランドの活動期間と年代が重複するかチェック
           if (brandStartYear <= decadeEnd && brandEndYear >= decadeStart) {
+            console.log(`  -> マッチ: ${filterEra} (${decadeStart}-${decadeEnd})`);
             matchesEra = true;
             break;
           }
@@ -60,6 +72,7 @@ function filterBrands(brands: Brand[], filters?: FilterOptions): Brand[] {
           const year = parseInt(filterEra);
           
           if (!isNaN(year) && year >= brandStartYear && year <= brandEndYear) {
+            console.log(`  -> マッチ: ${filterEra}`);
             matchesEra = true;
             break;
           }
@@ -67,6 +80,7 @@ function filterBrands(brands: Brand[], filters?: FilterOptions): Brand[] {
       }
       
       if (!matchesEra) {
+        console.log(`  -> マッチしない`);
         return false;
       }
     }
@@ -85,6 +99,30 @@ function filterBrands(brands: Brand[], filters?: FilterOptions): Brand[] {
     
     return true;
   });
+  
+  console.log('フィルター結果:', {
+    filteredCount: result.length,
+    filteredBrands: result.map(b => `${b.name} (${b.eraStart}-${b.eraEnd})`)
+  });
+  
+  return result;
+}
+
+/**
+ * ブランドの年代文字列から数値を抽出する
+ */
+function parseBrandYear(yearString: string): number {
+  // 数字のみを抽出
+  const match = yearString.match(/\d+/);
+  if (match) {
+    const year = parseInt(match[0]);
+    // 2桁の年を適切に変換する
+    if (year < 100) {
+      return year < 50 ? 2000 + year : 1900 + year;
+    }
+    return year;
+  }
+  return 0; // パースできない場合
 }
 
 /**
@@ -102,9 +140,24 @@ export function generateSinglePrompt(options: GenerateOptions): Prompt {
   do {
     // フィルタリングされたブランドの中からランダムに選択
     const filteredBrands = filterBrands(brands, filters);
-    const brand = filteredBrands.length > 0 
-      ? getRandomElement(filteredBrands) 
-      : getRandomElement(brands);
+    
+    // デバッグ情報を出力
+    if (attempts === 0) {
+      console.log('フィルター結果:', {
+        totalBrands: brands.length,
+        filteredBrands: filteredBrands.length,
+        selectedFilters: filters?.eras || [],
+        filteredBrandNames: filteredBrands.map(b => `${b.name} (${b.eraStart}-${b.eraEnd})`)
+      });
+    }
+    
+    // フィルタリング後のブランドがない場合はエラーを出す
+    if (filteredBrands.length === 0) {
+      console.warn('フィルター条件に一致するブランドがありません:', filters);
+      throw new Error('フィルター条件に一致するブランドがありません。フィルター条件を確認してください。');
+    }
+    
+    const brand = getRandomElement(filteredBrands);
     
     // 要素を選択
     const era = formatEra(brand.eraStart);
