@@ -46,29 +46,46 @@ export interface FashionElement {
 // 素材の定義
 export interface Material extends FashionElement {
   category: 'material';
-  texture: string[];
+  description: string;
+  keywords: string[];
+  season: ('spring' | 'summer' | 'autumn' | 'winter' | 'early_spring' | 'early_autumn' | 'mild_winter' | 'party_season' | 'all')[];
+  formality: ('casual' | 'business' | 'formal' | 'business_casual' | 'smart_casual' | 'semi-formal' | 'black-tie' | 'streetwear' | 'sportswear' | 'loungewear' | 'evening_wear' | 'party_wear' | 'clubwear' | 'technical_outerwear' | 'all')[];
+  compatibility: string[];
+  texture: string;
   weight: 'lightweight' | 'medium' | 'heavy';
-  finish: string[];
-  seasonality: ('spring' | 'summer' | 'autumn' | 'winter')[];
+  care: string[];
+  sustainability: 'low' | 'medium' | 'high' | 'very-low';
+  priceRange: 'budget' | 'mid-range' | 'luxury' | 'ultra-luxury';
 }
 
 // シルエットの定義
 export interface Silhouette extends FashionElement {
   category: 'silhouette';
-  fit: 'oversized' | 'relaxed' | 'fitted' | 'tailored' | 'cropped';
-  length: 'mini' | 'short' | 'midi' | 'long' | 'maxi' | 'variable';
-  bodyType: string[];
-  occasion: string[];
+  description: string;
+  keywords: string[];
+  bodyTypes: string[];
+  occasions: string[];
+  seasons: ('spring' | 'summer' | 'autumn' | 'winter' | 'early_spring' | 'early_autumn' | 'mild_winter' | 'party_season' | 'all')[];
+  eras: string[];
+  compatibility: string[];
+  formality: ('casual' | 'business' | 'formal' | 'business_casual' | 'smart_casual' | 'semi-formal' | 'black-tie' | 'streetwear' | 'sportswear' | 'loungewear' | 'evening_wear' | 'party_wear' | 'clubwear' | 'technical_outerwear' | 'all')[];
+  ageGroups: string[];
 }
 
 // スタイルトレンドの定義
 export interface StyleTrend extends FashionElement {
   category: 'style_trend';
+  description: string;
+  keywords: string[];
   era: string;
-  culturalOrigin?: string;
-  keyElements: string[];
-  colorPalette: string[];
-  attitude: string[];
+  seasons: ('spring' | 'summer' | 'autumn' | 'winter' | 'early_spring' | 'early_autumn' | 'mild_winter' | 'party_season' | 'evening_events' | 'anytime_for_boldness' | 'all-year-party' | 'all')[];
+  occasions: string[];
+  colors: string[];
+  materials: string[];
+  compatibility: string[];
+  popularity: number;
+  formality: ('casual' | 'business' | 'formal' | 'business_casual' | 'smart_casual' | 'semi-formal' | 'black-tie' | 'streetwear' | 'sportswear' | 'loungewear' | 'evening_wear' | 'party_wear' | 'clubwear' | 'technical_outerwear' | 'casual_chic' | 'casual_statement' | 'creative_formal' | 'avant-garde' | 'statement-piece' | 'casual_expressive' | 'understated_business' | 'refined_evening' | 'all')[];
+  mood: string[];
 }
 
 // プロンプト生成に使用するファッションコンテキスト
@@ -172,9 +189,6 @@ export interface AppSettings {
   includeStylize: boolean;
   stylize: string; // 選択されたスタイライズ値
   customSuffix: string;
-  // 性別設定のみ（人種設定は削除）
-  includeGender: boolean;
-  gender: string; // '男' | '女' | 'ランダム'
   // 新しいV2設定
   generationMode: 'brand' | 'elements'; // 生成モード
   includeSeasonalConsistency: boolean; // 季節的一貫性を考慮

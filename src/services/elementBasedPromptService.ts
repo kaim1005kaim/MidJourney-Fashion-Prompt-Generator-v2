@@ -11,27 +11,39 @@ function getRandomElement<T>(array: T[]): T {
 }
 
 // 安全な特性取得
-function getSafeCharacteristic(element: { characteristics?: string[] }): string {
-  if (!element || !element.characteristics || element.characteristics.length === 0) {
+function getSafeCharacteristic(element: { keywords?: string[], description?: string }): string {
+  if (!element) {
     return 'stylish design';
   }
-  return getRandomElement(element.characteristics);
+  
+  // keywordsから選択
+  if (element.keywords && element.keywords.length > 0) {
+    return getRandomElement(element.keywords);
+  }
+  
+  // descriptionの最初の一文を使用
+  if (element.description) {
+    const firstSentence = element.description.split('。')[0];
+    return firstSentence || 'stylish design';
+  }
+  
+  return 'stylish design';
 }
 
 // 安全な色選択
-function getSafeColor(colorPalette: string[]): string {
-  if (!colorPalette || colorPalette.length === 0) {
+function getSafeColor(colors: string[]): string {
+  if (!colors || colors.length === 0) {
     return 'neutral';
   }
-  return getRandomElement(colorPalette);
+  return getRandomElement(colors);
 }
 
-// 安全な態度選択
-function getSafeAttitude(attitude: string[]): string {
-  if (!attitude || attitude.length === 0) {
+// 安全なムード選択
+function getSafeMood(mood: string[]): string {
+  if (!mood || mood.length === 0) {
     return 'confident';
   }
-  return getRandomElement(attitude);
+  return getRandomElement(mood);
 }
 
 // 画角選択（2つに固定）
@@ -41,7 +53,7 @@ function getCameraAngle(): string {
 }
 
 // フィルターに基づいて要素を選択
-function filterByCompatibility<T extends { compatibleWith?: string[], seasonal?: string, formality?: string }>(
+function filterByCompatibility<T extends { compatibility?: string[], season?: string[], seasons?: string[], formality?: string[] }>(
   elements: T[],
   selectedElements: string[] = [],
   season?: string,
@@ -53,43 +65,38 @@ function filterByCompatibility<T extends { compatibleWith?: string[], seasonal?:
   
   return elements.filter(element => {
     // 季節フィルター
-    if (season && element.seasonal && element.seasonal !== 'all' && element.seasonal !== season) {
-      return false;
+    if (season) {
+      const elementSeasons = element.season || element.seasons || [];
+      if (elementSeasons.length > 0 && !elementSeasons.includes('all' as any) && !elementSeasons.includes(season as any)) {
+        return false;
+      }
     }
     
     // フォーマリティフィルター
-    if (formality && element.formality && element.formality !== 'all' && element.formality !== formality) {
-      return false;
+    if (formality && element.formality) {
+      if (element.formality.length > 0 && !element.formality.includes('all' as any) && !element.formality.includes(formality as any)) {
+        return false;
+      }
     }
     
     // 互換性フィルター
-    if (selectedElements.length > 0 && element.compatibleWith) {
-      return selectedElements.some(selected => element.compatibleWith!.includes(selected));
+    if (selectedElements.length > 0 && element.compatibility) {
+      return selectedElements.some(selected => element.compatibility!.includes(selected));
     }
     
     return true;
   });
 }
 
-// 性別のテキストを取得する（人種は削除）
-function getGenderText(includeGender: boolean, gender: string): string {
-  if (!includeGender) return '';
-  
-  switch (gender) {
-    case '男':
-      return 'male';
-    case '女':
-      return 'female';
-    case 'ランダム':
-      return Math.random() > 0.5 ? 'male' : 'female';
-    default:
-      return '';
-  }
+// 人種・性別設定を完全削除
+function getPersonDescription(): string {
+  // 人種・性別指定を完全に削除し、ニュートラルなモデルとして表現
+  return '';
 }
 
 // カラーハーモニーを考慮した色選択
 function selectHarmoniousColors(styleTrend: StyleTrend, creativity: 'conservative' | 'balanced' | 'experimental'): string[] {
-  const baseColors = styleTrend.colorPalette || ['neutral'];
+  const baseColors = styleTrend.colors || ['neutral'];
   
   switch (creativity) {
     case 'conservative':
@@ -113,15 +120,15 @@ function selectHarmoniousColors(styleTrend: StyleTrend, creativity: 'conservativ
 // 季節に適した要素の組み合わせを生成
 function generateSeasonalCombination(season: string, creativity: 'conservative' | 'balanced' | 'experimental') {
   const seasonalMaterials = fashionContext.materials.filter(m => 
-    m.seasonality && (m.seasonality.includes(season as any) || m.seasonal === 'all')
+    m.season && (m.season.includes(season as any) || m.season.includes('all' as any))
   );
   
   const seasonalSilhouettes = fashionContext.silhouettes.filter(s => 
-    s.seasonal === season || s.seasonal === 'all'
+    s.seasons && (s.seasons.includes(season as any) || s.seasons.includes('all' as any))
   );
   
   const seasonalTrends = fashionContext.styleTrends.filter(t => 
-    t.seasonal === season || t.seasonal === 'all'
+    t.seasons && (t.seasons.includes(season as any) || t.seasons.includes('all' as any))
   );
   
   return {
@@ -212,18 +219,17 @@ export function generateElementBasedPrompt(
     // 色の選択
     const colors = includeColorHarmony ? 
       selectHarmoniousColors(selectedTrend, creativityLevel) : 
-      (selectedTrend.colorPalette || ['neutral']);
+      (selectedTrend.colors || ['neutral']);
     const primaryColor = getSafeColor(colors);
     
     // ライティングと画角の選択
     const lighting = getRandomElement(context.lightingStyles || ['natural lighting']);
     const cameraAngle = getCameraAngle(); // 固定の2つから選択
     const background = getRandomElement(context.backgrounds || ['clean background']);
-    const mood = getSafeAttitude(selectedTrend.attitude || ['confident']);
+    const mood = getSafeMood(selectedTrend.mood || ['confident']);
     
-    // 人物情報の生成（人種は削除、性別のみ）
-    const genderText = getGenderText(settings.includeGender, settings.gender);
-    const personDescription = genderText ? `${genderText} ` : '';
+    // 人物情報の生成（人種・性別を完全削除）
+    const personDescription = getPersonDescription();
     
     // 安全な特性取得
     const materialChar = getSafeCharacteristic(selectedMaterial);
@@ -401,25 +407,35 @@ export function checkElementCompatibility(
   const suggestions: string[] = [];
   
   // 季節の互換性をチェック
-  if (material.seasonal !== 'all' && trend.seasonal !== 'all' && 
-      material.seasonal !== trend.seasonal) {
-    issues.push(`素材の季節性（${material.seasonal}）とトレンドの季節性（${trend.seasonal}）が合いません`);
+  const materialSeasons = material.season || [];
+  const trendSeasons = trend.seasons || [];
+  const hasCommonSeason = materialSeasons.some(s => trendSeasons.includes(s)) || 
+                         materialSeasons.includes('all' as any) || 
+                         trendSeasons.includes('all' as any);
+  
+  if (materialSeasons.length > 0 && trendSeasons.length > 0 && !hasCommonSeason) {
+    issues.push(`素材の季節性（${materialSeasons.join(', ')}）とトレンドの季節性（${trendSeasons.join(', ')}）が合いません`);
   }
   
   // フォーマリティの互換性をチェック
-  if (material.formality !== 'all' && silhouette.formality !== 'all' && 
-      material.formality !== silhouette.formality) {
-    issues.push(`素材のフォーマリティ（${material.formality}）とシルエットのフォーマリティ（${silhouette.formality}）が合いません`);
+  const materialFormality = material.formality || [];
+  const silhouetteFormality = silhouette.formality || [];
+  const hasCommonFormality = materialFormality.some(f => silhouetteFormality.includes(f)) ||
+                            materialFormality.includes('all' as any) ||
+                            silhouetteFormality.includes('all' as any);
+  
+  if (materialFormality.length > 0 && silhouetteFormality.length > 0 && !hasCommonFormality) {
+    issues.push(`素材のフォーマリティ（${materialFormality.join(', ')}）とシルエットのフォーマリティ（${silhouetteFormality.join(', ')}）が合いません`);
   }
   
   // 相性の良い組み合わせをチェック
   const hasCompatibility = 
-    material.compatibleWith?.includes(silhouetteId) ||
-    material.compatibleWith?.includes(trendId) ||
-    silhouette.compatibleWith?.includes(materialId) ||
-    silhouette.compatibleWith?.includes(trendId) ||
-    trend.compatibleWith?.includes(materialId) ||
-    trend.compatibleWith?.includes(silhouetteId);
+    material.compatibility?.includes(silhouetteId) ||
+    material.compatibility?.includes(trendId) ||
+    silhouette.compatibility?.includes(materialId) ||
+    silhouette.compatibility?.includes(trendId) ||
+    trend.compatibility?.includes(materialId) ||
+    trend.compatibility?.includes(silhouetteId);
   
   if (!hasCompatibility) {
     suggestions.push('この組み合わせは実験的です。より調和の取れた組み合わせを試してみてください。');
@@ -437,25 +453,25 @@ export function getPopularCombinations(context: FashionContext = fashionContext)
   return [
     {
       name: '韓国ミニマル × カシミア × フィットタートル',
-      elements: ['knit_cashmere', 'fitted_turtleneck', 'korean_minimal'],
+      elements: ['cashmere-knit', 'fitted-turtleneck', 'korean-minimal'],
       description: '洗練されたミニマルスタイル',
       popularity: 95
     },
     {
       name: 'Y2K × クロップトップ × テクニカル素材',
-      elements: ['nylon_ripstop', 'crop_top', 'y2k_revival'],
+      elements: ['ripstop-nylon', 'crop-top', 'y2k-revival'],
       description: '未来的なストリートスタイル',
       popularity: 87
     },
     {
       name: 'サステナブル × オーガニックコットン × Aライン',
-      elements: ['cotton_organic', 'a_line_dress', 'sustainable_chic'],
+      elements: ['organic-cotton', 'a-line-dress', 'sustainable-chic'],
       description: '環境に優しいエレガンス',
       popularity: 82
     },
     {
       name: 'インディースリーズ × ダメージデニム × スキニー',
-      elements: ['denim_distressed', 'skinny_jeans', 'indie_sleaze'],
+      elements: ['distressed-denim', 'skinny-jeans', 'indie-sleaze'],
       description: 'エフォートレスクール',
       popularity: 78
     }

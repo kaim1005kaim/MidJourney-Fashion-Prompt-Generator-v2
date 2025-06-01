@@ -27,20 +27,22 @@ const ElementSelector: React.FC<ElementSelectorProps> = ({
   const [filterFormality, setFilterFormality] = useState('all');
 
   // 検索とフィルタリング
-  const filterElements = <T extends { name: string; tags: string[], seasonal?: string, formality?: string }>(
+  const filterElements = <T extends { name: string; keywords: string[], season?: string[], seasons?: string[], formality?: string[] }>(
     elements: T[]
   ): T[] => {
     return elements.filter(element => {
       const matchesSearch = element.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           element.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+                           element.keywords.some(keyword => keyword.toLowerCase().includes(searchTerm.toLowerCase()));
       
+      const elementSeasons = element.season || element.seasons || [];
       const matchesSeason = filterSeason === 'all' || 
-                           element.seasonal === 'all' || 
-                           element.seasonal === filterSeason;
+                           elementSeasons.includes('all' as any) || 
+                           elementSeasons.includes(filterSeason as any);
       
+      const elementFormality = element.formality || [];
       const matchesFormality = filterFormality === 'all' || 
-                              element.formality === 'all' || 
-                              element.formality === filterFormality;
+                              elementFormality.includes('all' as any) || 
+                              elementFormality.includes(filterFormality as any);
       
       return matchesSearch && matchesSeason && matchesFormality;
     });
@@ -92,7 +94,7 @@ const ElementSelector: React.FC<ElementSelectorProps> = ({
         </div>
         
         <div className="flex flex-wrap gap-1 mb-2">
-          {element.tags.slice(0, 3).map((tag, index) => (
+          {element.keywords.slice(0, 3).map((keyword, index) => (
             <span
               key={index}
               className={`text-xs px-2 py-1 rounded-full ${
@@ -101,27 +103,41 @@ const ElementSelector: React.FC<ElementSelectorProps> = ({
                   : 'bg-gray-200 text-gray-600'
               }`}
             >
-              {tag}
+              {keyword}
             </span>
           ))}
         </div>
         
         <div className="text-sm opacity-70">
-          {element.characteristics[0]}
+          {element.description?.split('。')[0] || 'スタイリッシュなデザイン'}
         </div>
         
         {/* 追加情報 */}
         <div className="mt-2 flex gap-2 text-xs">
-          {element.seasonal && element.seasonal !== 'all' && (
-            <span className="px-2 py-1 rounded bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
-              {element.seasonal}
-            </span>
-          )}
-          {element.formality && element.formality !== 'all' && (
-            <span className="px-2 py-1 rounded bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300">
-              {element.formality}
-            </span>
-          )}
+          {/* 季節情報 */}
+          {(() => {
+            const seasons = (element as any).season || (element as any).seasons || [];
+            if (seasons.length > 0 && !seasons.includes('all')) {
+              return (
+                <span className="px-2 py-1 rounded bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
+                  {seasons.slice(0, 2).join(', ')}
+                </span>
+              );
+            }
+            return null;
+          })()}
+          {/* フォーマリティ情報 */}
+          {(() => {
+            const formality = (element as any).formality || [];
+            if (formality.length > 0 && !formality.includes('all')) {
+              return (
+                <span className="px-2 py-1 rounded bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300">
+                  {formality.slice(0, 2).join(', ')}
+                </span>
+              );
+            }
+            return null;
+          })()}
         </div>
       </div>
     );
