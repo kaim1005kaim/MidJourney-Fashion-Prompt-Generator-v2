@@ -57,24 +57,53 @@ const PromptGenerator: React.FC = () => {
   
   const [isGenerating, setIsGenerating] = useState(false);
   const [showPopularCombinations, setShowPopularCombinations] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  
+  // データ整合性チェック
+  useEffect(() => {
+    try {
+      if (!fashionContext || !fashionContext.materials || fashionContext.materials.length === 0) {
+        setError('ファッションデータの読み込みに失敗しました。ページを再読み込みしてください。');
+      } else {
+        setError(null);
+      }
+    } catch (err) {
+      setError('データ初期化エラーが発生しました。');
+    }
+  }, []);
   
   // 要素が選択されたときの互換性チェック
   useEffect(() => {
-    if (selectedElements.material && selectedElements.silhouette && selectedElements.styleTrend) {
-      const result = checkElementCompatibility(
-        selectedElements.material.id,
-        selectedElements.silhouette.id,
-        selectedElements.styleTrend.id
-      );
-      setCompatibility(result);
-    } else {
-      setCompatibility(null);
+    try {
+      if (selectedElements.material && selectedElements.silhouette && selectedElements.styleTrend) {
+        const result = checkElementCompatibility(
+          selectedElements.material.id,
+          selectedElements.silhouette.id,
+          selectedElements.styleTrend.id
+        );
+        setCompatibility(result);
+      } else {
+        setCompatibility(null);
+      }
+    } catch (err) {
+      console.error('互換性チェックエラー:', err);
+      setCompatibility({
+        compatible: false,
+        suggestions: [],
+        issues: ['互換性チェック中にエラーが発生しました']
+      });
     }
   }, [selectedElements]);
   
   // プロンプト生成
   const generatePrompts = async () => {
+    if (error) {
+      alert('データ読み込みエラーのため、プロンプトを生成できません。ページを再読み込みしてください。');
+      return;
+    }
+    
     setIsGenerating(true);
+    setError(null);
     
     try {
       // 選択された要素がある場合はフィルターに追加
@@ -95,10 +124,14 @@ const PromptGenerator: React.FC = () => {
         updatedFilters
       );
       
+      if (newPrompts.length === 0) {
+        throw new Error('プロンプトの生成に失敗しました');
+      }
+      
       setPrompts(prevPrompts => [...newPrompts, ...prevPrompts]);
     } catch (error) {
       console.error('プロンプト生成エラー:', error);
-      alert('プロンプトの生成に失敗しました。設定を確認してください。');
+      setError('プロンプトの生成中にエラーが発生しました。設定を確認して再度お試しください。');
     } finally {
       setIsGenerating(false);
     }
@@ -116,16 +149,48 @@ const PromptGenerator: React.FC = () => {
   
   // 人気の組み合わせを適用
   const applyPopularCombination = (combination: any) => {
-    const [materialId, silhouetteId, trendId] = combination.elements;
-    
-    setSelectedElements({
-      material: fashionContext.materials.find(m => m.id === materialId) || null,
-      silhouette: fashionContext.silhouettes.find(s => s.id === silhouetteId) || null,
-      styleTrend: fashionContext.styleTrends.find(t => t.id === trendId) || null
-    });
-    
-    setShowPopularCombinations(false);
+    try {
+      const [materialId, silhouetteId, trendId] = combination.elements;
+      
+      setSelectedElements({
+        material: fashionContext.materials.find(m => m.id === materialId) || null,
+        silhouette: fashionContext.silhouettes.find(s => s.id === silhouetteId) || null,
+        styleTrend: fashionContext.styleTrends.find(t => t.id === trendId) || null
+      });
+      
+      setShowPopularCombinations(false);
+    } catch (err) {
+      console.error('組み合わせ適用エラー:', err);
+      setError('組み合わせの適用中にエラーが発生しました。');
+    }
   };
+  
+  // エラー表示
+  if (error) {
+    return (
+      <div className={`min-h-screen transition-colors ${
+        settings.darkMode 
+          ? 'bg-gray-900 text-gray-100' 
+          : 'bg-gray-50 text-gray-900'
+      }`}>
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center">
+            <div className="text-6xl mb-4">⚠️</div>
+            <h2 className="text-2xl font-bold mb-4 text-red-600 dark:text-red-400">
+              エラーが発生しました
+            </h2>
+            <p className="mb-4">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+            >
+              ページを再読み込み
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <div className={`min-h-screen transition-colors ${
@@ -221,6 +286,16 @@ const PromptGenerator: React.FC = () => {
           
           {/* メインコンテンツ: プロンプト表示 */}
           <div className="lg:col-span-2">
+            {/* エラー表示 */}
+            {error && (
+              <div className="mb-6 p-4 bg-red-100 dark:bg-red-900/20 border border-red-300 dark:border-red-700 rounded-lg">
+                <div className="flex items-center">
+                  <div className="text-red-600 dark:text-red-400 mr-2">⚠️</div>
+                  <div className="text-red-800 dark:text-red-200">{error}</div>
+                </div>
+              </div>
+            )}
+            
             {/* 統計情報 */}
             <div className={`rounded-lg p-4 mb-6 ${
               settings.darkMode ? 'bg-gray-800' : 'bg-white'
