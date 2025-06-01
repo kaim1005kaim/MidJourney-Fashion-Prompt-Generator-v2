@@ -58,6 +58,7 @@ const PromptGenerator: React.FC = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [showPopularCombinations, setShowPopularCombinations] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [copySuccess, setCopySuccess] = useState<string | null>(null);
   
   // データ整合性チェック
   useEffect(() => {
@@ -94,6 +95,16 @@ const PromptGenerator: React.FC = () => {
       });
     }
   }, [selectedElements]);
+  
+  // コピー成功メッセージの自動非表示
+  useEffect(() => {
+    if (copySuccess) {
+      const timer = setTimeout(() => {
+        setCopySuccess(null);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [copySuccess]);
   
   // プロンプト生成
   const generatePrompts = async () => {
@@ -134,6 +145,81 @@ const PromptGenerator: React.FC = () => {
       setError('プロンプトの生成中にエラーが発生しました。設定を確認して再度お試しください。');
     } finally {
       setIsGenerating(false);
+    }
+  };
+  
+  // 一括コピー機能
+  const copyAllPrompts = async () => {
+    if (prompts.length === 0) {
+      setCopySuccess('コピーするプロンプトがありません');
+      return;
+    }
+    
+    try {
+      // プロンプトテキストのみを結合（番号付き）
+      const allPromptsText = prompts
+        .map((prompt, index) => `${index + 1}. ${prompt.fullPrompt}`)
+        .join('\n\n');
+      
+      await navigator.clipboard.writeText(allPromptsText);
+      setCopySuccess(`${prompts.length}個のプロンプトをコピーしました！`);
+    } catch (err) {
+      console.error('コピーエラー:', err);
+      setCopySuccess('コピーに失敗しました');
+    }
+  };
+  
+  // お気に入りのみコピー
+  const copyFavoritePrompts = async () => {
+    const favoritePrompts = prompts.filter(p => p.isFavorite);
+    
+    if (favoritePrompts.length === 0) {
+      setCopySuccess('お気に入りのプロンプトがありません');
+      return;
+    }
+    
+    try {
+      const favoritePromptsText = favoritePrompts
+        .map((prompt, index) => `${index + 1}. ${prompt.fullPrompt}`)
+        .join('\n\n');
+      
+      await navigator.clipboard.writeText(favoritePromptsText);
+      setCopySuccess(`${favoritePrompts.length}個のお気に入りプロンプトをコピーしました！`);
+    } catch (err) {
+      console.error('コピーエラー:', err);
+      setCopySuccess('コピーに失敗しました');
+    }
+  };
+  
+  // 高評価のみコピー
+  const copyHighRatedPrompts = async () => {
+    const highRatedPrompts = prompts.filter(p => p.rating >= 4);
+    
+    if (highRatedPrompts.length === 0) {
+      setCopySuccess('4星以上のプロンプトがありません');
+      return;
+    }
+    
+    try {
+      const highRatedPromptsText = highRatedPrompts
+        .map((prompt, index) => `${index + 1}. ★${prompt.rating} ${prompt.fullPrompt}`)
+        .join('\n\n');
+      
+      await navigator.clipboard.writeText(highRatedPromptsText);
+      setCopySuccess(`${highRatedPrompts.length}個の高評価プロンプトをコピーしました！`);
+    } catch (err) {
+      console.error('コピーエラー:', err);
+      setCopySuccess('コピーに失敗しました');
+    }
+  };
+  
+  // プロンプトクリア
+  const clearAllPrompts = () => {
+    if (prompts.length === 0) return;
+    
+    if (window.confirm(`${prompts.length}個のプロンプトをすべて削除しますか？`)) {
+      setPrompts([]);
+      setCopySuccess('すべてのプロンプトを削除しました');
     }
   };
   
@@ -286,7 +372,7 @@ const PromptGenerator: React.FC = () => {
           
           {/* メインコンテンツ: プロンプト表示 */}
           <div className="lg:col-span-2">
-            {/* エラー表示 */}
+            {/* エラー・成功メッセージ表示 */}
             {error && (
               <div className="mb-6 p-4 bg-red-100 dark:bg-red-900/20 border border-red-300 dark:border-red-700 rounded-lg">
                 <div className="flex items-center">
@@ -296,11 +382,20 @@ const PromptGenerator: React.FC = () => {
               </div>
             )}
             
-            {/* 統計情報 */}
+            {copySuccess && (
+              <div className="mb-6 p-4 bg-green-100 dark:bg-green-900/20 border border-green-300 dark:border-green-700 rounded-lg">
+                <div className="flex items-center">
+                  <div className="text-green-600 dark:text-green-400 mr-2">✅</div>
+                  <div className="text-green-800 dark:text-green-200">{copySuccess}</div>
+                </div>
+              </div>
+            )}
+            
+            {/* 統計情報とアクションボタン */}
             <div className={`rounded-lg p-4 mb-6 ${
               settings.darkMode ? 'bg-gray-800' : 'bg-white'
             } shadow-lg`}>
-              <div className="grid grid-cols-3 gap-4 text-center">
+              <div className="grid grid-cols-3 gap-4 text-center mb-4">
                 <div>
                   <div className="text-2xl font-bold text-blue-500">{prompts.length}</div>
                   <div className="text-sm opacity-70">生成済み</div>
@@ -313,11 +408,45 @@ const PromptGenerator: React.FC = () => {
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-purple-500">
-                    {prompts.filter(p => p.rating > 0).length}
+                    {prompts.filter(p => p.rating >= 4).length}
                   </div>
-                  <div className="text-sm opacity-70">評価済み</div>
+                  <div className="text-sm opacity-70">高評価(4★+)</div>
                 </div>
               </div>
+              
+              {/* 一括操作ボタン */}
+              {prompts.length > 0 && (
+                <div className="border-t pt-4">
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      onClick={copyAllPrompts}
+                      className="flex-1 min-w-0 bg-green-500 text-white px-3 py-2 rounded-md hover:bg-green-600 transition-colors text-sm"
+                    >
+                      📋 全部コピー
+                    </button>
+                    <button
+                      onClick={copyFavoritePrompts}
+                      className="flex-1 min-w-0 bg-yellow-500 text-white px-3 py-2 rounded-md hover:bg-yellow-600 transition-colors text-sm"
+                      disabled={prompts.filter(p => p.isFavorite).length === 0}
+                    >
+                      ⭐ お気に入りコピー
+                    </button>
+                    <button
+                      onClick={copyHighRatedPrompts}
+                      className="flex-1 min-w-0 bg-purple-500 text-white px-3 py-2 rounded-md hover:bg-purple-600 transition-colors text-sm"
+                      disabled={prompts.filter(p => p.rating >= 4).length === 0}
+                    >
+                      🌟 高評価コピー
+                    </button>
+                    <button
+                      onClick={clearAllPrompts}
+                      className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors text-sm"
+                    >
+                      🗑️ 全削除
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
             
             {/* プロンプト一覧 */}
