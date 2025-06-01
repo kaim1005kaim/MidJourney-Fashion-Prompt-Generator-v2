@@ -31,6 +31,60 @@ export interface Brand {
   cameraShotType: string[];
 }
 
+// 新しいファッション要素の定義
+export interface FashionElement {
+  id: string;
+  name: string;
+  category: 'material' | 'silhouette' | 'style_trend' | 'detail' | 'color';
+  tags: string[];
+  characteristics: string[];
+  compatibleWith?: string[]; // 相性の良い他の要素
+  seasonal?: 'spring' | 'summer' | 'autumn' | 'winter' | 'all';
+  formality?: 'casual' | 'business' | 'formal' | 'streetwear' | 'all';
+}
+
+// 素材の定義
+export interface Material extends FashionElement {
+  category: 'material';
+  texture: string[];
+  weight: 'lightweight' | 'medium' | 'heavy';
+  finish: string[];
+  seasonality: ('spring' | 'summer' | 'autumn' | 'winter')[];
+}
+
+// シルエットの定義
+export interface Silhouette extends FashionElement {
+  category: 'silhouette';
+  fit: 'oversized' | 'relaxed' | 'fitted' | 'tailored' | 'cropped';
+  length: 'mini' | 'short' | 'midi' | 'long' | 'maxi' | 'variable';
+  bodyType: string[];
+  occasion: string[];
+}
+
+// スタイルトレンドの定義
+export interface StyleTrend extends FashionElement {
+  category: 'style_trend';
+  era: string;
+  culturalOrigin?: string;
+  keyElements: string[];
+  colorPalette: string[];
+  attitude: string[];
+}
+
+// プロンプト生成に使用するファッションコンテキスト
+export interface FashionContext {
+  materials: Material[];
+  silhouettes: Silhouette[];
+  styleTrends: StyleTrend[];
+  colors: string[];
+  seasons: string[];
+  occasions: string[];
+  moods: string[];
+  lightingStyles: string[];
+  backgrounds: string[];
+  cameraAngles: string[];
+}
+
 export interface Prompt {
   id: number;
   fullPrompt: string;
@@ -50,6 +104,11 @@ export interface Prompt {
   atmosphereMood?: string;
   settingBackgroundDetail?: string;
   cameraShotType?: string;
+  // 新しいV2専用フィールド
+  selectedMaterial?: Material;
+  selectedSilhouette?: Silhouette;
+  selectedStyleTrend?: StyleTrend;
+  generationMode?: 'brand' | 'elements'; // どのモードで生成されたか
 }
 
 export interface PhraseVariationGroup {
@@ -79,6 +138,13 @@ export interface FilterOptions {
   styles: string[]; // Selected style elements
   materials: string[]; // Selected material types
   silhouettes: string[]; // Selected silhouette types
+  // 新しいV2フィルター
+  selectedMaterials?: string[]; // 選択された素材ID
+  selectedSilhouettes?: string[]; // 選択されたシルエットID
+  selectedStyleTrends?: string[]; // 選択されたスタイルトレンドID
+  seasons?: string[]; // 季節フィルター
+  formality?: string[]; // フォーマリティフィルター
+  moods?: string[]; // ムードフィルター
 }
 
 export interface AspectRatioOption {
@@ -111,4 +177,9 @@ export interface AppSettings {
   ethnicity: string; // '白人' | '黒人' | 'アジア人' | 'ランダム'
   includeGender: boolean;
   gender: string; // '男' | '女' | 'ランダム'
+  // 新しいV2設定
+  generationMode: 'brand' | 'elements'; // 生成モード
+  includeSeasonalConsistency: boolean; // 季節的一貫性を考慮
+  includeColorHarmony: boolean; // カラーハーモニーを考慮
+  creativityLevel: 'conservative' | 'balanced' | 'experimental'; // 創造性レベル
 }

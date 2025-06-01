@@ -22,3 +22,33 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Mac
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Build artifacts
+/build
+/dist
+
+# Temporary files
+*.tmp
+*.temp
+
+# Local storage
+*.db
+*.sqlite
+
+# Netlify
+.netlify
