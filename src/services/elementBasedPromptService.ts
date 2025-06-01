@@ -34,6 +34,12 @@ function getSafeAttitude(attitude: string[]): string {
   return getRandomElement(attitude);
 }
 
+// 画角選択（2つに固定）
+function getCameraAngle(): string {
+  const angles = ['full-body shot', 'portrait shot'];
+  return getRandomElement(angles);
+}
+
 // フィルターに基づいて要素を選択
 function filterByCompatibility<T extends { compatibleWith?: string[], seasonal?: string, formality?: string }>(
   elements: T[],
@@ -65,26 +71,7 @@ function filterByCompatibility<T extends { compatibleWith?: string[], seasonal?:
   });
 }
 
-// 人種のテキストを取得する
-function getEthnicityText(includeEthnicity: boolean, ethnicity: string): string {
-  if (!includeEthnicity) return '';
-  
-  switch (ethnicity) {
-    case '白人':
-      return 'Caucasian';
-    case '黒人':
-      return 'African American';
-    case 'アジア人':
-      return 'Asian';
-    case 'ランダム':
-      const ethnicities = ['Caucasian', 'African American', 'Asian', 'Hispanic', 'Middle Eastern'];
-      return getRandomElement(ethnicities);
-    default:
-      return '';
-  }
-}
-
-// 性別のテキストを取得する
+// 性別のテキストを取得する（人種は削除）
 function getGenderText(includeGender: boolean, gender: string): string {
   if (!includeGender) return '';
   
@@ -228,21 +215,15 @@ export function generateElementBasedPrompt(
       (selectedTrend.colorPalette || ['neutral']);
     const primaryColor = getSafeColor(colors);
     
-    // ライティングとカメラアングルの選択
+    // ライティングと画角の選択
     const lighting = getRandomElement(context.lightingStyles || ['natural lighting']);
-    const cameraAngle = getRandomElement(context.cameraAngles || ['full-body shot']);
+    const cameraAngle = getCameraAngle(); // 固定の2つから選択
     const background = getRandomElement(context.backgrounds || ['clean background']);
     const mood = getSafeAttitude(selectedTrend.attitude || ['confident']);
     
-    // 人物情報の生成
-    const ethnicityText = getEthnicityText(settings.includeEthnicity, settings.ethnicity);
+    // 人物情報の生成（人種は削除、性別のみ）
     const genderText = getGenderText(settings.includeGender, settings.gender);
-    
-    let personDescription = '';
-    if (ethnicityText || genderText) {
-      const parts = [ethnicityText, genderText].filter(Boolean);
-      personDescription = parts.length > 0 ? `${parts.join(' ')} ` : '';
-    }
+    const personDescription = genderText ? `${genderText} ` : '';
     
     // 安全な特性取得
     const materialChar = getSafeCharacteristic(selectedMaterial);
@@ -263,8 +244,8 @@ export function generateElementBasedPrompt(
         break;
     }
     
-    // プロンプトテキストの組み立て
-    let promptText = `${selectedTrend.era || '2020s'} ${cameraAngle} of ${personDescription}model wearing ${trendChar}, `;
+    // プロンプトテキストの組み立て（年代を削除）
+    let promptText = `A ${cameraAngle} of ${personDescription}model wearing ${trendChar}, `;
     promptText += `${silhouetteChar} in ${materialChar}, `;
     promptText += `${primaryColor} color palette, `;
     promptText += `${mood} mood, `;
@@ -301,7 +282,7 @@ export function generateElementBasedPrompt(
       silhouette: selectedSilhouette.name,
       lighting: lighting,
       background: background,
-      era: selectedTrend.era || '2020s',
+      era: '', // 年代は削除
       styleElements: [trendChar, materialChar, silhouetteChar],
       atmosphereMood: mood,
       generationMode: 'elements',
@@ -317,9 +298,10 @@ export function generateElementBasedPrompt(
     
     // フォールバック：基本的なプロンプトを生成
     const now = new Date();
+    const cameraAngle = getCameraAngle();
     return {
       id: now.getTime() + Math.floor(Math.random() * 1000),
-      fullPrompt: 'A stylish fashion model wearing modern clothing, clean professional styling, fashion photography --ar 3:4 --v 6.1',
+      fullPrompt: `A ${cameraAngle} of model wearing modern clothing, clean professional styling, fashion photography --ar 3:4 --v 6.1`,
       createdDate: now.toISOString(),
       rating: 0,
       isFavorite: false,
@@ -327,7 +309,7 @@ export function generateElementBasedPrompt(
       silhouette: 'contemporary fit',
       lighting: 'professional lighting',
       background: 'clean background',
-      era: '2020s',
+      era: '',
       styleElements: ['modern', 'stylish', 'professional'],
       atmosphereMood: 'confident',
       generationMode: 'elements'

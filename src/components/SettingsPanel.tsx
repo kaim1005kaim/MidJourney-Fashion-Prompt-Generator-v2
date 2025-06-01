@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Settings, ChevronDown, ChevronUp, Moon, Sun, Database } from 'lucide-react';
 import { AppSettings } from '../types';
-import { ASPECT_RATIO_OPTIONS, STYLIZE_OPTIONS, VERSION_OPTIONS, ETHNICITY_OPTIONS, GENDER_OPTIONS } from '../services/dataService';
+import { ASPECT_RATIO_OPTIONS, STYLIZE_OPTIONS, VERSION_OPTIONS, GENDER_OPTIONS } from '../services/dataService';
 import { DatabaseManager } from './database';
 
 interface SettingsPanelProps {
@@ -187,41 +187,9 @@ export default function SettingsPanel({ settings, onSettingsChange, onDatabaseUp
             </div>
           </div>
           
-          {/* 人種・性別設定 */}
+          {/* 人物設定（性別のみ） */}
           <div className="space-y-4">
             <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">人物設定</h4>
-            
-            {/* 人種設定 */}
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="include-ethnicity"
-                  checked={settings.includeEthnicity}
-                  onChange={(e) => handleSettingChange('includeEthnicity', e.target.checked)}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
-                />
-                <label htmlFor="include-ethnicity" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                  人種を指定する
-                </label>
-              </div>
-              
-              {settings.includeEthnicity && (
-                <div className="ml-6">
-                  <select
-                    value={settings.ethnicity}
-                    onChange={(e) => handleSettingChange('ethnicity', e.target.value)}
-                    className="block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white text-sm"
-                  >
-                    {ETHNICITY_OPTIONS.map(option => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-            </div>
             
             {/* 性別設定 */}
             <div className="flex flex-col gap-2">
@@ -253,6 +221,9 @@ export default function SettingsPanel({ settings, onSettingsChange, onDatabaseUp
                   </select>
                 </div>
               )}
+              <p className="ml-6 mt-1 text-xs text-gray-500 dark:text-gray-400">
+                性別を指定すると、よりターゲット感のあるプロンプトが生成されます
+              </p>
             </div>
           </div>
           

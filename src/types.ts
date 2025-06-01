@@ -172,9 +172,7 @@ export interface AppSettings {
   includeStylize: boolean;
   stylize: string; // 選択されたスタイライズ値
   customSuffix: string;
-  // 人種と性別設定を追加
-  includeEthnicity: boolean;
-  ethnicity: string; // '白人' | '黒人' | 'アジア人' | 'ランダム'
+  // 性別設定のみ（人種設定は削除）
   includeGender: boolean;
   gender: string; // '男' | '女' | 'ランダム'
   // 新しいV2設定
