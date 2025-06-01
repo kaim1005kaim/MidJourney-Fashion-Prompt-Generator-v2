@@ -9,6 +9,7 @@ import CompatibilityIndicator from './CompatibilityIndicator';
 
 const PromptGenerator: React.FC = () => {
   const [prompts, setPrompts] = useState<Prompt[]>([]);
+  const [lastGeneratedPrompts, setLastGeneratedPrompts] = useState<Prompt[]>([]); // 最新生成分を追跡
   const [settings, setSettings] = useState<AppSettings>({
     darkMode: false,
     promptCount: 3,
@@ -135,6 +136,9 @@ const PromptGenerator: React.FC = () => {
         throw new Error('プロンプトの生成に失敗しました');
       }
       
+      // 最新生成分を記録
+      setLastGeneratedPrompts(newPrompts);
+      
       setPrompts(prevPrompts => [...newPrompts, ...prevPrompts]);
     } catch (error) {
       console.error('プロンプト生成エラー:', error);
@@ -144,7 +148,28 @@ const PromptGenerator: React.FC = () => {
     }
   };
   
-  // 一括コピー機能
+  // 最新生成分をコピー
+  const copyLatestPrompts = async () => {
+    if (lastGeneratedPrompts.length === 0) {
+      setCopySuccess('最新生成されたプロンプトがありません');
+      return;
+    }
+    
+    try {
+      // 最新生成分のプロンプトテキストのみを結合（番号付き）
+      const latestPromptsText = lastGeneratedPrompts
+        .map((prompt, index) => `${index + 1}. ${prompt.fullPrompt}`)
+        .join('\n\n');
+      
+      await navigator.clipboard.writeText(latestPromptsText);
+      setCopySuccess(`最新生成の${lastGeneratedPrompts.length}個のプロンプトをコピーしました！`);
+    } catch (err) {
+      console.error('コピーエラー:', err);
+      setCopySuccess('コピーに失敗しました');
+    }
+  };
+  
+  // 一括コピー機能（全て）
   const copyAllPrompts = async () => {
     if (prompts.length === 0) {
       setCopySuccess('コピーするプロンプトがありません');
@@ -158,7 +183,7 @@ const PromptGenerator: React.FC = () => {
         .join('\n\n');
       
       await navigator.clipboard.writeText(allPromptsText);
-      setCopySuccess(`${prompts.length}個のプロンプトをコピーしました！`);
+      setCopySuccess(`全${prompts.length}個のプロンプトをコピーしました！`);
     } catch (err) {
       console.error('コピーエラー:', err);
       setCopySuccess('コピーに失敗しました');
@@ -215,6 +240,7 @@ const PromptGenerator: React.FC = () => {
     
     if (window.confirm(`${prompts.length}個のプロンプトをすべて削除しますか？`)) {
       setPrompts([]);
+      setLastGeneratedPrompts([]); // 最新生成分もクリア
       setCopySuccess('すべてのプロンプトを削除しました');
     }
   };
@@ -391,10 +417,14 @@ const PromptGenerator: React.FC = () => {
             <div className={`rounded-lg p-4 mb-6 ${
               settings.darkMode ? 'bg-gray-800' : 'bg-white'
             } shadow-lg`}>
-              <div className="grid grid-cols-3 gap-4 text-center mb-4">
+              <div className="grid grid-cols-4 gap-4 text-center mb-4">
                 <div>
                   <div className="text-2xl font-bold text-blue-500">{prompts.length}</div>
-                  <div className="text-sm opacity-70">生成済み</div>
+                  <div className="text-sm opacity-70">全件数</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-orange-500">{lastGeneratedPrompts.length}</div>
+                  <div className="text-sm opacity-70">最新生成</div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-green-500">
@@ -414,6 +444,13 @@ const PromptGenerator: React.FC = () => {
               {prompts.length > 0 && (
                 <div className="border-t pt-4">
                   <div className="flex flex-wrap gap-2">
+                    <button
+                      onClick={copyLatestPrompts}
+                      className="flex-1 min-w-0 bg-orange-500 text-white px-3 py-2 rounded-md hover:bg-orange-600 transition-colors text-sm"
+                      disabled={lastGeneratedPrompts.length === 0}
+                    >
+                      🆕 最新コピー
+                    </button>
                     <button
                       onClick={copyAllPrompts}
                       className="flex-1 min-w-0 bg-green-500 text-white px-3 py-2 rounded-md hover:bg-green-600 transition-colors text-sm"
