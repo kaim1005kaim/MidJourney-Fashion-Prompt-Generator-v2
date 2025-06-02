@@ -46,10 +46,18 @@ function getSafeMood(mood: string[]): string {
   return getRandomElement(mood);
 }
 
-// 画角選択（2つに固定）
-function getCameraAngle(): string {
-  const angles = ['full-body shot', 'portrait shot'];
-  return getRandomElement(angles);
+// 撮影角度選択（ユーザー選択対応）
+function getCameraAngle(userPreference: 'random' | 'full-body' | 'portrait'): string {
+  switch (userPreference) {
+    case 'full-body':
+      return 'full-body shot';
+    case 'portrait':
+      return 'portrait shot';
+    case 'random':
+    default:
+      const angles = ['full-body shot', 'portrait shot'];
+      return getRandomElement(angles);
+  }
 }
 
 // フィルターに基づいて要素を選択
@@ -224,7 +232,7 @@ export function generateElementBasedPrompt(
     
     // ライティングと画角の選択
     const lighting = getRandomElement(context.lightingStyles || ['natural lighting']);
-    const cameraAngle = getCameraAngle(); // 固定の2つから選択
+    const cameraAngle = getCameraAngle(settings.cameraAngle); // ユーザー選択を反映
     const background = getRandomElement(context.backgrounds || ['clean background']);
     const mood = getSafeMood(selectedTrend.mood || ['confident']);
     
@@ -304,7 +312,7 @@ export function generateElementBasedPrompt(
     
     // フォールバック：基本的なプロンプトを生成
     const now = new Date();
-    const cameraAngle = getCameraAngle();
+    const cameraAngle = getCameraAngle('random'); // フォールバック時はランダム
     return {
       id: now.getTime() + Math.floor(Math.random() * 1000),
       fullPrompt: `A ${cameraAngle} of model wearing modern clothing, clean professional styling, fashion photography --ar 3:4 --v 6.1`,

@@ -194,4 +194,6 @@ export interface AppSettings {
   includeSeasonalConsistency: boolean; // 季節的一貫性を考慮
   includeColorHarmony: boolean; // カラーハーモニーを考慮
   creativityLevel: 'conservative' | 'balanced' | 'experimental'; // 創造性レベル
+  // 撮影角度設定
+  cameraAngle: 'random' | 'full-body' | 'portrait'; // 撮影角度選択
 }

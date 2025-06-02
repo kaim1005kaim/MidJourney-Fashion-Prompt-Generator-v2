@@ -23,7 +23,8 @@ const PromptGenerator: React.FC = () => {
     generationMode: 'elements',
     includeSeasonalConsistency: true,
     includeColorHarmony: true,
-    creativityLevel: 'balanced'
+    creativityLevel: 'balanced',
+    cameraAngle: 'random' // 初期値はランダム
   });
   
   const [filters, setFilters] = useState<FilterOptions>({
