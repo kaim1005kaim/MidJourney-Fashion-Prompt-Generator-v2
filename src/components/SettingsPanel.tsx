@@ -101,14 +101,14 @@ export default function SettingsPanel({ settings, onSettingsChange, onDatabaseUp
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <Settings className="w-5 h-5 text-blue-500" />
-                  <span className="font-semibold">生成設定</span>
+                  <span className="font-semibold text-gray-700 dark:text-gray-300">生成設定</span>
                 </div>
                 {expandedSections.generation ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
               </div>
             </button>
             
             {expandedSections.generation && (
-              <div className="px-4 py-3 border-t space-y-4">
+              <div className="px-4 py-3 border-t border-gray-300 dark:border-gray-600 space-y-4">
                 {/* 生成モード設定 */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -230,19 +230,19 @@ export default function SettingsPanel({ settings, onSettingsChange, onDatabaseUp
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <Palette className="w-5 h-5 text-purple-500" />
-                  <span className="font-semibold">カラーパレット</span>
+                  <span className="font-semibold text-gray-700 dark:text-gray-300">カラーパレット</span>
                 </div>
                 {expandedSections.colors ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
               </div>
             </button>
             
             {expandedSections.colors && (
-              <div className="px-4 py-3 border-t space-y-4">
+              <div className="px-4 py-3 border-t border-gray-300 dark:border-gray-600 space-y-4">
                 {/* カラーパレット使用切り替え */}
                 <div className="flex items-center justify-between">
                   <div>
-                    <label className="text-sm font-medium">カラーパレットを使用</label>
-                    <p className="text-xs opacity-70 mt-1">オフにするとMidJourneyが自動で色を選択</p>
+                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">カラーパレットを使用</label>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">オフにするとMidJourneyが自動で色を選択</p>
                   </div>
                   <button
                     onClick={() => handleSettingChange('useColorPalette', !settings.useColorPalette)}
@@ -281,14 +281,14 @@ export default function SettingsPanel({ settings, onSettingsChange, onDatabaseUp
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <Settings className="w-5 h-5 text-green-500" />
-                  <span className="font-semibold">プロンプトオプション</span>
+                  <span className="font-semibold text-gray-700 dark:text-gray-300">プロンプトオプション</span>
                 </div>
                 {expandedSections.options ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
               </div>
             </button>
             
             {expandedSections.options && (
-              <div className="px-4 py-3 border-t space-y-4">
+              <div className="px-4 py-3 border-t border-gray-300 dark:border-gray-600 space-y-4">
                 {/* アスペクト比設定 */}
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center">

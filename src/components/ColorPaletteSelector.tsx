@@ -105,7 +105,7 @@ const ColorPaletteSelector: React.FC<ColorPaletteSelectorProps> = ({
       {/* ヘッダー */}
       <div className="flex items-center space-x-2">
         <Palette className="w-5 h-5 text-blue-500" />
-        <h3 className="font-semibold">カラーパレット</h3>
+        <h3 className="font-semibold text-gray-700 dark:text-gray-300">カラーパレット</h3>
       </div>
 
       {/* カテゴリータブ */}
@@ -146,8 +146,8 @@ const ColorPaletteSelector: React.FC<ColorPaletteSelectorProps> = ({
             <span className="text-gray-400 text-xs">自動</span>
           </div>
           <div>
-            <div className="font-medium">色指定なし</div>
-            <div className="text-sm opacity-70">MidJourneyに色選択を委ねる</div>
+            <div className="font-medium text-gray-700 dark:text-gray-300">色指定なし</div>
+            <div className="text-sm text-gray-500 dark:text-gray-400">MidJourneyに色選択を委ねる</div>
           </div>
         </div>
       </div>
@@ -174,8 +174,8 @@ const ColorPaletteSelector: React.FC<ColorPaletteSelectorProps> = ({
                     ))}
                   </div>
                   <div>
-                    <div className="font-medium">{palette.name}</div>
-                    <div className="text-sm opacity-70">{palette.description}</div>
+                    <div className="font-medium text-gray-700 dark:text-gray-300">{palette.name}</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">{palette.description}</div>
                   </div>
                 </div>
                 <button
@@ -183,7 +183,7 @@ const ColorPaletteSelector: React.FC<ColorPaletteSelectorProps> = ({
                     e.stopPropagation();
                     setShowPaletteInfo(showPaletteInfo === palette.id ? null : palette.id);
                   }}
-                  className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+                  className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400"
                 >
                   <Info className="w-4 h-4" />
                 </button>
@@ -191,8 +191,8 @@ const ColorPaletteSelector: React.FC<ColorPaletteSelectorProps> = ({
               
               {/* パレット詳細情報 */}
               {showPaletteInfo === palette.id && (
-                <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-800 rounded border-t">
-                  <div className="space-y-2 text-sm">
+                <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-800 rounded border-t border-gray-200 dark:border-gray-600">
+                  <div className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
                     <div>
                       <span className="font-medium">調和タイプ:</span> {getHarmonyDescription(palette.harmony)}
                     </div>
@@ -206,7 +206,7 @@ const ColorPaletteSelector: React.FC<ColorPaletteSelectorProps> = ({
                       <span className="font-medium">色彩:</span>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {palette.colors.map((color, index) => (
-                          <span key={index} className="text-xs bg-white dark:bg-gray-700 px-2 py-1 rounded">
+                          <span key={index} className="text-xs bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-1 rounded">
                             {getColorDisplayName(color)}
                           </span>
                         ))}
@@ -224,7 +224,7 @@ const ColorPaletteSelector: React.FC<ColorPaletteSelectorProps> = ({
       <div className="border-t pt-4">
         <button
           onClick={() => setShowCustomColors(!showCustomColors)}
-          className="flex items-center space-x-2 text-sm font-medium mb-3"
+          className="flex items-center space-x-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-3"
         >
           <Plus className="w-4 h-4" />
           <span>カスタムカラー設定</span>
@@ -235,12 +235,12 @@ const ColorPaletteSelector: React.FC<ColorPaletteSelectorProps> = ({
             {/* 既存のカスタムカラー */}
             {customColors.length > 0 && (
               <div className="space-y-2">
-                <div className="text-sm font-medium">設定済みカラー:</div>
+                <div className="text-sm font-medium text-gray-700 dark:text-gray-300">設定済みカラー:</div>
                 <div className="flex flex-wrap gap-2">
                   {customColors.map((color, index) => (
                     <div key={index} className="flex items-center space-x-2 bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">
                       <ColorSwatch color={color} size="sm" />
-                      <span className="text-sm">{getColorDisplayName(color)}</span>
+                      <span className="text-sm text-gray-700 dark:text-gray-300">{getColorDisplayName(color)}</span>
                       <button
                         onClick={() => removeCustomColor(index)}
                         className="text-red-500 hover:text-red-700"
@@ -278,7 +278,7 @@ const ColorPaletteSelector: React.FC<ColorPaletteSelectorProps> = ({
               </div>
             )}
 
-            <div className="text-xs opacity-70">
+            <div className="text-xs text-gray-500 dark:text-gray-400">
               最大5色まで設定可能。英語での色名指定を推奨します。
             </div>
           </div>
@@ -288,7 +288,7 @@ const ColorPaletteSelector: React.FC<ColorPaletteSelectorProps> = ({
       {/* 現在の選択状態表示 */}
       {(selectedPalette || customColors.length > 0) && (
         <div className={`p-3 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
-          <div className="text-sm font-medium mb-2">現在の設定:</div>
+          <div className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">現在の設定:</div>
           {selectedPalette && (
             <div className="flex items-center space-x-2 mb-2">
               <div className="flex space-x-1">
@@ -296,7 +296,7 @@ const ColorPaletteSelector: React.FC<ColorPaletteSelectorProps> = ({
                   <ColorSwatch key={index} color={color} size="sm" />
                 ))}
               </div>
-              <span className="text-sm">{selectedPalette.name}</span>
+              <span className="text-sm text-gray-700 dark:text-gray-300">{selectedPalette.name}</span>
             </div>
           )}
           {customColors.length > 0 && (
@@ -306,7 +306,7 @@ const ColorPaletteSelector: React.FC<ColorPaletteSelectorProps> = ({
                   <ColorSwatch key={index} color={color} size="sm" />
                 ))}
               </div>
-              <span className="text-sm">カスタム ({customColors.length}色)</span>
+              <span className="text-sm text-gray-700 dark:text-gray-300">カスタム ({customColors.length}色)</span>
             </div>
           )}
         </div>
