@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Prompt, AppSettings, FilterOptions, Material, Silhouette, StyleTrend } from '../types';
 import { fashionContext } from '../data/initialData';
 import { generateElementBasedPrompt, generateMultipleElementBasedPrompts, checkElementCompatibility, getPopularCombinations } from '../services/elementBasedPromptService';
+import { generateBrandBasedPrompt, generateMultipleBrandBasedPrompts, getAvailableBrands } from '../services/brandBasedPromptService';
 import PromptCard from './PromptCard';
 import SettingsPanel from './SettingsPanel';
 import ElementSelector from './ElementSelector';
@@ -24,7 +25,10 @@ const PromptGenerator: React.FC = () => {
     includeSeasonalConsistency: true,
     includeColorHarmony: true,
     creativityLevel: 'balanced',
-    cameraAngle: 'random' // 初期値はランダム
+    cameraAngle: 'random',
+    useColorPalette: false,
+    selectedColorPalette: undefined,
+    customColors: []
   });
   
   const [filters, setFilters] = useState<FilterOptions>({
@@ -115,23 +119,34 @@ const PromptGenerator: React.FC = () => {
     setError(null);
     
     try {
-      // 選択された要素がある場合はフィルターに追加
-      const updatedFilters = { ...filters };
-      if (selectedElements.material) {
-        updatedFilters.selectedMaterials = [selectedElements.material.id];
-      }
-      if (selectedElements.silhouette) {
-        updatedFilters.selectedSilhouettes = [selectedElements.silhouette.id];
-      }
-      if (selectedElements.styleTrend) {
-        updatedFilters.selectedStyleTrends = [selectedElements.styleTrend.id];
-      }
+      let newPrompts: Prompt[];
       
-      const newPrompts = generateMultipleElementBasedPrompts(
-        settings,
-        settings.promptCount,
-        updatedFilters
-      );
+      if (settings.generationMode === 'brand') {
+        // ブランドベース生成
+        newPrompts = await generateMultipleBrandBasedPrompts(
+          settings,
+          settings.promptCount,
+          filters
+        );
+      } else {
+        // 要素ベース生成
+        const updatedFilters = { ...filters };
+        if (selectedElements.material) {
+          updatedFilters.selectedMaterials = [selectedElements.material.id];
+        }
+        if (selectedElements.silhouette) {
+          updatedFilters.selectedSilhouettes = [selectedElements.silhouette.id];
+        }
+        if (selectedElements.styleTrend) {
+          updatedFilters.selectedStyleTrends = [selectedElements.styleTrend.id];
+        }
+        
+        newPrompts = generateMultipleElementBasedPrompts(
+          settings,
+          settings.promptCount,
+          updatedFilters
+        );
+      }
       
       if (newPrompts.length === 0) {
         throw new Error('プロンプトの生成に失敗しました');
@@ -314,77 +329,216 @@ const PromptGenerator: React.FC = () => {
             MidJourney Fashion Prompt Generator
             <span className="text-2xl ml-2 text-blue-500">v2.0</span>
           </h1>
-          <p className="text-lg opacity-80">
+          <p className="text-lg opacity-80 mb-6">
             素材・シルエット・トレンドベースのファッションプロンプト生成ツール
+          </p>
+          
+          {/* タブナビゲーション */}
+          <div className="flex justify-center mb-4">
+            <div className={`flex rounded-lg p-1 ${settings.darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+              <button
+                onClick={() => setSettings(prev => ({ ...prev, generationMode: 'elements' }))}
+                className={`px-6 py-3 rounded-md font-medium transition-colors ${
+                  settings.generationMode === 'elements'
+                    ? 'bg-blue-500 text-white shadow-md'
+                    : settings.darkMode
+                    ? 'text-gray-300 hover:text-white hover:bg-gray-700'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+                }`}
+              >
+                🎨 要素ベース生成
+              </button>
+              <button
+                onClick={() => setSettings(prev => ({ ...prev, generationMode: 'brand' }))}
+                className={`px-6 py-3 rounded-md font-medium transition-colors ${
+                  settings.generationMode === 'brand'
+                    ? 'bg-purple-500 text-white shadow-md'
+                    : settings.darkMode
+                    ? 'text-gray-300 hover:text-white hover:bg-gray-700'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+                }`}
+              >
+                👑 ブランドベース生成
+              </button>
+            </div>
+          </div>
+          
+          {/* モード説明 */}
+          <p className="text-sm opacity-70">
+            {settings.generationMode === 'elements' 
+              ? '素材・シルエット・トレンドを自由に組み合わせてユニークなプロンプトを作成' 
+              : 'Chanel、Dior、Comme des Garçonsなど43の有名ブランドスタイルでプロンプトを生成'}
           </p>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* 左サイドバー: 要素選択 */}
+          {/* 左サイドバー: 生成モードに応じた設定 */}
           <div className="lg:col-span-1">
-            <div className={`rounded-lg p-6 mb-6 ${
-              settings.darkMode ? 'bg-gray-800' : 'bg-white'
-            } shadow-lg`}>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold">要素選択</h2>
-                <button
-                  onClick={() => setShowPopularCombinations(!showPopularCombinations)}
-                  className="text-sm px-3 py-1 rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-colors"
-                >
-                  人気の組み合わせ
-                </button>
-              </div>
-              
-              {/* 人気の組み合わせパネル */}
-              {showPopularCombinations && (
-                <div className="mb-6 p-4 border rounded-lg">
-                  <h3 className="font-medium mb-3">人気の組み合わせ</h3>
-                  {getPopularCombinations().map((combo, index) => (
-                    <div
-                      key={index}
-                      className="mb-3 p-3 border rounded cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                      onClick={() => applyPopularCombination(combo)}
-                    >
-                      <div className="font-medium">{combo.name}</div>
-                      <div className="text-sm opacity-70">{combo.description}</div>
-                      <div className="text-xs mt-1 text-blue-500">人気度: {combo.popularity}%</div>
-                    </div>
-                  ))}
+            {settings.generationMode === 'elements' ? (
+              // 要素ベース生成用UI
+              <div className={`rounded-lg p-6 mb-6 ${
+                settings.darkMode ? 'bg-gray-800' : 'bg-white'
+              } shadow-lg`}>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-semibold">要素選択</h2>
+                  <button
+                    onClick={() => setShowPopularCombinations(!showPopularCombinations)}
+                    className="text-sm px-3 py-1 rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-colors"
+                  >
+                    人気の組み合わせ
+                  </button>
                 </div>
-              )}
-              
-              {/* 要素セレクター */}
-              <ElementSelector
-                selectedElements={selectedElements}
-                onElementChange={setSelectedElements}
-                darkMode={settings.darkMode}
-              />
-              
-              {/* 互換性インジケーター */}
-              {compatibility && (
-                <CompatibilityIndicator
-                  compatibility={compatibility}
+                
+                {/* 人気の組み合わせパネル */}
+                {showPopularCombinations && (
+                  <div className="mb-6 p-4 border rounded-lg">
+                    <h3 className="font-medium mb-3">人気の組み合わせ</h3>
+                    {getPopularCombinations().map((combo, index) => (
+                      <div
+                        key={index}
+                        className="mb-3 p-3 border rounded cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                        onClick={() => applyPopularCombination(combo)}
+                      >
+                        <div className="font-medium">{combo.name}</div>
+                        <div className="text-sm opacity-70">{combo.description}</div>
+                        <div className="text-xs mt-1 text-blue-500">人気度: {combo.popularity}%</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {/* 要素セレクター */}
+                <ElementSelector
+                  selectedElements={selectedElements}
+                  onElementChange={setSelectedElements}
                   darkMode={settings.darkMode}
                 />
-              )}
-              
-              {/* アクションボタン */}
-              <div className="flex gap-2 mt-4">
-                <button
-                  onClick={generatePrompts}
-                  disabled={isGenerating}
-                  className="flex-1 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 disabled:opacity-50 transition-colors"
-                >
-                  {isGenerating ? '生成中...' : 'プロンプト生成'}
-                </button>
-                <button
-                  onClick={clearElements}
-                  className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors"
-                >
-                  クリア
-                </button>
+                
+                {/* 互換性インジケーター */}
+                {compatibility && (
+                  <CompatibilityIndicator
+                    compatibility={compatibility}
+                    darkMode={settings.darkMode}
+                  />
+                )}
+                
+                {/* アクションボタン */}
+                <div className="flex gap-2 mt-4">
+                  <button
+                    onClick={generatePrompts}
+                    disabled={isGenerating}
+                    className="flex-1 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 disabled:opacity-50 transition-colors"
+                  >
+                    {isGenerating ? '生成中...' : 'プロンプト生成'}
+                  </button>
+                  <button
+                    onClick={clearElements}
+                    className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    クリア
+                  </button>
+                </div>
               </div>
-            </div>
+            ) : (
+              // ブランドベース生成用UI
+              <div className={`rounded-lg p-6 mb-6 ${
+                settings.darkMode ? 'bg-gray-800' : 'bg-white'
+              } shadow-lg`}>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-semibold">ブランド選択</h2>
+                </div>
+                
+                <div className="space-y-4">
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    {/* ブランド数表示 */}
+                    43の有名ファッションブランドから自動選択
+                  </div>
+                  
+                  {/* フィルター設定 */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2">年代フィルター</label>
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {['1920s', '1930s', '1940s', '1950s', '1960s', '1970s', '1980s', '1990s', '2000s', '2010s', '2020s'].map(era => (
+                        <button
+                          key={era}
+                          onClick={() => {
+                            const newEras = filters.eras?.includes(era) 
+                              ? filters.eras.filter(e => e !== era)
+                              : [...(filters.eras || []), era];
+                            setFilters(prev => ({ ...prev, eras: newEras }));
+                          }}
+                          className={`px-2 py-1 text-xs rounded transition-colors ${
+                            filters.eras?.includes(era)
+                              ? 'bg-blue-500 text-white'
+                              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                          }`}
+                        >
+                          {era}
+                        </button>
+                      ))}
+                    </div>
+                    {filters.eras && filters.eras.length > 0 && (
+                      <button
+                        onClick={() => setFilters(prev => ({ ...prev, eras: [] }))}
+                        className="text-xs text-blue-500 hover:text-blue-700"
+                      >
+                        フィルターをクリア
+                      </button>
+                    )}
+                  </div>
+                  
+                  {/* スタイルフィルター */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2">スタイルフィルター</label>
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {['Elegant', 'Minimalist', 'Avant-garde', 'Romantic', 'Edgy', 'Classic', 'Modern'].map(style => (
+                        <button
+                          key={style}
+                          onClick={() => {
+                            const newStyles = filters.styles?.includes(style) 
+                              ? filters.styles.filter(s => s !== style)
+                              : [...(filters.styles || []), style];
+                            setFilters(prev => ({ ...prev, styles: newStyles }));
+                          }}
+                          className={`px-2 py-1 text-xs rounded transition-colors ${
+                            filters.styles?.includes(style)
+                              ? 'bg-green-500 text-white'
+                              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                          }`}
+                        >
+                          {style}
+                        </button>
+                      ))}
+                    </div>
+                    {filters.styles && filters.styles.length > 0 && (
+                      <button
+                        onClick={() => setFilters(prev => ({ ...prev, styles: [] }))}
+                        className="text-xs text-green-500 hover:text-green-700"
+                      >
+                        フィルターをクリア
+                      </button>
+                    )}
+                  </div>
+                </div>
+                
+                {/* アクションボタン */}
+                <div className="flex gap-2 mt-6">
+                  <button
+                    onClick={generatePrompts}
+                    disabled={isGenerating}
+                    className="flex-1 bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-purple-600 disabled:opacity-50 transition-colors"
+                  >
+                    {isGenerating ? '生成中...' : 'ブランドベース生成'}
+                  </button>
+                  <button
+                    onClick={() => setFilters({ brands: [], eras: [], styles: [], materials: [], silhouettes: [] })}
+                    className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    リセット
+                  </button>
+                </div>
+              </div>
+            )}
             
             {/* 設定パネル */}
             <SettingsPanel

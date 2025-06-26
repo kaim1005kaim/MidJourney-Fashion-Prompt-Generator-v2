@@ -1,6 +1,7 @@
 // services/elementBasedPromptService.ts
 import { Material, Silhouette, StyleTrend, FashionContext, Prompt, AppSettings, FilterOptions } from '../types';
 import { fashionContext } from '../data/initialData';
+import { colorPalettes, getColorPaletteById } from '../data/colorPalettes';
 
 // ランダム選択のユーティリティ（安全性向上）
 function getRandomElement<T>(array: T[]): T {
@@ -30,12 +31,31 @@ function getSafeCharacteristic(element: { keywords?: string[], description?: str
   return 'stylish design';
 }
 
-// 安全な色選択
-function getSafeColor(colors: string[]): string {
-  if (!colors || colors.length === 0) {
-    return 'neutral';
+// カラーパレットの統合
+function integrateColorPalette(
+  trendColors: string[], 
+  settings: AppSettings
+): string[] {
+  // カラーパレットを使用しない場合は、トレンドの色をそのまま使用
+  if (!settings.useColorPalette) {
+    return trendColors;
   }
-  return getRandomElement(colors);
+
+  // カスタムカラーが設定されている場合
+  if (settings.customColors && settings.customColors.length > 0) {
+    return settings.customColors;
+  }
+
+  // 選択されたカラーパレットがある場合
+  if (settings.selectedColorPalette) {
+    const palette = getColorPaletteById(settings.selectedColorPalette);
+    if (palette) {
+      return palette.colors;
+    }
+  }
+
+  // デフォルトはトレンドの色
+  return trendColors;
 }
 
 // 安全なムード選択
@@ -96,9 +116,8 @@ function filterByCompatibility<T extends { compatibility?: string[], season?: st
   });
 }
 
-// 人種・性別設定を完全削除
+// 人物記述を完全削除
 function getPersonDescription(): string {
-  // 人種・性別指定を完全に削除し、ニュートラルなモデルとして表現
   return '';
 }
 
@@ -224,11 +243,10 @@ export function generateElementBasedPrompt(
       getRandomElement(compatibleSilhouettes) : 
       getRandomElement(availableSilhouettes);
     
-    // 色の選択
-    const colors = includeColorHarmony ? 
-      selectHarmoniousColors(selectedTrend, creativityLevel) : 
-      (selectedTrend.colors || ['neutral']);
-    const primaryColor = getSafeColor(colors);
+    // 色の選択（カラーパレット統合）
+    const trendColors = selectedTrend.colors || ['neutral'];
+    const colors = integrateColorPalette(trendColors, settings);
+    const primaryColor = colors.length > 0 ? getRandomElement(colors) : 'neutral';
     
     // ライティングと画角の選択
     const lighting = getRandomElement(context.lightingStyles || ['natural lighting']);
@@ -258,10 +276,15 @@ export function generateElementBasedPrompt(
         break;
     }
     
-    // プロンプトテキストの組み立て（年代を削除）
-    let promptText = `A ${cameraAngle} of ${personDescription}model wearing ${trendChar}, `;
+    // プロンプトテキストの組み立て
+    let promptText = `A ${cameraAngle} of model wearing ${trendChar}, `;
     promptText += `${silhouetteChar} in ${materialChar}, `;
-    promptText += `${primaryColor} color palette, `;
+    
+    // カラーパレットが指定されている場合のみ色を追加
+    if (settings.useColorPalette && (settings.selectedColorPalette || settings.customColors?.length)) {
+      promptText += `${primaryColor} color palette, `;
+    }
+    
     promptText += `${mood} mood, `;
     promptText += `${background}, `;
     promptText += `${lighting}, `;

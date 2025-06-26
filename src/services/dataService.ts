@@ -18,11 +18,16 @@ const DEFAULT_SETTINGS: AppSettings = {
   includeStylize: true,
   stylize: "s100",
   customSuffix: '',
-  // 人種と性別のデフォルト設定
-  includeEthnicity: false,
-  ethnicity: 'ランダム',
-  includeGender: false,
-  gender: 'ランダム'
+  // V2設定
+  generationMode: 'elements',
+  includeSeasonalConsistency: true,
+  includeColorHarmony: true,
+  creativityLevel: 'balanced',
+  cameraAngle: 'random',
+  // カラーパレット設定
+  useColorPalette: false,
+  selectedColorPalette: undefined,
+  customColors: []
 };
 
 // アスペクト比オプション

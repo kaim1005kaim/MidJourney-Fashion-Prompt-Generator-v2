@@ -196,4 +196,8 @@ export interface AppSettings {
   creativityLevel: 'conservative' | 'balanced' | 'experimental'; // 創造性レベル
   // 撮影角度設定
   cameraAngle: 'random' | 'full-body' | 'portrait'; // 撮影角度選択
+  // カラーパレット設定
+  useColorPalette: boolean; // カラーパレットを使用するか
+  selectedColorPalette?: string; // 選択されたカラーパレットID
+  customColors: string[]; // カスタムカラー（最大5色）
 }
