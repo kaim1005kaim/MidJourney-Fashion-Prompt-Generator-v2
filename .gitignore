@@ -32,6 +32,8 @@ dist-ssr
 
 # Mac
 .DS_Store
+._*
+._.DS_Store
 
 # Windows
 Thumbs.db
@@ -52,3 +54,9 @@ Desktop.ini
 
 # Netlify
 .netlify
+
+# Bolt
+.bolt/
+
+# Claude
+.claude/

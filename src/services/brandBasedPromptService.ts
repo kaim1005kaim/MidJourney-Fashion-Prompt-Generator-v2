@@ -3,50 +3,6 @@ import { Brand, AppSettings, FilterOptions, Prompt } from '../types';
 import { loadInitialData } from './dataService';
 import { colorPalettes, getColorPaletteById } from '../data/colorPalettes';
 
-// ブランドデータを型安全に変換
-function convertRawBrandToBrand(rawBrand: any): Brand {
-  return {
-    id: rawBrand.brand_id,
-    name: rawBrand.brand_name,
-    eraStart: rawBrand.era_start,
-    eraEnd: rawBrand.era_end,
-    coreStyle: typeof rawBrand.core_style === 'string' 
-      ? rawBrand.core_style.split(', ').map(s => s.trim())
-      : rawBrand.core_style || [],
-    signatureElements: typeof rawBrand.signature_elements === 'string'
-      ? rawBrand.signature_elements.split(', ').map(s => s.trim())
-      : rawBrand.signature_elements || [],
-    materials: typeof rawBrand.materials === 'string'
-      ? rawBrand.materials.split(', ').map(s => s.trim())
-      : rawBrand.materials || [],
-    silhouettes: typeof rawBrand.silhouettes === 'string'
-      ? rawBrand.silhouettes.split(', ').map(s => s.trim())
-      : rawBrand.silhouettes || [],
-    colorPalette: typeof rawBrand.color_palette === 'string'
-      ? rawBrand.color_palette.split(', ').map(s => s.trim())
-      : rawBrand.color_palette || [],
-    lighting: Array.isArray(rawBrand.lighting) 
-      ? rawBrand.lighting 
-      : typeof rawBrand.lighting === 'string'
-      ? rawBrand.lighting.split(', ').map(s => s.trim())
-      : [],
-    atmosphereMood: Array.isArray(rawBrand.atmosphere_mood)
-      ? rawBrand.atmosphere_mood
-      : typeof rawBrand.atmosphere_mood === 'string'
-      ? rawBrand.atmosphere_mood.split(', ').map(s => s.trim())
-      : [],
-    settingBackgroundDetail: Array.isArray(rawBrand.setting_background_detail)
-      ? rawBrand.setting_background_detail
-      : typeof rawBrand.setting_background_detail === 'string'
-      ? rawBrand.setting_background_detail.split(', ').map(s => s.trim())
-      : [],
-    cameraShotType: Array.isArray(rawBrand.camera_shot_type)
-      ? rawBrand.camera_shot_type
-      : typeof rawBrand.camera_shot_type === 'string'
-      ? rawBrand.camera_shot_type.split(', ').map(s => s.trim())
-      : []
-  };
-}
 
 // ランダム要素選択ヘルパー
 function getRandomElement<T>(array: T[]): T {
@@ -162,14 +118,11 @@ export async function generateBrandBasedPrompt(
 ): Promise<Prompt> {
   try {
     // データベースからブランドデータを読み込み
-    const { brands: rawBrands } = await loadInitialData();
+    const { brands } = await loadInitialData();
     
-    if (!rawBrands || rawBrands.length === 0) {
+    if (!brands || brands.length === 0) {
       throw new Error('ブランドデータが見つかりません');
     }
-
-    // 生データを型安全なBrand型に変換
-    const brands = rawBrands.map(convertRawBrandToBrand);
     console.log('利用可能なブランド数:', brands.length);
     console.log('最初のブランド:', brands[0]?.name);
     
@@ -328,8 +281,8 @@ export async function generateMultipleBrandBasedPrompts(
 // 利用可能なブランド一覧を取得
 export async function getAvailableBrands(): Promise<Brand[]> {
   try {
-    const { brands: rawBrands } = await loadInitialData();
-    return rawBrands.map(convertRawBrandToBrand);
+    const { brands } = await loadInitialData();
+    return brands;
   } catch (error) {
     console.error('ブランド一覧取得エラー:', error);
     return [];
