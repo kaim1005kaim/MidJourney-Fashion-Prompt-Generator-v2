@@ -210,7 +210,7 @@ export async function generateBrandBasedPrompt(
     const prompt: Prompt = {
       id: now.getTime() + Math.floor(Math.random() * 1000),
       fullPrompt: promptText,
-      createdDate: now.toISOString(),
+      timestamp: now,
       rating: 0,
       isFavorite: false,
       brandId: selectedBrand.id,
@@ -237,7 +237,7 @@ export async function generateBrandBasedPrompt(
     return {
       id: now.getTime() + Math.floor(Math.random() * 1000),
       fullPrompt: `A fashion portrait of model wearing contemporary designer clothing, elegant styling, professional fashion photography ${settings.aspectRatio || ''} ${settings.version || ''}`,
-      createdDate: now.toISOString(),
+      timestamp: now,
       rating: 0,
       isFavorite: false,
       brandName: 'Contemporary Designer',

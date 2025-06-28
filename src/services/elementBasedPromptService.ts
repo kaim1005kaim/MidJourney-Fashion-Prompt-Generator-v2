@@ -312,7 +312,7 @@ export function generateElementBasedPrompt(
     const prompt: Prompt = {
       id: now.getTime() + Math.floor(Math.random() * 1000),
       fullPrompt: promptText,
-      createdDate: now.toISOString(),
+      timestamp: now,
       rating: 0,
       isFavorite: false,
       material: selectedMaterial.name,
@@ -339,7 +339,7 @@ export function generateElementBasedPrompt(
     return {
       id: now.getTime() + Math.floor(Math.random() * 1000),
       fullPrompt: `A ${cameraAngle} of model wearing modern clothing, clean professional styling, fashion photography --ar 3:4 --v 6.1`,
-      createdDate: now.toISOString(),
+      timestamp: now,
       rating: 0,
       isFavorite: false,
       material: 'modern fabric',
