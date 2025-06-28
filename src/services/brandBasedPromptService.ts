@@ -170,9 +170,12 @@ export async function generateBrandBasedPrompt(
 
     // 生データを型安全なBrand型に変換
     const brands = rawBrands.map(convertRawBrandToBrand);
+    console.log('利用可能なブランド数:', brands.length);
+    console.log('最初のブランド:', brands[0]?.name);
     
     // フィルターを適用
     const filteredBrands = filterBrands(brands, filters);
+    console.log('フィルター後のブランド数:', filteredBrands.length);
     
     if (filteredBrands.length === 0) {
       throw new Error('フィルター条件に一致するブランドがありません');
@@ -180,6 +183,7 @@ export async function generateBrandBasedPrompt(
 
     // ランダムにブランドを選択
     const selectedBrand = getRandomElement(filteredBrands);
+    console.log('選択されたブランド:', selectedBrand.name);
     
     // 要素を選択
     const era = selectedBrand.eraStart;
@@ -216,6 +220,9 @@ export async function generateBrandBasedPrompt(
     promptText += `featuring ${signatureElement}, `;
     promptText += `${silhouette} in ${material}, `;
     
+    console.log('プロンプト構築中 - ブランド名:', selectedBrand.name);
+    console.log('構築されたプロンプト（開始部分）:', promptText);
+    
     // カラーパレットが指定されている場合のみ色を追加
     if (settings.useColorPalette && (settings.selectedColorPalette || settings.customColors?.length)) {
       promptText += `${primaryColor} color palette, `;
@@ -242,6 +249,8 @@ export async function generateBrandBasedPrompt(
     if (settings.customSuffix) {
       promptText += ` ${settings.customSuffix}`;
     }
+    
+    console.log('最終プロンプト:', promptText);
     
     // プロンプトオブジェクトの作成
     const now = new Date();
