@@ -4,7 +4,7 @@ import { generateMultipleBrandBasedPrompts } from './brandBasedPromptService';
 import { generateMultipleCreativePrompts } from './creativePromptService';
 
 // ミックスモード用のプロンプト生成
-export function generateMixedModePrompts(
+export async function generateMixedModePrompts(
   settings: AppSettings,
   selectedElements: {
     material: Material | null;
@@ -41,17 +41,29 @@ export function generateMixedModePrompts(
         counts.elements,
         updatedFilters
       );
-      prompts.push(...elementPrompts);
+      
+      // 配列かどうかチェック
+      if (Array.isArray(elementPrompts)) {
+        prompts.push(...elementPrompts);
+      } else {
+        console.warn('要素ベース生成が配列を返しませんでした:', elementPrompts);
+      }
     }
     
-    // ブランドベースプロンプト生成
+    // ブランドベースプロンプト生成  
     if (counts.brand > 0) {
-      const brandPrompts = generateMultipleBrandBasedPrompts(
+      const brandPrompts = await generateMultipleBrandBasedPrompts(
         settings,
         counts.brand,
         filters
       );
-      prompts.push(...brandPrompts);
+      
+      // 配列かどうかチェック
+      if (Array.isArray(brandPrompts)) {
+        prompts.push(...brandPrompts);
+      } else {
+        console.warn('ブランドベース生成が配列を返しませんでした:', brandPrompts);
+      }
     }
     
     // Creativeモードプロンプト生成
@@ -62,7 +74,13 @@ export function generateMixedModePrompts(
         counts.creative,
         creativeSettings
       );
-      prompts.push(...creativePrompts);
+      
+      // 配列かどうかチェック
+      if (Array.isArray(creativePrompts)) {
+        prompts.push(...creativePrompts);
+      } else {
+        console.warn('Creative生成が配列を返しませんでした:', creativePrompts);
+      }
     }
     
     // シャッフル設定に基づいて順序を調整

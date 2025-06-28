@@ -150,7 +150,7 @@ const PromptGenerator: React.FC = () => {
         );
       } else if (settings.generationMode === 'mixed') {
         // ミックスモード生成
-        newPrompts = generateMixedModePrompts(
+        newPrompts = await generateMixedModePrompts(
           settings,
           selectedElements,
           filters,
