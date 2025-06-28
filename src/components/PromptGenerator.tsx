@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Prompt, AppSettings, FilterOptions, Material, Silhouette, StyleTrend } from '../types';
+import { Prompt, AppSettings, FilterOptions, Material, Silhouette, StyleTrend, CreativeSettings } from '../types';
 import { fashionContext } from '../data/initialData';
 import { generateElementBasedPrompt, generateMultipleElementBasedPrompts, checkElementCompatibility, getPopularCombinations } from '../services/elementBasedPromptService';
 import { generateBrandBasedPrompt, generateMultipleBrandBasedPrompts, getAvailableBrands } from '../services/brandBasedPromptService';
+import { generateCreativePrompt, generateMultipleCreativePrompts } from '../services/creativePromptService';
 import PromptCard from './PromptCard';
 import SettingsPanel from './SettingsPanel';
 import ElementSelector from './ElementSelector';
 import CompatibilityIndicator from './CompatibilityIndicator';
+import CreativeModePanel from './CreativeMode/CreativeModePanel';
 
 const PromptGenerator: React.FC = () => {
   const [prompts, setPrompts] = useState<Prompt[]>([]);
@@ -61,6 +63,11 @@ const PromptGenerator: React.FC = () => {
   const [showPopularCombinations, setShowPopularCombinations] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copySuccess, setCopySuccess] = useState<string | null>(null);
+  
+  // Creativeモード用の状態
+  const [creativeSettings, setCreativeSettings] = useState<CreativeSettings>({
+    randomizeAll: true // デフォルトは完全ランダム
+  });
   
   // データ整合性チェック
   useEffect(() => {
@@ -127,6 +134,14 @@ const PromptGenerator: React.FC = () => {
           settings,
           settings.promptCount,
           filters
+        );
+      } else if (settings.generationMode === 'creative') {
+        // Creativeモード生成
+        newPrompts = generateMultipleCreativePrompts(
+          settings,
+          selectedElements,
+          settings.promptCount,
+          creativeSettings
         );
       } else {
         // 要素ベース生成
@@ -338,7 +353,7 @@ const PromptGenerator: React.FC = () => {
             <div className={`flex rounded-lg p-1 ${settings.darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
               <button
                 onClick={() => setSettings(prev => ({ ...prev, generationMode: 'elements' }))}
-                className={`px-6 py-3 rounded-md font-medium transition-colors ${
+                className={`px-4 py-3 rounded-md font-medium transition-colors ${
                   settings.generationMode === 'elements'
                     ? 'bg-blue-500 text-white shadow-md'
                     : settings.darkMode
@@ -346,11 +361,11 @@ const PromptGenerator: React.FC = () => {
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
                 }`}
               >
-                🎨 要素ベース生成
+                🎨 要素ベース
               </button>
               <button
                 onClick={() => setSettings(prev => ({ ...prev, generationMode: 'brand' }))}
-                className={`px-6 py-3 rounded-md font-medium transition-colors ${
+                className={`px-4 py-3 rounded-md font-medium transition-colors ${
                   settings.generationMode === 'brand'
                     ? 'bg-purple-500 text-white shadow-md'
                     : settings.darkMode
@@ -358,7 +373,19 @@ const PromptGenerator: React.FC = () => {
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
                 }`}
               >
-                👑 ブランドベース生成
+                👑 ブランドベース
+              </button>
+              <button
+                onClick={() => setSettings(prev => ({ ...prev, generationMode: 'creative' }))}
+                className={`px-4 py-3 rounded-md font-medium transition-colors ${
+                  settings.generationMode === 'creative'
+                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md'
+                    : settings.darkMode
+                    ? 'text-gray-300 hover:text-white hover:bg-gray-700'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+                }`}
+              >
+                🌟 Creative
               </button>
             </div>
           </div>
@@ -367,7 +394,9 @@ const PromptGenerator: React.FC = () => {
           <p className="text-sm opacity-70">
             {settings.generationMode === 'elements' 
               ? '素材・シルエット・トレンドを自由に組み合わせてユニークなプロンプトを作成' 
-              : 'Chanel、Dior、Comme des Garçonsなど43の有名ブランドスタイルでプロンプトを生成'}
+              : settings.generationMode === 'brand'
+              ? 'Chanel、Dior、Comme des Garçonsなど43の有名ブランドスタイルでプロンプトを生成'
+              : 'アーティスティックで実験的なファッションプロンプトを生成。ミクストメディアコラージュとアート技法を活用'}
           </p>
         </div>
         
@@ -439,7 +468,7 @@ const PromptGenerator: React.FC = () => {
                   </button>
                 </div>
               </div>
-            ) : (
+            ) : settings.generationMode === 'brand' ? (
               // ブランドベース生成用UI
               <div className={`rounded-lg p-6 mb-6 ${
                 settings.darkMode ? 'bg-gray-800' : 'bg-white'
@@ -538,7 +567,17 @@ const PromptGenerator: React.FC = () => {
                   </button>
                 </div>
               </div>
-            )}
+            ) : settings.generationMode === 'creative' ? (
+              // Creativeモード用UI
+              <CreativeModePanel
+                creativeSettings={creativeSettings}
+                onCreativeSettingsChange={setCreativeSettings}
+                onGenerate={generatePrompts}
+                onClearSettings={() => setCreativeSettings({ randomizeAll: true })}
+                isGenerating={isGenerating}
+                darkMode={settings.darkMode}
+              />
+            ) : null}
             
             {/* 設定パネル */}
             <SettingsPanel

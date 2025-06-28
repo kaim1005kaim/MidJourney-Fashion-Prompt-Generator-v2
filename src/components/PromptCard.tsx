@@ -6,7 +6,7 @@ import { Prompt } from '../types';
 interface PromptCardProps {
   prompt: Prompt;
   onUpdate: (prompt: Prompt) => void;
-  onDelete: (id: number) => void;
+  onDelete: (id: string) => void;
   darkMode: boolean;
 }
 
@@ -18,7 +18,7 @@ export default function PromptCard({
 }: PromptCardProps) {
   const [showDetails, setShowDetails] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [editNotes, setEditNotes] = useState(prompt.resultNotes || '');
+  const [editNotes, setEditNotes] = useState(prompt.notes || '');
 
   // コピー機能
   const handleCopy = async () => {
@@ -50,7 +50,7 @@ export default function PromptCard({
   const handleSaveNotes = () => {
     onUpdate({
       ...prompt,
-      resultNotes: editNotes
+      notes: editNotes
     });
     setIsEditing(false);
   };
@@ -108,13 +108,17 @@ export default function PromptCard({
       {/* 要素タグ */}
       <div className="flex flex-wrap gap-2 mb-4 text-sm">
         {/* 生成モード表示 */}
-        {prompt.generationMode && (
+        {prompt.mode && (
           <span className={`px-2 py-1 rounded text-xs font-medium ${
-            prompt.generationMode === 'elements'
+            prompt.mode === 'elements'
               ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100'
-              : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100'
+              : prompt.mode === 'brand'
+              ? 'bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-100'
+              : 'bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900 dark:to-pink-900 text-purple-800 dark:text-purple-100'
           }`}>
-            {prompt.generationMode === 'elements' ? '要素ベース' : 'ブランドベース'}
+            {prompt.mode === 'elements' ? '要素ベース' 
+             : prompt.mode === 'brand' ? 'ブランドベース' 
+             : '🌟 Creative'}
           </span>
         )}
         
@@ -164,6 +168,18 @@ export default function PromptCard({
           <span className="bg-pink-100 dark:bg-pink-900 text-pink-800 dark:text-pink-100 px-2 py-1 rounded">
             {prompt.silhouette.split(' ').slice(0, 2).join(' ')}
           </span>
+        )}
+        
+        {/* Creativeモード要素 */}
+        {prompt.creativeElements && (
+          <>
+            <span className="bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900 dark:to-pink-900 text-purple-800 dark:text-purple-100 px-2 py-1 rounded text-xs">
+              {prompt.creativeElements.artisticTechnique}
+            </span>
+            <span className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100 px-2 py-1 rounded text-xs">
+              {prompt.creativeElements.naturalElement}
+            </span>
+          </>
         )}
       </div>
       
@@ -355,7 +371,7 @@ export default function PromptCard({
               <button
                 onClick={() => {
                   setIsEditing(false);
-                  setEditNotes(prompt.resultNotes || '');
+                  setEditNotes(prompt.notes || '');
                 }}
                 className={`px-3 py-1 text-sm rounded transition-colors ${
                   darkMode 
@@ -369,11 +385,11 @@ export default function PromptCard({
           </div>
         ) : (
           <div className="flex items-start gap-2">
-            {prompt.resultNotes ? (
+            {prompt.notes ? (
               <div className={`flex-grow p-3 rounded text-sm ${
                 darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-50 text-gray-700'
               }`}>
-                {prompt.resultNotes}
+                {prompt.notes}
               </div>
             ) : (
               <div className={`flex-grow p-3 rounded text-sm italic ${
@@ -401,7 +417,7 @@ export default function PromptCard({
       <div className={`mt-3 text-xs ${
         darkMode ? 'text-gray-400' : 'text-gray-500'
       }`}>
-        {new Date(prompt.createdDate).toLocaleString()}
+        {prompt.timestamp.toLocaleString()}
       </div>
     </div>
   );

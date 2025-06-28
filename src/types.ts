@@ -103,12 +103,13 @@ export interface FashionContext {
 }
 
 export interface Prompt {
-  id: number;
+  id: string; // 更新: 文字列IDに変更
+  text: string; // 基本プロンプトテキスト
   fullPrompt: string;
-  createdDate: string;
+  timestamp: Date; // 更新: Date型に変更
   rating: number;
   isFavorite: boolean;
-  resultNotes?: string;
+  notes: string; // 更新: resultNotesからnotesに変更
   resultImagePath?: string;
   brandId?: number;
   brandName?: string;
@@ -125,7 +126,20 @@ export interface Prompt {
   selectedMaterial?: Material;
   selectedSilhouette?: Silhouette;
   selectedStyleTrend?: StyleTrend;
-  generationMode?: 'brand' | 'elements'; // どのモードで生成されたか
+  mode: 'brand' | 'elements' | 'creative'; // 生成モード（Creativeモード追加）
+  elements?: any; // 選択された要素全体
+  creativeElements?: CreativeElements; // Creativeモード用要素
+  settings?: AppSettings; // 生成時の設定
+}
+
+// Creativeモード用の要素定義
+export interface CreativeElements {
+  artisticTechnique: string;
+  naturalElement: string;
+  overlayEffect: string;
+  colorMood: string;
+  surrealElement: string;
+  artistReference: string;
 }
 
 export interface PhraseVariationGroup {
@@ -190,14 +204,27 @@ export interface AppSettings {
   stylize: string; // 選択されたスタイライズ値
   customSuffix: string;
   // 新しいV2設定
-  generationMode: 'brand' | 'elements'; // 生成モード
+  generationMode: 'brand' | 'elements' | 'creative'; // 生成モード（Creativeモード追加）
   includeSeasonalConsistency: boolean; // 季節的一貫性を考慮
   includeColorHarmony: boolean; // カラーハーモニーを考慮
-  creativityLevel: 'conservative' | 'balanced' | 'experimental'; // 創造性レベル
+  creativityLevel: 'conservative' | 'balanced' | 'experimental' | 'maximum'; // 創造性レベル（maximum追加）
   // 撮影角度設定
   cameraAngle: 'random' | 'full-body' | 'portrait'; // 撮影角度選択
   // カラーパレット設定
   useColorPalette: boolean; // カラーパレットを使用するか
   selectedColorPalette?: string; // 選択されたカラーパレットID
   customColors: string[]; // カスタムカラー（最大5色）
+}
+
+// Creativeモード用の設定
+export interface CreativeSettings {
+  artisticTechnique?: string;
+  naturalElement?: string;
+  overlayEffect?: string;
+  colorMood?: string;
+  surrealElement?: string;
+  artistReference?: string;
+  templateIndex?: number;
+  fashionDescription?: string;
+  randomizeAll?: boolean; // すべてランダム化するか
 }
