@@ -23,16 +23,39 @@ const MixedModePanel: React.FC<MixedModePanelProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<'presets' | 'custom'>('presets');
   const [showPreview, setShowPreview] = useState(true);
+  const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
   
   const validation = validateMixedSettings(mixedSettings);
+  
+  // 現在の設定がどのプリセットに一致するかチェック
+  const getCurrentPreset = (): string | null => {
+    for (const [key, preset] of Object.entries(mixedModePresets)) {
+      const settings = preset.settings;
+      if (
+        mixedSettings.balanceMode === settings.balanceMode &&
+        mixedSettings.elementsRatio === settings.elementsRatio &&
+        mixedSettings.brandRatio === settings.brandRatio &&
+        mixedSettings.creativeRatio === settings.creativeRatio &&
+        mixedSettings.shuffleOrder === settings.shuffleOrder
+      ) {
+        return key;
+      }
+    }
+    return null;
+  };
+  
+  const currentPreset = getCurrentPreset();
 
   // プリセット適用
   const applyPreset = (presetKey: keyof typeof mixedModePresets) => {
+    setSelectedPreset(presetKey);
     onMixedSettingsChange(mixedModePresets[presetKey].settings);
   };
 
   // カスタム設定更新
   const updateCustomSetting = (key: keyof MixedModeSettings, value: any) => {
+    // カスタム設定を変更する際は選択されたプリセットをクリア
+    setSelectedPreset(null);
     onMixedSettingsChange({
       ...mixedSettings,
       [key]: value
@@ -87,6 +110,29 @@ const MixedModePanel: React.FC<MixedModePanelProps> = ({
           <p className={`text-sm mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
             3つのモードをバランスよく組み合わせて生成
           </p>
+          {/* 現在の状態表示 */}
+          <div className="mt-2">
+            {currentPreset ? (
+              <div className="flex items-center gap-2">
+                <span className={`text-xs px-2 py-1 rounded-full ${
+                  darkMode ? 'bg-green-900/30 text-green-300' : 'bg-green-100 text-green-700'
+                }`}>
+                  ✓ 適用中
+                </span>
+                <span className={`text-xs font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  {mixedModePresets[currentPreset as keyof typeof mixedModePresets].name}
+                </span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <span className={`text-xs px-2 py-1 rounded-full ${
+                  darkMode ? 'bg-blue-900/30 text-blue-300' : 'bg-blue-100 text-blue-700'
+                }`}>
+                  ⚙️ カスタム設定
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -165,18 +211,39 @@ const MixedModePanel: React.FC<MixedModePanelProps> = ({
           </p>
           
           <div className="grid gap-3">
-            {Object.entries(mixedModePresets).map(([key, preset]) => (
-              <div
-                key={key}
-                onClick={() => applyPreset(key as keyof typeof mixedModePresets)}
-                className={`p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md ${
-                  darkMode
-                    ? 'border-gray-600 hover:border-purple-500 bg-gray-700 hover:bg-gray-650'
-                    : 'border-gray-200 hover:border-purple-300 bg-gray-50 hover:bg-purple-50'
-                }`}
+            {Object.entries(mixedModePresets).map(([key, preset]) => {
+              const isSelected = currentPreset === key;
+              return (
+                <div
+                  key={key}
+                  onClick={() => applyPreset(key as keyof typeof mixedModePresets)}
+                  className={`p-4 border-2 rounded-lg cursor-pointer transition-all hover:shadow-md relative ${
+                    isSelected
+                      ? darkMode
+                        ? 'border-purple-500 bg-purple-900/20 shadow-lg'
+                        : 'border-purple-500 bg-purple-50 shadow-lg'
+                      : darkMode
+                      ? 'border-gray-600 hover:border-purple-400 bg-gray-700 hover:bg-gray-650'
+                      : 'border-gray-200 hover:border-purple-300 bg-gray-50 hover:bg-purple-50'
+                  }`}
               >
+                {/* 選択インジケーター */}
+                {isSelected && (
+                  <div className="absolute top-2 right-2">
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                      darkMode ? 'bg-purple-500' : 'bg-purple-500'
+                    }`}>
+                      <span className="text-white text-xs font-bold">✓</span>
+                    </div>
+                  </div>
+                )}
+                
                 <div className="flex items-center justify-between mb-2">
-                  <h4 className={`font-medium ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                  <h4 className={`font-medium ${
+                    isSelected 
+                      ? darkMode ? 'text-purple-300' : 'text-purple-700'
+                      : darkMode ? 'text-gray-200' : 'text-gray-800'
+                  }`}>
                     {preset.name}
                   </h4>
                   <div className="flex gap-1 text-xs">
@@ -212,7 +279,8 @@ const MixedModePanel: React.FC<MixedModePanelProps> = ({
                   </div>
                 )}
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
