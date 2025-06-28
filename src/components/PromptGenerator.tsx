@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Prompt, AppSettings, FilterOptions, Material, Silhouette, StyleTrend, CreativeSettings } from '../types';
+import { Prompt, AppSettings, FilterOptions, Material, Silhouette, StyleTrend, CreativeSettings, MixedModeSettings } from '../types';
 import { fashionContext } from '../data/initialData';
 import { generateElementBasedPrompt, generateMultipleElementBasedPrompts, checkElementCompatibility, getPopularCombinations } from '../services/elementBasedPromptService';
 import { generateBrandBasedPrompt, generateMultipleBrandBasedPrompts, getAvailableBrands } from '../services/brandBasedPromptService';
 import { generateCreativePrompt, generateMultipleCreativePrompts } from '../services/creativePromptService';
+import { generateMixedModePrompts, getDefaultMixedSettings } from '../services/mixedModeService';
 import PromptCard from './PromptCard';
 import SettingsPanel from './SettingsPanel';
 import ElementSelector from './ElementSelector';
 import CompatibilityIndicator from './CompatibilityIndicator';
 import CreativeModePanel from './CreativeMode/CreativeModePanel';
+import MixedModePanel from './MixedMode/MixedModePanel';
 
 const PromptGenerator: React.FC = () => {
   const [prompts, setPrompts] = useState<Prompt[]>([]);
@@ -68,6 +70,9 @@ const PromptGenerator: React.FC = () => {
   const [creativeSettings, setCreativeSettings] = useState<CreativeSettings>({
     randomizeAll: true // デフォルトは完全ランダム
   });
+  
+  // ミックスモード用の状態
+  const [mixedSettings, setMixedSettings] = useState<MixedModeSettings>(getDefaultMixedSettings());
   
   // データ整合性チェック
   useEffect(() => {
@@ -142,6 +147,16 @@ const PromptGenerator: React.FC = () => {
           selectedElements,
           settings.promptCount,
           creativeSettings
+        );
+      } else if (settings.generationMode === 'mixed') {
+        // ミックスモード生成
+        newPrompts = generateMixedModePrompts(
+          settings,
+          selectedElements,
+          filters,
+          creativeSettings,
+          mixedSettings,
+          settings.promptCount
         );
       } else {
         // 要素ベース生成
@@ -377,7 +392,7 @@ const PromptGenerator: React.FC = () => {
               </button>
               <button
                 onClick={() => setSettings(prev => ({ ...prev, generationMode: 'creative' }))}
-                className={`px-4 py-3 rounded-md font-medium transition-colors ${
+                className={`px-3 py-3 rounded-md font-medium transition-colors ${
                   settings.generationMode === 'creative'
                     ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md'
                     : settings.darkMode
@@ -386,6 +401,18 @@ const PromptGenerator: React.FC = () => {
                 }`}
               >
                 🌟 Creative
+              </button>
+              <button
+                onClick={() => setSettings(prev => ({ ...prev, generationMode: 'mixed' }))}
+                className={`px-3 py-3 rounded-md font-medium transition-colors ${
+                  settings.generationMode === 'mixed'
+                    ? 'bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white shadow-md'
+                    : settings.darkMode
+                    ? 'text-gray-300 hover:text-white hover:bg-gray-700'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+                }`}
+              >
+                🎭 ミックス
               </button>
             </div>
           </div>
@@ -396,7 +423,9 @@ const PromptGenerator: React.FC = () => {
               ? '素材・シルエット・トレンドを自由に組み合わせてユニークなプロンプトを作成' 
               : settings.generationMode === 'brand'
               ? 'Chanel、Dior、Comme des Garçonsなど43の有名ブランドスタイルでプロンプトを生成'
-              : 'アーティスティックで実験的なファッションプロンプトを生成。ミクストメディアコラージュとアート技法を活用'}
+              : settings.generationMode === 'creative'
+              ? 'アーティスティックで実験的なファッションプロンプトを生成。ミクストメディアコラージュとアート技法を活用'
+              : '3つのモード（要素ベース・ブランドベース・Creative）をバランスよく組み合わせて多様なプロンプトを生成'}
           </p>
         </div>
         
@@ -576,6 +605,17 @@ const PromptGenerator: React.FC = () => {
                 onClearSettings={() => setCreativeSettings({ randomizeAll: true })}
                 isGenerating={isGenerating}
                 darkMode={settings.darkMode}
+              />
+            ) : settings.generationMode === 'mixed' ? (
+              // ミックスモード用UI
+              <MixedModePanel
+                mixedSettings={mixedSettings}
+                onMixedSettingsChange={setMixedSettings}
+                onGenerate={generatePrompts}
+                onClearSettings={() => setMixedSettings(getDefaultMixedSettings())}
+                isGenerating={isGenerating}
+                darkMode={settings.darkMode}
+                totalCount={settings.promptCount}
               />
             ) : null}
             

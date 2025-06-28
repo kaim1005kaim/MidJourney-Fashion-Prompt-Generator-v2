@@ -114,7 +114,7 @@ export default function SettingsPanel({ settings, onSettingsChange, onDatabaseUp
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     生成モード
                   </label>
-                  <div className="flex gap-2">
+                  <div className="grid grid-cols-2 gap-2">
                     <button
                       onClick={() => handleSettingChange('generationMode', 'elements')}
                       className={`px-3 py-2 text-sm rounded-md transition-colors ${
@@ -129,17 +129,41 @@ export default function SettingsPanel({ settings, onSettingsChange, onDatabaseUp
                       onClick={() => handleSettingChange('generationMode', 'brand')}
                       className={`px-3 py-2 text-sm rounded-md transition-colors ${
                         settings.generationMode === 'brand'
-                          ? 'bg-blue-500 text-white'
+                          ? 'bg-purple-500 text-white'
                           : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                       }`}
                     >
                       ブランドベース
                     </button>
+                    <button
+                      onClick={() => handleSettingChange('generationMode', 'creative')}
+                      className={`px-3 py-2 text-sm rounded-md transition-colors ${
+                        settings.generationMode === 'creative'
+                          ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
+                          : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                      }`}
+                    >
+                      Creative
+                    </button>
+                    <button
+                      onClick={() => handleSettingChange('generationMode', 'mixed')}
+                      className={`px-3 py-2 text-sm rounded-md transition-colors ${
+                        settings.generationMode === 'mixed'
+                          ? 'bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white'
+                          : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                      }`}
+                    >
+                      ミックス
+                    </button>
                   </div>
                   <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                     {settings.generationMode === 'elements' 
                       ? '素材・シルエット・トレンドの組み合わせで生成' 
-                      : 'ファッションブランドベースで生成'}
+                      : settings.generationMode === 'brand'
+                      ? 'ファッションブランドベースで生成'
+                      : settings.generationMode === 'creative'
+                      ? 'アーティスティックで実験的なプロンプトを生成'
+                      : '3つのモードをバランスよく組み合わせて生成'}
                   </p>
                 </div>
 
@@ -151,17 +175,18 @@ export default function SettingsPanel({ settings, onSettingsChange, onDatabaseUp
                   <input
                     type="range"
                     min="1"
-                    max="20"
+                    max="50"
                     value={settings.promptCount}
                     onChange={(e) => handleSettingChange('promptCount', parseInt(e.target.value))}
                     className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
                   />
                   <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
                     <span>1</span>
-                    <span>5</span>
                     <span>10</span>
-                    <span>15</span>
                     <span>20</span>
+                    <span>30</span>
+                    <span>40</span>
+                    <span>50</span>
                   </div>
                 </div>
 

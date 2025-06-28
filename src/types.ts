@@ -126,7 +126,7 @@ export interface Prompt {
   selectedMaterial?: Material;
   selectedSilhouette?: Silhouette;
   selectedStyleTrend?: StyleTrend;
-  mode: 'brand' | 'elements' | 'creative'; // 生成モード（Creativeモード追加）
+  mode: 'brand' | 'elements' | 'creative' | 'mixed'; // 生成モード（Creativeモード、ミックスモード追加）
   elements?: any; // 選択された要素全体
   creativeElements?: CreativeElements; // Creativeモード用要素
   settings?: AppSettings; // 生成時の設定
@@ -204,7 +204,7 @@ export interface AppSettings {
   stylize: string; // 選択されたスタイライズ値
   customSuffix: string;
   // 新しいV2設定
-  generationMode: 'brand' | 'elements' | 'creative'; // 生成モード（Creativeモード追加）
+  generationMode: 'brand' | 'elements' | 'creative' | 'mixed'; // 生成モード（Creativeモード、ミックスモード追加）
   includeSeasonalConsistency: boolean; // 季節的一貫性を考慮
   includeColorHarmony: boolean; // カラーハーモニーを考慮
   creativityLevel: 'conservative' | 'balanced' | 'experimental' | 'maximum'; // 創造性レベル（maximum追加）
@@ -227,4 +227,13 @@ export interface CreativeSettings {
   templateIndex?: number;
   fashionDescription?: string;
   randomizeAll?: boolean; // すべてランダム化するか
+}
+
+// ミックスモード用の設定
+export interface MixedModeSettings {
+  elementsRatio: number; // 要素ベースの割合 (0-100)
+  brandRatio: number; // ブランドベースの割合 (0-100)
+  creativeRatio: number; // Creativeモードの割合 (0-100)
+  balanceMode: 'equal' | 'custom' | 'random'; // バランスモード
+  shuffleOrder: boolean; // 生成順をシャッフルするか
 }
