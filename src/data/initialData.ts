@@ -441,8 +441,216 @@ export const materials = [
     care: ["wipe-clean-with-soft-cloth", "special-patent-cleaner"],
     sustainability: "low", // コーティングと革/合成皮革のベースによる
     priceRange: "mid-range" // (synthetic) to luxury (real leather)
+  },
+
+  // --- 新規追加素材 (Phase 1: +14種類) ---
+  
+  // プレミアム天然素材
+  {
+    id: "vicuna-wool",
+    name: "ビクーニャウール",
+    description: "南米アンデス山脈に生息するビクーニャから採取される世界最高級の動物繊維。軽量で温かく、シルクのような光沢を持つ。",
+    keywords: ["vicuna", "luxury", "premium", "rare", "soft", "lightweight", "lustrous", "exclusive"],
+    season: ["autumn", "winter"],
+    formality: ["formal", "luxury"],
+    compatibility: ["silk", "cashmere", "fine-wool", "satin"],
+    texture: "ultra-soft",
+    weight: "ultra-lightweight",
+    care: ["dry-clean-only", "specialist-care"],
+    sustainability: "high", // 野生動物保護への配慮
+    priceRange: "ultra-luxury"
+  },
+  {
+    id: "alpaca-wool",
+    name: "アルパカウール",
+    description: "アルパカの毛から作られる高品質な天然繊維。羊毛よりも軽量で温かく、低アレルギー性も特徴。",
+    keywords: ["alpaca", "natural", "hypoallergenic", "warm", "lightweight", "sustainable", "premium"],
+    season: ["autumn", "winter"],
+    formality: ["casual", "business", "formal"],
+    compatibility: ["wool", "cashmere", "cotton", "linen"],
+    texture: "soft",
+    weight: "lightweight",
+    care: ["hand-wash", "dry-clean", "gentle-machine-wash"],
+    sustainability: "high",
+    priceRange: "premium"
+  },
+  {
+    id: "silk-georgette",
+    name: "シルクジョーゼット",
+    description: "薄手で軽やか、微細なしわ加工が施されたシルク素材。流れるような美しいドレープが特徴的。",
+    keywords: ["silk", "georgette", "flowing", "lightweight", "drape", "elegant", "sheer", "luxurious"],
+    season: ["spring", "summer", "early_autumn"],
+    formality: ["business", "formal", "cocktail"],
+    compatibility: ["silk-satin", "chiffon", "crepe", "lace"],
+    texture: "crisp",
+    weight: "ultra-lightweight",
+    care: ["dry-clean", "gentle-hand-wash"],
+    sustainability: "medium",
+    priceRange: "luxury"
+  },
+
+  // 革新的テクニカル素材
+  {
+    id: "smart-fabric",
+    name: "スマートファブリック",
+    description: "体温調節機能や抗菌性、形状記憶など、先進技術を組み込んだ次世代素材。機能性とファッション性を両立。",
+    keywords: ["smart-textile", "tech-wear", "functional", "innovative", "adaptive", "performance", "future"],
+    season: ["all"],
+    formality: ["casual", "activewear", "tech-casual"],
+    compatibility: ["technical-nylon", "neoprene", "performance-fabrics"],
+    texture: "smooth",
+    weight: "variable",
+    care: ["special-tech-wash", "air-dry"],
+    sustainability: "medium",
+    priceRange: "premium"
+  },
+  {
+    id: "phase-change-material",
+    name: "相変化素材",
+    description: "体温に応じて蓄熱・放熱を行う素材。暑い時は冷却し、寒い時は保温する自動調節機能を持つ。",
+    keywords: ["pcm", "temperature-regulating", "adaptive", "comfort", "innovative", "thermal-management"],
+    season: ["all"],
+    formality: ["activewear", "outdoor", "tech-casual"],
+    compatibility: ["technical-fabrics", "performance-wear", "smart-textiles"],
+    texture: "smooth",
+    weight: "medium",
+    care: ["machine-wash-cold", "air-dry"],
+    sustainability: "medium",
+    priceRange: "premium"
+  },
+
+  // バイオ・サステナブル素材
+  {
+    id: "mushroom-leather",
+    name: "マッシュルームレザー",
+    description: "キノコの菌糸体から作られる革新的なヴィーガンレザー。本革に近い質感を持ちながら環境負荷が低い。",
+    keywords: ["mushroom", "mycelium", "vegan-leather", "sustainable", "innovative", "eco-friendly", "biodegradable"],
+    season: ["all"],
+    formality: ["casual", "business", "eco-luxury"],
+    compatibility: ["organic-cotton", "hemp", "recycled-polyester", "sustainable-fabrics"],
+    texture: "leather-like",
+    weight: "medium",
+    care: ["wipe-clean", "avoid-water"],
+    sustainability: "very-high",
+    priceRange: "premium"
+  },
+  {
+    id: "pineapple-leather",
+    name: "パイナップルレザー",
+    description: "パイナップルの葉の繊維から作られるサステナブルなヴィーガンレザー。柔軟性と耐久性を兼ね備える。",
+    keywords: ["pineapple", "pinatex", "vegan-leather", "sustainable", "fruit-waste", "eco-innovation", "flexible"],
+    season: ["all"],
+    formality: ["casual", "eco-conscious", "alternative-luxury"],
+    compatibility: ["organic-cotton", "hemp", "sustainable-synthetics"],
+    texture: "leather-like",
+    weight: "medium",
+    care: ["gentle-clean", "avoid-soaking"],
+    sustainability: "very-high",
+    priceRange: "mid-range"
+  },
+  {
+    id: "orange-fiber",
+    name: "オレンジファイバー",
+    description: "オレンジの搾りかすから作られるシルクのような光沢を持つ素材。ビタミンEを含有し、肌に優しい。",
+    keywords: ["orange", "citrus-fiber", "silk-like", "vitamin-enriched", "innovative", "upcycled", "lustrous"],
+    season: ["spring", "summer"],
+    formality: ["casual", "business", "eco-luxury"],
+    compatibility: ["silk", "cotton", "sustainable-fabrics"],
+    texture: "silk-like",
+    weight: "lightweight",
+    care: ["gentle-wash", "dry-flat"],
+    sustainability: "very-high",
+    priceRange: "premium"
+  },
+
+  // 伝統的高級素材
+  {
+    id: "brocade",
+    name: "ブロケード",
+    description: "金糸や銀糸を織り込んだ豪華な装飾織物。歴史ある高級素材で、フォーマルウェアに多用される。",
+    keywords: ["brocade", "metallic-threads", "ornate", "formal", "traditional", "luxury", "decorative"],
+    season: ["autumn", "winter"],
+    formality: ["formal", "cocktail", "ceremonial"],
+    compatibility: ["silk", "velvet", "satin", "fine-wool"],
+    texture: "textured",
+    weight: "heavy",
+    care: ["dry-clean-only", "professional-care"],
+    sustainability: "medium",
+    priceRange: "luxury"
+  },
+  {
+    id: "damask",
+    name: "ダマスク",
+    description: "光沢のある図柄と無光沢の地組織のコントラストが美しい高級織物。エレガントなパターンが特徴。",
+    keywords: ["damask", "woven-pattern", "elegant", "contrast", "traditional", "sophisticated", "formal"],
+    season: ["all"],
+    formality: ["business", "formal", "luxury"],
+    compatibility: ["silk", "fine-cotton", "linen", "wool-blend"],
+    texture: "smooth",
+    weight: "medium",
+    care: ["dry-clean", "gentle-wash"],
+    sustainability: "medium",
+    priceRange: "luxury"
+  },
+  {
+    id: "chiffon",
+    name: "シフォン",
+    description: "薄手で軽やか、透明感のある素材。ドレープ性に優れ、エレガントな仕上がりになる。",
+    keywords: ["chiffon", "sheer", "lightweight", "flowing", "elegant", "feminine", "delicate"],
+    season: ["spring", "summer"],
+    formality: ["cocktail", "formal", "romantic"],
+    compatibility: ["silk", "satin", "lace", "tulle"],
+    texture: "sheer",
+    weight: "ultra-lightweight",
+    care: ["dry-clean", "gentle-hand-wash"],
+    sustainability: "medium",
+    priceRange: "mid-range"
+  },
+  {
+    id: "organza",
+    name: "オーガンザ",
+    description: "薄手で張りがあり、透明感のある素材。ボリューム感を出しながらも軽やかな印象を与える。",
+    keywords: ["organza", "crisp", "transparent", "structured", "volume", "formal", "bridal"],
+    season: ["spring", "summer", "formal-occasions"],
+    formality: ["formal", "bridal", "cocktail"],
+    compatibility: ["silk", "tulle", "satin", "lace"],
+    texture: "crisp",
+    weight: "lightweight",
+    care: ["dry-clean", "steam-gently"],
+    sustainability: "medium",
+    priceRange: "premium"
+  },
+
+  // パフォーマンス・スポーツ素材
+  {
+    id: "compression-fabric",
+    name: "コンプレッション素材",
+    description: "身体に適度な圧力を加えることで血流を促進し、パフォーマンス向上をサポートする機能性素材。",
+    keywords: ["compression", "performance", "athletic", "support", "functional", "stretchy", "recovery"],
+    season: ["all"],
+    formality: ["activewear", "sportswear", "athleisure"],
+    compatibility: ["moisture-wicking", "technical-fabrics", "performance-wear"],
+    texture: "smooth",
+    weight: "medium",
+    care: ["machine-wash-cold", "air-dry"],
+    sustainability: "medium",
+    priceRange: "mid-range"
+  },
+  {
+    id: "moisture-wicking",
+    name: "モイスチャーウィック素材",
+    description: "汗を素早く吸収・拡散させて乾燥を促進する高機能素材。運動時の快適性を向上させる。",
+    keywords: ["moisture-wicking", "quick-dry", "breathable", "performance", "athletic", "comfort"],
+    season: ["all"],
+    formality: ["activewear", "sportswear", "casual-athletic"],
+    compatibility: ["compression-fabric", "technical-synthetics", "performance-wear"],
+    texture: "smooth",
+    weight: "lightweight",
+    care: ["machine-wash", "tumble-dry-low"],
+    sustainability: "medium",
+    priceRange: "mid-range"
   }
-  // 目標50-60種類に対し、現在 約25種類。更なる追加が可能。
+  // 現在の素材数: 約39種類（目標45種類まであと6種類）
 ];
 
 // シルエットデータ
@@ -687,8 +895,160 @@ export const silhouettes = [
     compatibility: ["suits", "dresses", "jeans-and-sweater", "scarf", "ankle-boots"],
     formality: ["business", "business_casual", "smart_casual"],
     ageGroups: ["all"]
+  },
+
+  // --- 新規追加シルエット (Phase 1: +12種類) ---
+  
+  // トップス系
+  {
+    id: "off-shoulder-top",
+    name: "オフショルダートップ",
+    description: "肩を露出したデザインで、女性らしさとエレガンスを演出。春夏に人気の定番スタイル。",
+    keywords: ["off-shoulder", "feminine", "elegant", "shoulder-baring", "romantic", "summer-style"],
+    seasons: ["spring", "summer"],
+    occasions: ["casual", "date", "vacation", "party"],
+    bodyTypes: ["all"],
+    formality: ["casual", "semi-formal"],
+    ageGroups: ["young-adult", "adult"],
+    compatibility: ["high-waisted-bottoms", "statement-earrings", "delicate-necklaces", "flowing-skirts"]
+  },
+  {
+    id: "halter-neck-top",
+    name: "ホルターネック",
+    description: "首の後ろで結ぶデザインで背中が大きく開いたスタイル。セクシーで大胆な印象を与える。",
+    keywords: ["halter-neck", "backless", "sexy", "dramatic", "statement", "summer"],
+    seasons: ["spring", "summer"],
+    occasions: ["party", "date", "vacation", "evening"],
+    bodyTypes: ["pear", "rectangle", "inverted-triangle"],
+    formality: ["casual", "cocktail", "evening"],
+    ageGroups: ["young-adult", "adult"],
+    compatibility: ["high-waisted-bottoms", "statement-jewelry", "strappy-sandals"]
+  },
+  {
+    id: "bodysuit",
+    name: "ボディスーツ",
+    description: "体にフィットし、下部でスナップ留めするワンピース型トップス。スタイリッシュでスマートな印象。",
+    keywords: ["bodysuit", "fitted", "sleek", "modern", "streamlined", "versatile"],
+    seasons: ["all"],
+    occasions: ["casual", "work", "evening", "layering"],
+    bodyTypes: ["hourglass", "rectangle", "inverted-triangle"],
+    formality: ["casual", "business_casual", "evening"],
+    ageGroups: ["young-adult", "adult"],
+    compatibility: ["high-waisted-pants", "skirts", "blazers", "statement-bottoms"]
+  },
+  {
+    id: "tube-top",
+    name: "チューブトップ",
+    description: "肩紐がないスタイルで、胸元でフィットするデザイン。カジュアルからエレガントまで幅広く着用。",
+    keywords: ["tube-top", "strapless", "minimal", "summer", "casual", "layering"],
+    seasons: ["spring", "summer"],
+    occasions: ["casual", "vacation", "layering-piece"],
+    bodyTypes: ["hourglass", "pear"],
+    formality: ["casual"],
+    ageGroups: ["young-adult"],
+    compatibility: ["cardigans", "blazers", "high-waisted-bottoms", "statement-accessories"]
+  },
+
+  // ボトムス系
+  {
+    id: "palazzo-pants",
+    name: "パラッツォパンツ",
+    description: "ウエストから裾にかけて大きく広がる、流れるようなワイドパンツ。エレガントで快適。",
+    keywords: ["palazzo", "wide-leg", "flowing", "elegant", "comfortable", "bohemian"],
+    seasons: ["spring", "summer", "early_autumn"],
+    occasions: ["casual", "vacation", "evening", "relaxed"],
+    bodyTypes: ["pear", "apple", "rectangle"],
+    formality: ["casual", "resort", "semi-formal"],
+    ageGroups: ["all"],
+    compatibility: ["fitted-tops", "blouses", "camisoles", "statement-jewelry"]
+  },
+  {
+    id: "capri-pants",
+    name: "カプリパンツ",
+    description: "ふくらはぎの中間丈の長さのパンツ。カジュアルで実用的、夏の定番アイテム。",
+    keywords: ["capri", "cropped", "mid-calf", "casual", "practical", "summer"],
+    seasons: ["spring", "summer"],
+    occasions: ["casual", "vacation", "outdoor", "relaxed"],
+    bodyTypes: ["rectangle", "pear", "inverted-triangle"],
+    formality: ["casual"],
+    ageGroups: ["adult", "mature"],
+    compatibility: ["tops", "blouses", "sandals", "flats"]
+  },
+  {
+    id: "jogger-pants",
+    name: "ジョガーパンツ",
+    description: "足首部分が絞られたスポーティーなパンツ。カジュアルで快適性を重視したデザイン。",
+    keywords: ["jogger", "athletic", "casual", "comfortable", "sporty", "tapered"],
+    seasons: ["all"],
+    occasions: ["casual", "athletic", "relaxed", "streetwear"],
+    bodyTypes: ["all"],
+    formality: ["casual", "athleisure"],
+    ageGroups: ["young-adult", "adult"],
+    compatibility: ["sneakers", "t-shirts", "hoodies", "athletic-wear"]
+  },
+  {
+    id: "cargo-pants",
+    name: "カーゴパンツ",
+    description: "太ももなどにパッチポケットが付いたユーティリティパンツ。機能的でストリート感のあるデザイン。",
+    keywords: ["cargo", "utility", "functional", "streetwear", "pockets", "urban"],
+    seasons: ["all"],
+    occasions: ["casual", "streetwear", "outdoor", "urban"],
+    bodyTypes: ["rectangle", "inverted-triangle"],
+    formality: ["casual", "streetwear"],
+    ageGroups: ["young-adult", "adult"],
+    compatibility: ["t-shirts", "tank-tops", "sneakers", "boots"]
+  },
+
+  // ドレス・スカート系
+  {
+    id: "bodycon-dress",
+    name: "ボディコンドレス",
+    description: "体のラインにぴったりとフィットするタイトなドレス。セクシーで自信に満ちた印象を与える。",
+    keywords: ["bodycon", "fitted", "tight", "sexy", "curve-hugging", "confident"],
+    seasons: ["spring", "summer", "evening"],
+    occasions: ["party", "date", "evening", "club"],
+    bodyTypes: ["hourglass", "rectangle"],
+    formality: ["cocktail", "evening", "party"],
+    ageGroups: ["young-adult", "adult"],
+    compatibility: ["heels", "statement-jewelry", "blazers", "jackets"]
+  },
+  {
+    id: "shirt-dress",
+    name: "シャツドレス",
+    description: "シャツのディテールを持つドレススタイル。クラシックで versatile、カジュアルからビジネスまで対応。",
+    keywords: ["shirt-dress", "versatile", "classic", "button-front", "collar", "timeless"],
+    seasons: ["all"],
+    occasions: ["casual", "work", "brunch", "everyday"],
+    bodyTypes: ["all"],
+    formality: ["casual", "business_casual"],
+    ageGroups: ["all"],
+    compatibility: ["belts", "sneakers", "sandals", "pumps", "cardigans"]
+  },
+  {
+    id: "pleated-skirt",
+    name: "プリーツスカート",
+    description: "規則的なひだが入ったスカート。クラシックで上品、動きに合わせて美しく揺れる。",
+    keywords: ["pleated", "classic", "elegant", "movement", "feminine", "structured"],
+    seasons: ["all"],
+    occasions: ["work", "casual", "formal", "school"],
+    bodyTypes: ["rectangle", "pear", "inverted-triangle"],
+    formality: ["casual", "business", "formal"],
+    ageGroups: ["all"],
+    compatibility: ["blouses", "sweaters", "boots", "heels", "flats"]
+  },
+  {
+    id: "pencil-skirt",
+    name: "ペンシルスカート",
+    description: "体のラインに沿ったタイトなスカート。プロフェッショナルで洗練された印象を与える。",
+    keywords: ["pencil", "fitted", "professional", "sophisticated", "business", "sleek"],
+    seasons: ["all"],
+    occasions: ["work", "business", "formal", "professional"],
+    bodyTypes: ["hourglass", "rectangle", "pear"],
+    formality: ["business", "formal", "professional"],
+    ageGroups: ["adult", "mature"],
+    compatibility: ["blouses", "blazers", "heels", "professional-accessories"]
   }
-  // 目標40-50種類に対し、現在 約18種類。更なる追加が可能。
+  // 現在のシルエット数: 約30種類（目標40種類まであと10種類）
 ];
 
 // スタイルトレンドデータ
@@ -907,8 +1267,262 @@ export const styleTrends = [
     popularity: 90, // 常に人気のある普遍的スタイル
     formality: ["casual_chic", "smart_casual", "understated_business"],
     mood: ["effortless", "chic", "sophisticated", "confident", "understated", "timeless", "feminine-independent"]
+  },
+
+  // --- 新規追加スタイルトレンド (Phase 1: +16種類) ---
+  
+  // 地域別スタイル
+  {
+    id: "california-girl",
+    name: "カリフォルニアガール",
+    description: "西海岸の太陽、サーフィン、ビーチライフにインスパイアされたリラックスした魅力的なスタイル。",
+    keywords: ["california", "beach-style", "laid-back", "sun-kissed", "effortless", "coastal", "relaxed-glamour"],
+    era: "1960s-2020s",
+    seasons: ["spring", "summer", "early_autumn"],
+    occasions: ["casual", "vacation", "beach", "outdoor"],
+    colors: ["sun-bleached-blonde", "ocean-blue", "coral", "sandy-beige", "sunset-orange", "white"],
+    materials: ["denim", "cotton", "linen", "jersey", "crochet"],
+    compatibility: ["denim-shorts", "flowing-maxi-dress", "crop-tops", "sandals", "sun-hat"],
+    popularity: 80,
+    formality: ["casual", "vacation"],
+    mood: ["relaxed", "confident", "sunny", "effortless", "beach-vibes"]
+  },
+  {
+    id: "new-york-chic",
+    name: "ニューヨークシック",
+    description: "都市の洗練されたエネルギーと実用性を体現する、スマートで効率的なスタイル。",
+    keywords: ["new-york", "urban-chic", "sophisticated", "practical", "fast-paced", "cosmopolitan"],
+    era: "1980s-2020s",
+    seasons: ["all"],
+    occasions: ["work", "urban", "business", "everyday"],
+    colors: ["black", "grey", "navy", "white", "camel"],
+    materials: ["wool", "cashmere", "leather", "cotton", "silk"],
+    compatibility: ["blazers", "trench-coats", "ankle-boots", "structured-bags"],
+    popularity: 85,
+    formality: ["business", "smart-casual", "urban-professional"],
+    mood: ["confident", "efficient", "sophisticated", "urban", "powerful"]
+  },
+  {
+    id: "milanese-elegance",
+    name: "ミラネーゼエレガンス",
+    description: "イタリア・ミラノ発祥の、伝統的な技巧と現代的な洗練が融合した上品なスタイル。",
+    keywords: ["milanese", "italian-elegance", "refined", "luxurious", "artisanal", "sophisticated"],
+    era: "1950s-2020s",
+    seasons: ["all"],
+    occasions: ["business", "formal", "luxury", "cultural-events"],
+    colors: ["deep-navy", "cream", "rich-brown", "burgundy", "gold"],
+    materials: ["fine-wool", "silk", "cashmere", "leather", "tweed"],
+    compatibility: ["tailored-coats", "silk-scarves", "leather-goods", "fine-jewelry"],
+    popularity: 75,
+    formality: ["business", "formal", "luxury"],
+    mood: ["refined", "sophisticated", "elegant", "timeless", "luxurious"]
+  },
+
+  // 時代別リバイバル
+  {
+    id: "1920s-flapper",
+    name: "1920sフラッパー",
+    description: "1920年代の自由な女性たちのスタイル。ドロップウエスト、ビーズ、フリンジが特徴的。",
+    keywords: ["1920s", "flapper", "art-deco", "jazz-age", "beaded", "fringe", "drop-waist"],
+    era: "1920s",
+    seasons: ["all"],
+    occasions: ["formal", "party", "vintage-themed", "special-events"],
+    colors: ["gold", "silver", "black", "cream", "pearl-white"],
+    materials: ["silk", "chiffon", "beads", "sequins", "lace"],
+    compatibility: ["headbands", "long-pearls", "t-bar-shoes", "beaded-dresses"],
+    popularity: 60,
+    formality: ["formal", "cocktail", "vintage"],
+    mood: ["rebellious", "glamorous", "free-spirited", "vintage", "jazz-era"]
+  },
+  {
+    id: "1950s-rockabilly",
+    name: "1950sロカビリー",
+    description: "1950年代のロックンロール文化に影響を受けた、女性らしく反抗的なスタイル。",
+    keywords: ["1950s", "rockabilly", "pin-up", "vintage", "rock-n-roll", "retro"],
+    era: "1950s",
+    seasons: ["all"],
+    occasions: ["casual", "vintage-events", "rockabilly-culture", "pin-up"],
+    colors: ["cherry-red", "black", "white", "polka-dots", "gingham"],
+    materials: ["cotton", "denim", "leather", "tulle", "satin"],
+    compatibility: ["circle-skirts", "petticoats", "cardigans", "victory-rolls"],
+    popularity: 65,
+    formality: ["casual", "vintage", "pin-up"],
+    mood: ["retro", "feminine", "rebellious", "vintage", "rock-n-roll"]
+  },
+  {
+    id: "1970s-bohemian",
+    name: "1970sボヘミアン",
+    description: "1970年代のヒッピー文化とボヘミアンライフスタイルを反映した自由なスタイル。",
+    keywords: ["1970s", "bohemian", "hippie", "free-spirit", "natural", "folk", "psychedelic"],
+    era: "1970s",
+    seasons: ["all"],
+    occasions: ["casual", "festivals", "bohemian-lifestyle", "artistic"],
+    colors: ["earth-tones", "burnt-orange", "deep-purple", "forest-green", "golden-yellow"],
+    materials: ["cotton", "hemp", "suede", "fringe", "crochet"],
+    compatibility: ["flowing-maxi-dresses", "peasant-blouses", "headbands", "sandals"],
+    popularity: 70,
+    formality: ["casual", "bohemian", "festival"],
+    mood: ["free-spirited", "natural", "artistic", "peaceful", "bohemian"]
+  },
+
+  // ライフスタイル・サブカルチャー
+  {
+    id: "normcore",
+    name: "ノームコア",
+    description: "意図的に普通で目立たない服装を選ぶことで、逆に個性を表現するスタイル。",
+    keywords: ["normcore", "anti-fashion", "ordinary", "understated", "minimal", "unpretentious"],
+    era: "2010s-2020s",
+    seasons: ["all"],
+    occasions: ["everyday", "casual", "anti-fashion"],
+    colors: ["neutral", "beige", "grey", "navy", "white"],
+    materials: ["cotton", "denim", "jersey", "basic-fabrics"],
+    compatibility: ["basic-tees", "jeans", "sneakers", "simple-accessories"],
+    popularity: 60,
+    formality: ["casual", "everyday"],
+    mood: ["understated", "comfortable", "unpretentious", "minimal", "relaxed"]
+  },
+  {
+    id: "visual-kei",
+    name: "ビジュアル系",
+    description: "日本発祥の音楽ジャンルに関連した、劇的でアンドロジナスな美的表現。",
+    keywords: ["visual-kei", "japanese", "androgynous", "dramatic", "gothic", "theatrical"],
+    era: "1980s-2020s",
+    seasons: ["all"],
+    occasions: ["concerts", "subculture-events", "artistic-expression"],
+    colors: ["black", "white", "deep-purple", "blood-red", "silver"],
+    materials: ["leather", "lace", "velvet", "metal-accessories", "pvc"],
+    compatibility: ["platform-boots", "dramatic-makeup", "elaborate-accessories"],
+    popularity: 45,
+    formality: ["alternative", "subcultural"],
+    mood: ["dramatic", "mysterious", "androgynous", "artistic", "rebellious"]
+  },
+
+  // 職業・シーン別
+  {
+    id: "power-business",
+    name: "パワービジネス",
+    description: "権威と専門性を示すための、強力で印象的なビジネススタイル。",
+    keywords: ["power-dressing", "authoritative", "professional", "commanding", "executive"],
+    era: "1980s-2020s",
+    seasons: ["all"],
+    occasions: ["business", "executive", "professional", "leadership"],
+    colors: ["navy", "black", "charcoal", "burgundy", "white"],
+    materials: ["wool-suiting", "silk", "cashmere", "fine-cotton"],
+    compatibility: ["structured-blazers", "power-suits", "statement-accessories"],
+    popularity: 70,
+    formality: ["business", "formal", "executive"],
+    mood: ["authoritative", "confident", "professional", "powerful", "commanding"]
+  },
+  {
+    id: "creative-casual",
+    name: "クリエイティブカジュアル",
+    description: "創造的な職業に従事する人々の、個性と専門性を両立させたスタイル。",
+    keywords: ["creative", "artistic", "individual", "expressive", "innovative", "contemporary"],
+    era: "2000s-2020s",
+    seasons: ["all"],
+    occasions: ["creative-work", "artistic", "casual-professional"],
+    colors: ["varied", "artistic-palettes", "unconventional-combinations"],
+    materials: ["mixed-textures", "innovative-fabrics", "artistic-prints"],
+    compatibility: ["unique-accessories", "statement-pieces", "artistic-elements"],
+    popularity: 65,
+    formality: ["casual", "creative-professional"],
+    mood: ["creative", "expressive", "individual", "innovative", "artistic"]
+  },
+
+  // 季節・イベント特化
+  {
+    id: "resort-wear",
+    name: "リゾートウェア",
+    description: "休暇や高級リゾートでの滞在に適した、エレガントで快適なスタイル。",
+    keywords: ["resort", "vacation", "luxury-travel", "elegant-casual", "comfortable-chic"],
+    era: "1950s-2020s",
+    seasons: ["spring", "summer"],
+    occasions: ["vacation", "resort", "travel", "leisure"],
+    colors: ["tropical", "coral", "turquoise", "white", "sunset-hues"],
+    materials: ["linen", "silk", "cotton", "lightweight-fabrics"],
+    compatibility: ["flowing-dresses", "elegant-swimwear", "resort-accessories"],
+    popularity: 75,
+    formality: ["resort-casual", "elegant-vacation"],
+    mood: ["relaxed", "elegant", "vacation", "luxurious", "tropical"]
+  },
+  {
+    id: "festival-fashion",
+    name: "フェスティバルファッション",
+    description: "音楽フェスティバルやアウトドアイベントでの実用的でスタイリッシュな装い。",
+    keywords: ["festival", "outdoor", "practical", "boho", "comfortable", "weather-resistant"],
+    era: "1960s-2020s",
+    seasons: ["spring", "summer", "early_autumn"],
+    occasions: ["festivals", "outdoor-events", "concerts"],
+    colors: ["vibrant", "tie-dye", "earth-tones", "neon-accents"],
+    materials: ["denim", "cotton", "weather-resistant", "comfortable-fabrics"],
+    compatibility: ["comfortable-shoes", "practical-bags", "weather-gear"],
+    popularity: 80,
+    formality: ["casual", "festival"],
+    mood: ["fun", "energetic", "practical", "bohemian", "adventurous"]
+  },
+
+  // 新興トレンド
+  {
+    id: "gender-neutral",
+    name: "ジェンダーニュートラル",
+    description: "性別の境界を超えた、包括的で多様性を重視するファッションスタイル。",
+    keywords: ["gender-neutral", "inclusive", "unisex", "diverse", "boundary-breaking"],
+    era: "2010s-2020s",
+    seasons: ["all"],
+    occasions: ["everyday", "progressive", "inclusive-events"],
+    colors: ["neutral", "earth-tones", "monochromatic"],
+    materials: ["versatile", "comfortable", "quality-basics"],
+    compatibility: ["versatile-pieces", "unisex-accessories", "comfortable-footwear"],
+    popularity: 85,
+    formality: ["casual", "progressive"],
+    mood: ["inclusive", "comfortable", "progressive", "authentic", "diverse"]
+  },
+  {
+    id: "cyberpunk",
+    name: "サイバーパンク",
+    description: "未来的なテクノロジーとストリート文化が融合した、反体制的で革新的なスタイル。",
+    keywords: ["cyberpunk", "futuristic", "tech", "neon", "dystopian", "sci-fi"],
+    era: "1980s-2020s",
+    seasons: ["all"],
+    occasions: ["alternative", "sci-fi-events", "tech-culture"],
+    colors: ["neon-colors", "metallic", "black", "electric-blue", "cyber-green"],
+    materials: ["synthetic", "metallic", "tech-fabrics", "neon-accents"],
+    compatibility: ["tech-accessories", "futuristic-footwear", "LED-elements"],
+    popularity: 50,
+    formality: ["alternative", "subcultural"],
+    mood: ["futuristic", "rebellious", "tech-oriented", "edgy", "innovative"]
+  },
+  {
+    id: "solarpunk",
+    name: "ソーラーパンク",
+    description: "持続可能な未来と自然との調和を重視した、希望的で環境意識の高いスタイル。",
+    keywords: ["solarpunk", "sustainable", "eco-futuristic", "optimistic", "nature-tech"],
+    era: "2010s-2020s",
+    seasons: ["all"],
+    occasions: ["eco-events", "sustainable-lifestyle", "future-oriented"],
+    colors: ["green-tones", "earth-colors", "solar-inspired", "natural-palettes"],
+    materials: ["sustainable", "eco-friendly", "bio-materials", "recycled"],
+    compatibility: ["eco-accessories", "solar-elements", "natural-textures"],
+    popularity: 60,
+    formality: ["casual", "eco-conscious"],
+    mood: ["optimistic", "eco-friendly", "futuristic", "harmonious", "sustainable"]
+  },
+  {
+    id: "metaverse-fashion",
+    name: "メタバースファッション",
+    description: "デジタル空間での自己表現に特化した、現実の制約を超えたバーチャルスタイル。",
+    keywords: ["metaverse", "digital", "virtual", "avatar", "limitless", "futuristic"],
+    era: "2020s",
+    seasons: ["digital-all"],
+    occasions: ["virtual-events", "digital-spaces", "avatar-styling"],
+    colors: ["digital-spectrum", "holographic", "impossible-colors"],
+    materials: ["digital-textures", "virtual-materials", "light-elements"],
+    compatibility: ["digital-accessories", "virtual-elements", "impossible-physics"],
+    popularity: 40,
+    formality: ["virtual", "digital"],
+    mood: ["innovative", "limitless", "digital", "creative", "futuristic"]
   }
-  // 目標60-70種類に対し、現在 約14種類。更なる追加が必要。
+  // 現在のスタイルトレンド数: 約30種類（目標50種類まであと20種類）
 ];
 
 // その他のファッション要素 (既存のまま、または必要に応じて拡充)
