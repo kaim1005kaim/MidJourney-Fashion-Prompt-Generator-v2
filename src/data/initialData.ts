@@ -1047,8 +1047,148 @@ export const silhouettes = [
     formality: ["business", "formal", "professional"],
     ageGroups: ["adult", "mature"],
     compatibility: ["blouses", "blazers", "heels", "professional-accessories"]
+  },
+
+  // --- Phase 2 拡充: +10種類のシルエット ---
+  
+  // トップス系追加
+  {
+    id: "turtle-neck-sweater",
+    name: "タートルネックセーター",
+    description: "首元まで覆う高い襟が特徴的なセーター。知的で洗練された印象を与え、秋冬の定番アイテム。",
+    keywords: ["turtle-neck", "high-collar", "sophisticated", "intellectual", "warm", "classic", "minimalist"],
+    bodyTypes: ["all", "hourglass", "rectangle", "inverted-triangle"],
+    occasions: ["casual", "work", "weekend", "smart_casual", "winter_events"],
+    seasons: ["autumn", "winter", "early_spring"],
+    eras: ["1960s", "timeless", "contemporary"],
+    compatibility: ["midi-skirt", "straight-pants", "blazer", "wool-coat", "ankle-boots"],
+    formality: ["casual", "business_casual", "smart_casual"],
+    ageGroups: ["all"]
+  },
+  {
+    id: "wrap-blouse",
+    name: "ラップブラウス",
+    description: "前身頃を巻きつけるようにして着用するブラウス。ウエストラインを美しく見せ、フェミニンな印象を演出。",
+    keywords: ["wrap-style", "feminine", "flattering", "versatile", "flowing", "elegant", "waist-defining"],
+    bodyTypes: ["hourglass", "pear", "apple", "rectangle"],
+    occasions: ["work", "casual_chic", "date", "business_meeting", "semi-formal"],
+    seasons: ["spring", "summer", "early_autumn"],
+    eras: ["1940s", "contemporary"],
+    compatibility: ["pencil-skirt", "wide-leg-pants", "midi-skirt", "heels", "statement-earrings"],
+    formality: ["business", "business_casual", "semi-formal"],
+    ageGroups: ["20s", "30s", "40s", "50s+"]
+  },
+  {
+    id: "camisole-top",
+    name: "キャミソールトップ",
+    description: "細いストラップが特徴的なノースリーブトップス。レイヤードスタイルの基本アイテムとしても人気。",
+    keywords: ["camisole", "strappy", "sleeveless", "layering", "lightweight", "feminine", "summer"],
+    bodyTypes: ["all", "slim", "hourglass", "rectangle"],
+    occasions: ["casual", "summer", "layering", "vacation", "date"],
+    seasons: ["spring", "summer"],
+    eras: ["1990s", "2000s", "contemporary"],
+    compatibility: ["blazer", "cardigan", "high-waisted-jeans", "midi-skirt", "sandals"],
+    formality: ["casual", "smart_casual"],
+    ageGroups: ["teens", "20s", "30s", "40s"]
+  },
+  
+  // ボトムス系追加
+  {
+    id: "straight-leg-trousers",
+    name: "ストレートレッグトラウザーズ",
+    description: "腰から裾まで一直線のラインが美しいパンツ。クラシックで上品、ビジネスシーンにも最適。",
+    keywords: ["straight-leg", "classic", "tailored", "professional", "timeless", "structured", "elegant"],
+    bodyTypes: ["all", "hourglass", "pear", "rectangle"],
+    occasions: ["work", "business", "formal", "smart_casual", "professional_events"],
+    seasons: ["all"],
+    eras: ["timeless", "contemporary"],
+    compatibility: ["blouse", "blazer", "button-down-shirt", "heels", "loafers"],
+    formality: ["business", "formal", "professional"],
+    ageGroups: ["20s", "30s", "40s", "50s+"]
+  },
+  {
+    id: "high-waisted-shorts",
+    name: "ハイウエストショーツ",
+    description: "腰の位置が高く設定されたショーツ。脚長効果があり、ヴィンテージ感のあるスタイリングが可能。",
+    keywords: ["high-waisted", "vintage-inspired", "leg-lengthening", "retro", "summer", "flattering"],
+    bodyTypes: ["hourglass", "pear", "rectangle", "petite"],
+    occasions: ["casual", "summer", "vacation", "weekend", "retro_events"],
+    seasons: ["spring", "summer"],
+    eras: ["1940s", "1950s", "contemporary_revival"],
+    compatibility: ["crop-top", "tucked-in-blouse", "vintage-belt", "high-heels", "ankle-boots"],
+    formality: ["casual", "smart_casual"],
+    ageGroups: ["teens", "20s", "30s", "40s"]
+  },
+  
+  // ドレス系追加
+  {
+    id: "tea-dress",
+    name: "ティードレス",
+    description: "午後のお茶の時間に着用されていたエレガントなドレス。膝丈でフェミニン、上品な印象。",
+    keywords: ["tea-dress", "midi-length", "feminine", "vintage-inspired", "elegant", "classic", "floral-friendly"],
+    bodyTypes: ["hourglass", "pear", "rectangle", "petite"],
+    occasions: ["afternoon_tea", "garden_party", "casual_elegant", "brunch", "vintage_events"],
+    seasons: ["spring", "summer", "early_autumn"],
+    eras: ["1940s", "1950s", "contemporary_vintage"],
+    compatibility: ["cardigan", "pearl-necklace", "ballet-flats", "low-heels", "vintage-bag"],
+    formality: ["casual_elegant", "semi-formal"],
+    ageGroups: ["20s", "30s", "40s", "50s+"]
+  },
+  {
+    id: "slip-dress",
+    name: "スリップドレス",
+    description: "下着のスリップからインスパイアされた、シンプルで洗練されたドレス。90年代のミニマリズムを象徴。",
+    keywords: ["slip-dress", "minimalist", "sleek", "90s-inspired", "satin-like", "effortless", "sophisticated"],
+    bodyTypes: ["slim", "hourglass", "rectangle"],
+    occasions: ["evening", "date", "party", "minimalist_events", "summer_formal"],
+    seasons: ["spring", "summer", "early_autumn"],
+    eras: ["1990s", "contemporary"],
+    compatibility: ["blazer", "leather-jacket", "strappy-heels", "minimalist-jewelry", "clutch"],
+    formality: ["cocktail", "semi-formal", "evening"],
+    ageGroups: ["20s", "30s", "40s"]
+  },
+  
+  // アウター系追加
+  {
+    id: "denim-jacket",
+    name: "デニムジャケット",
+    description: "カジュアルの代名詞的なジャケット。様々なスタイルに合わせやすく、オールシーズン活躍する万能アイテム。",
+    keywords: ["denim-jacket", "casual", "versatile", "timeless", "layering", "americana", "relaxed"],
+    bodyTypes: ["all"],
+    occasions: ["casual", "weekend", "street_style", "layering", "outdoor"],
+    seasons: ["spring", "summer", "autumn", "mild_winter"],
+    eras: ["1950s", "timeless", "contemporary"],
+    compatibility: ["dress", "t-shirt", "jeans", "skirt", "sneakers", "boots"],
+    formality: ["casual"],
+    ageGroups: ["all"]
+  },
+  {
+    id: "cardigan-coat",
+    name: "カーディガンコート",
+    description: "カーディガンのディテールを持つ長めのコート。ニット素材が多く、カジュアルで温かみのある印象。",
+    keywords: ["cardigan-coat", "knit-outerwear", "cozy", "long-cardigan", "comfortable", "layering", "soft"],
+    bodyTypes: ["all", "apple", "rectangle"],
+    occasions: ["casual", "work_casual", "weekend", "autumn_casual", "layering"],
+    seasons: ["autumn", "winter", "early_spring"],
+    eras: ["contemporary"],
+    compatibility: ["jeans", "leggings", "midi-dress", "ankle-boots", "scarves"],
+    formality: ["casual", "business_casual"],
+    ageGroups: ["20s", "30s", "40s", "50s+"]
+  },
+  {
+    id: "puffer-vest",
+    name: "パフベスト",
+    description: "中綿入りのノースリーブアウター。機能性とスタイルを兼ね備え、レイヤードスタイルに最適。",
+    keywords: ["puffer-vest", "sleeveless-outerwear", "functional", "sporty", "layering", "urban", "practical"],
+    bodyTypes: ["all", "athletic", "rectangle"],
+    occasions: ["casual", "outdoor", "urban", "sporty", "layering"],
+    seasons: ["autumn", "winter", "early_spring"],
+    eras: ["contemporary"],
+    compatibility: ["long-sleeve-shirt", "hoodie", "jeans", "leggings", "sneakers", "boots"],
+    formality: ["casual", "athletic"],
+    ageGroups: ["teens", "20s", "30s", "40s"]
   }
-  // 現在のシルエット数: 約30種類（目標40種類まであと10種類）
+  // Phase 2完了: 合計40種類のシルエット
 ];
 
 // スタイルトレンドデータ
@@ -1521,8 +1661,307 @@ export const styleTrends = [
     popularity: 40,
     formality: ["virtual", "digital"],
     mood: ["innovative", "limitless", "digital", "creative", "futuristic"]
+  },
+
+  // --- Phase 2 拡充: +20種類のスタイルトレンド ---
+  
+  // 現代新興トレンド
+  {
+    id: "dopamine-dressing",
+    name: "ドーパミンドレッシング",
+    description: "鮮やかな色彩と楽しいパターンで気分を高揚させる、心理学的効果を狙ったポジティブなスタイル。",
+    keywords: ["dopamine-dressing", "bright-colors", "mood-boosting", "positive", "vibrant", "cheerful", "uplifting"],
+    era: "2020s",
+    seasons: ["all"],
+    occasions: ["daily_mood-boost", "creative_work", "social_events", "self-care"],
+    colors: ["rainbow-spectrum", "neon-pink", "electric-yellow", "vibrant-green", "royal-blue", "sunset-orange"],
+    materials: ["textured-knits", "shiny-fabrics", "playful-prints", "colorful-accessories"],
+    compatibility: ["statement-jewelry", "colorful-bags", "fun-shoes", "playful-accessories"],
+    popularity: 88,
+    formality: ["casual", "creative"],
+    mood: ["joyful", "energetic", "positive", "confident", "expressive", "uplifting"]
+  },
+  {
+    id: "coastal-grandmother",
+    name: "コースタルグランドマザー",
+    description: "海辺で過ごす上品な祖母をイメージした、リラックスしたエレガンスとタイムレスな魅力を持つスタイル。",
+    keywords: ["coastal-grandmother", "timeless-elegance", "relaxed-luxury", "seaside-chic", "mature-style", "effortless"],
+    era: "2020s",
+    seasons: ["spring", "summer", "early_autumn"],
+    occasions: ["vacation", "relaxed_elegance", "seaside_events", "mature_casual"],
+    colors: ["soft-blues", "creamy-whites", "natural-linens", "sage-green", "sandy-beige"],
+    materials: ["linen", "cotton", "cashmere", "natural-fibers", "flowing-fabrics"],
+    compatibility: ["comfortable-sandals", "straw-hats", "natural-jewelry", "canvas-bags"],
+    popularity: 75,
+    formality: ["relaxed_elegant", "vacation"],
+    mood: ["serene", "sophisticated", "comfortable", "timeless", "relaxed", "elegant"]
+  },
+  {
+    id: "clean-girl-aesthetic",
+    name: "クリーンガールエステティック",
+    description: "ミニマルなメイクと自然な髪型、シンプルな服装で健康的な美しさを強調するトレンド。",
+    keywords: ["clean-girl", "minimal-makeup", "natural-beauty", "effortless", "healthy", "simple", "fresh"],
+    era: "2020s",
+    seasons: ["all"],
+    occasions: ["daily_natural", "minimal_lifestyle", "wellness_focused", "authentic_self"],
+    colors: ["neutral-tones", "skin-tone-harmonious", "soft-whites", "gentle-beiges", "natural-browns"],
+    materials: ["organic-cotton", "bamboo-fiber", "natural-textures", "breathable-fabrics"],
+    compatibility: ["minimal-jewelry", "natural-accessories", "comfortable-footwear", "simple-bags"],
+    popularity: 90,
+    formality: ["casual", "natural"],
+    mood: ["fresh", "natural", "confident", "authentic", "healthy", "serene"]
+  },
+  {
+    id: "academia-core",
+    name: "アカデミアコア",
+    description: "学術的な環境にインスパイアされた知的でクラシックなスタイル。図書館や大学キャンパスの雰囲気。",
+    keywords: ["academia", "scholarly", "intellectual", "vintage-books", "library-aesthetic", "studious", "classic"],
+    era: "timeless_academic",
+    seasons: ["autumn", "winter", "early_spring"],
+    occasions: ["study", "library", "academic_events", "intellectual_gatherings", "book_clubs"],
+    colors: ["deep-browns", "forest-green", "burgundy", "cream", "antique-gold", "charcoal"],
+    materials: ["wool-blend", "corduroy", "leather-patches", "fine-cotton", "cashmere"],
+    compatibility: ["leather-satchel", "vintage-glasses", "scarves", "oxford-shoes", "classic-coats"],
+    popularity: 70,
+    formality: ["smart_casual", "academic"],
+    mood: ["intellectual", "scholarly", "sophisticated", "contemplative", "classic", "refined"]
+  },
+  {
+    id: "romantic-academia",
+    name: "ロマンティックアカデミア",
+    description: "クラシックなアカデミアスタイルにロマンティックでフェミニンな要素を加えた詩的なトレンド。",
+    keywords: ["romantic-academia", "feminine-scholarly", "poetic", "vintage-romantic", "literature-inspired", "dreamy"],
+    era: "timeless_romantic",
+    seasons: ["spring", "autumn", "early_winter"],
+    occasions: ["poetry_readings", "literary_events", "romantic_dates", "artistic_gatherings"],
+    colors: ["dusty-rose", "soft-lavender", "cream", "sage-green", "warm-brown", "antique-white"],
+    materials: ["silk-scarves", "lace-details", "wool-cardigans", "vintage-patterns", "soft-knits"],
+    compatibility: ["pearl-accessories", "vintage-brooches", "mary-jane-shoes", "delicate-jewelry"],
+    popularity: 65,
+    formality: ["romantic_casual", "artistic"],
+    mood: ["romantic", "dreamy", "poetic", "gentle", "artistic", "feminine"]
+  },
+  
+  // サブカルチャー・ライフスタイル
+  {
+    id: "cottagecore",
+    name: "コテージコア",
+    description: "田舎暮らしと手作りライフスタイルに憧れる、牧歌的でノスタルジックなスタイル。",
+    keywords: ["cottagecore", "rural-life", "handmade", "pastoral", "nostalgic", "countryside", "traditional-crafts"],
+    era: "2020s_revival",
+    seasons: ["spring", "summer", "early_autumn"],
+    occasions: ["countryside", "handcraft_activities", "garden_parties", "pastoral_events"],
+    colors: ["wildflower-colors", "meadow-green", "honey-yellow", "soft-pink", "cream", "earth-tones"],
+    materials: ["linen", "cotton", "wool", "natural-fibers", "handwoven-textures", "floral-prints"],
+    compatibility: ["straw-accessories", "handmade-jewelry", "vintage-aprons", "comfortable-boots"],
+    popularity: 72,
+    formality: ["rural_casual", "handcraft"],
+    mood: ["peaceful", "nostalgic", "romantic", "simple", "natural", "handmade"]
+  },
+  {
+    id: "dark-academia",
+    name: "ダークアカデミア",
+    description: "ゴシック建築の大学や古典文学にインスパイアされた、ダークで知的なアカデミックスタイル。",
+    keywords: ["dark-academia", "gothic-university", "literary", "mysterious", "intellectual-dark", "classical"],
+    era: "timeless_gothic",
+    seasons: ["autumn", "winter"],
+    occasions: ["academic_gothic", "literary_events", "mysterious_gatherings", "intellectual_circles"],
+    colors: ["black", "deep-burgundy", "forest-green", "charcoal", "antique-gold", "dark-brown"],
+    materials: ["wool-blend", "leather", "corduroy", "tweed", "vintage-textures", "dark-fabrics"],
+    compatibility: ["vintage-glasses", "leather-bags", "dark-scarves", "oxford-shoes", "antique-jewelry"],
+    popularity: 68,
+    formality: ["academic_dark", "mysterious"],
+    mood: ["mysterious", "intellectual", "gothic", "sophisticated", "contemplative", "dark"]
+  },
+  {
+    id: "indie-sleaze",
+    name: "インディースリーズ",
+    description: "2000年代後半のインディーロック文化に根ざした、故意に荒廃したシックなスタイル。",
+    keywords: ["indie-sleaze", "2000s-revival", "disheveled-chic", "alternative", "music-inspired", "grungy-cool"],
+    era: "2000s_revival",
+    seasons: ["all"],
+    occasions: ["music_events", "alternative_scenes", "indie_gatherings", "artistic_communities"],
+    colors: ["black", "grey", "faded-colors", "vintage-wash", "muted-tones", "distressed-colors"],
+    materials: ["distressed-denim", "vintage-band-tees", "leather-jackets", "worn-textures", "faded-fabrics"],
+    compatibility: ["vintage-accessories", "worn-boots", "band-merchandise", "alternative-jewelry"],
+    popularity: 55,
+    formality: ["alternative", "indie"],
+    mood: ["rebellious", "artistic", "cool", "alternative", "independent", "grungy"]
+  },
+  {
+    id: "fairy-grunge",
+    name: "フェアリーグランジ",
+    description: "グランジの荒々しさと妖精のような幻想的要素を組み合わせた対照的なスタイル。",
+    keywords: ["fairy-grunge", "whimsical-edge", "fantasy-alternative", "magical-dark", "ethereal-grunge", "contrasting"],
+    era: "2020s_fusion",
+    seasons: ["all"],
+    occasions: ["alternative_fantasy", "artistic_expression", "creative_events", "fantasy_gatherings"],
+    colors: ["pastels-with-black", "iridescent", "dark-purple", "magical-colors", "contrast-palette"],
+    materials: ["tulle-with-leather", "lace-with-denim", "metallic-accents", "contrasting-textures"],
+    compatibility: ["fantasy-accessories", "alternative-jewelry", "platform-boots", "whimsical-bags"],
+    popularity: 45,
+    formality: ["alternative", "fantasy"],
+    mood: ["whimsical", "rebellious", "magical", "contrasting", "creative", "unique"]
+  },
+  
+  // 地域・文化的トレンド
+  {
+    id: "scandinavian-minimalism",
+    name: "スカンジナビアンミニマリズム",
+    description: "北欧の機能美とシンプルさを重視した、洗練されたミニマルスタイル。",
+    keywords: ["scandinavian", "minimalism", "functional-beauty", "nordic", "clean-lines", "quality-basics"],
+    era: "contemporary_nordic",
+    seasons: ["all"],
+    occasions: ["daily_minimal", "work_clean", "lifestyle_focused", "quality_living"],
+    colors: ["white", "grey", "natural-wood-tones", "soft-blues", "muted-earth"],
+    materials: ["wool", "organic-cotton", "linen", "sustainable-materials", "natural-textures"],
+    compatibility: ["minimalist-accessories", "quality-basics", "functional-footwear", "simple-bags"],
+    popularity: 85,
+    formality: ["casual_clean", "work_minimal"],
+    mood: ["calm", "functional", "clean", "serene", "quality-focused", "sophisticated"]
+  },
+  {
+    id: "japanese-minimalism",
+    name: "ジャパニーズミニマリズム",
+    description: "日本の美意識に基づく、削ぎ落とされた美しさと機能性を追求するスタイル。",
+    keywords: ["japanese-minimalism", "wabi-sabi", "functional-beauty", "subtle", "refined-simplicity", "zen"],
+    era: "traditional_modern",
+    seasons: ["all"],
+    occasions: ["mindful_living", "zen_lifestyle", "artistic_minimal", "contemplative"],
+    colors: ["natural-white", "charcoal", "earth-tones", "muted-colors", "monochromatic"],
+    materials: ["natural-fibers", "organic-cotton", "linen", "bamboo", "sustainable-materials"],
+    compatibility: ["minimal-accessories", "natural-jewelry", "simple-footwear", "functional-bags"],
+    popularity: 75,
+    formality: ["zen_casual", "mindful"],
+    mood: ["serene", "mindful", "refined", "contemplative", "peaceful", "zen"]
+  },
+  {
+    id: "mediterranean-chic",
+    name: "メディタレニアンシック",
+    description: "地中海沿岸のライフスタイルにインスパイアされた、リラックスしたエレガンスのスタイル。",
+    keywords: ["mediterranean", "coastal-elegance", "relaxed-luxury", "seaside-chic", "european-casual", "sun-kissed"],
+    era: "timeless_coastal",
+    seasons: ["spring", "summer", "early_autumn"],
+    occasions: ["vacation", "coastal_living", "relaxed_elegance", "seaside_events"],
+    colors: ["ocean-blue", "sun-bleached-white", "terracotta", "olive-green", "sandy-beige", "coral"],
+    materials: ["linen", "cotton", "light-wool", "natural-fibers", "flowing-fabrics"],
+    compatibility: ["espadrilles", "straw-accessories", "natural-jewelry", "canvas-bags"],
+    popularity: 70,
+    formality: ["relaxed_elegant", "vacation"],
+    mood: ["relaxed", "elegant", "sun-kissed", "sophisticated", "coastal", "effortless"]
+  },
+  {
+    id: "brooklyn-hipster",
+    name: "ブルックリンヒップスター",
+    description: "ニューヨーク・ブルックリンの創造的コミュニティに根ざした、知的でアーティスティックなスタイル。",
+    keywords: ["brooklyn-hipster", "artisanal", "creative-community", "indie", "intellectual-casual", "handmade"],
+    era: "2010s_creative",
+    seasons: ["all"],
+    occasions: ["creative_work", "artisanal_events", "indie_culture", "intellectual_gatherings"],
+    colors: ["muted-tones", "vintage-colors", "earth-tones", "faded-denim", "natural-dyes"],
+    materials: ["vintage-denim", "organic-cotton", "handwoven-fabrics", "artisanal-textiles", "reclaimed-materials"],
+    compatibility: ["vintage-accessories", "handmade-jewelry", "vintage-boots", "canvas-bags"],
+    popularity: 60,
+    formality: ["creative_casual", "artisanal"],
+    mood: ["creative", "intellectual", "authentic", "artisanal", "independent", "thoughtful"]
+  },
+  
+  // 世代・年代別トレンド
+  {
+    id: "gen-z-maximalism",
+    name: "ジェンZ世代マキシマリズム",
+    description: "Z世代による表現力豊かな最大主義。多様な要素を組み合わせた個性的で大胆なスタイル。",
+    keywords: ["gen-z", "maximalism", "expressive", "bold-mixing", "individual", "diverse", "statement-making"],
+    era: "2020s_generation",
+    seasons: ["all"],
+    occasions: ["self_expression", "social_media", "creative_events", "generation_specific"],
+    colors: ["bold-contrasts", "unexpected-combinations", "bright-colors", "pattern-mixing"],
+    materials: ["mixed-textures", "statement-pieces", "vintage-modern-mix", "expressive-fabrics"],
+    compatibility: ["statement-accessories", "bold-shoes", "expressive-bags", "layered-jewelry"],
+    popularity: 80,
+    formality: ["expressive_casual", "creative"],
+    mood: ["bold", "expressive", "individual", "confident", "creative", "diverse"]
+  },
+  {
+    id: "millennial-comfort",
+    name: "ミレニアル世代コンフォート",
+    description: "ミレニアル世代のライフスタイルに合わせた、機能性と快適さを重視するスタイル。",
+    keywords: ["millennial", "comfort-first", "functional", "work-life-balance", "practical", "lifestyle"],
+    era: "2010s_2020s",
+    seasons: ["all"],
+    occasions: ["work_from_home", "busy_lifestyle", "multitasking", "practical_living"],
+    colors: ["neutral-palette", "earth-tones", "calming-colors", "versatile-shades"],
+    materials: ["comfortable-fabrics", "stretch-materials", "easy-care", "functional-textiles"],
+    compatibility: ["comfortable-shoes", "practical-bags", "functional-accessories", "versatile-pieces"],
+    popularity: 85,
+    formality: ["comfort_casual", "practical"],
+    mood: ["comfortable", "practical", "balanced", "functional", "relaxed", "efficient"]
+  },
+  
+  // テクノロジー・未来志向
+  {
+    id: "tech-wear",
+    name: "テックウェア",
+    description: "高機能素材とミニマルなデザインを組み合わせた、未来的で機能重視のスタイル。",
+    keywords: ["tech-wear", "functional", "performance", "futuristic", "minimal-tech", "innovative"],
+    era: "2010s_2020s",
+    seasons: ["all"],
+    occasions: ["urban_active", "tech_work", "modern_lifestyle", "functional_fashion"],
+    colors: ["black", "grey", "tech-colors", "monochromatic", "metallic-accents"],
+    materials: ["performance-fabrics", "weather-resistant", "stretch-tech", "innovative-textiles"],
+    compatibility: ["tech-accessories", "performance-shoes", "functional-bags", "minimal-jewelry"],
+    popularity: 65,
+    formality: ["tech_casual", "functional"],
+    mood: ["futuristic", "efficient", "minimal", "performance", "innovative", "urban"]
+  },
+  {
+    id: "biohacking-fashion",
+    name: "バイオハッキングファッション",
+    description: "健康とパフォーマンス向上を目的とした、科学的アプローチのファッションスタイル。",
+    keywords: ["biohacking", "health-optimized", "performance", "scientific", "wellness", "data-driven"],
+    era: "2020s_future",
+    seasons: ["all"],
+    occasions: ["wellness_lifestyle", "performance_optimization", "health_conscious", "scientific_approach"],
+    colors: ["clinical-white", "nature-green", "tech-blue", "health-inspired"],
+    materials: ["smart-fabrics", "health-monitoring", "performance-textiles", "wellness-materials"],
+    compatibility: ["health-tech", "performance-accessories", "wellness-jewelry", "monitoring-devices"],
+    popularity: 40,
+    formality: ["wellness_casual", "tech_health"],
+    mood: ["health-conscious", "performance", "scientific", "optimized", "future-oriented", "wellness"]
+  },
+  
+  // 持続可能性・環境意識
+  {
+    id: "zero-waste-fashion",
+    name: "ゼロウェイストファッション",
+    description: "廃棄物を最小限に抑える設計と製造プロセスによる、環境に配慮したファッションスタイル。",
+    keywords: ["zero-waste", "sustainable", "environmental", "circular-fashion", "eco-conscious", "waste-reduction"],
+    era: "2020s_sustainable",
+    seasons: ["all"],
+    occasions: ["eco_lifestyle", "sustainable_events", "environmental_awareness", "conscious_living"],
+    colors: ["natural-dyes", "undyed-natural", "earth-tones", "sustainable-colors"],
+    materials: ["upcycled", "recycled-materials", "organic-fibers", "sustainable-textiles", "biodegradable"],
+    compatibility: ["upcycled-accessories", "sustainable-shoes", "eco-bags", "natural-jewelry"],
+    popularity: 55,
+    formality: ["eco_casual", "sustainable"],
+    mood: ["conscious", "responsible", "environmental", "thoughtful", "sustainable", "aware"]
+  },
+  {
+    id: "regenerative-fashion",
+    name: "リジェネラティブファッション",
+    description: "環境再生に貢献する材料と手法を用いた、地球にポジティブな影響を与えるファッション。",
+    keywords: ["regenerative", "earth-positive", "restoration", "healing-environment", "positive-impact", "regeneration"],
+    era: "2020s_future",
+    seasons: ["all"],
+    occasions: ["environmental_restoration", "conscious_lifestyle", "regenerative_living", "earth_care"],
+    colors: ["soil-browns", "plant-greens", "sky-blues", "earth-restoration-palette"],
+    materials: ["regenerative-fibers", "soil-building", "carbon-sequestering", "restoration-textiles"],
+    compatibility: ["earth-positive-accessories", "regenerative-shoes", "restoration-bags", "healing-jewelry"],
+    popularity: 35,
+    formality: ["regenerative_casual", "earth_positive"],
+    mood: ["healing", "restorative", "earth-conscious", "positive-impact", "regenerative", "caring"]
   }
-  // 現在のスタイルトレンド数: 約30種類（目標50種類まであと20種類）
+  // Phase 2完了: 合計50種類のスタイルトレンド
 ];
 
 // その他のファッション要素 (既存のまま、または必要に応じて拡充)
