@@ -175,18 +175,18 @@ export default function SettingsPanel({ settings, onSettingsChange, onDatabaseUp
                   <input
                     type="range"
                     min="1"
-                    max="50"
+                    max="150"
                     value={settings.promptCount}
                     onChange={(e) => handleSettingChange('promptCount', parseInt(e.target.value))}
                     className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
                   />
                   <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
                     <span>1</span>
-                    <span>10</span>
-                    <span>20</span>
                     <span>30</span>
-                    <span>40</span>
-                    <span>50</span>
+                    <span>60</span>
+                    <span>90</span>
+                    <span>120</span>
+                    <span>150</span>
                   </div>
                 </div>
 
