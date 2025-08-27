@@ -21,7 +21,9 @@ const SeasonalBatchPanel: React.FC<SeasonalBatchPanelProps> = ({
     includeColors: true,
     includeLighting: true,
     includeBackground: false,
-    includeModels: false
+    includeModels: false,
+    genderRatio: 'equal',
+    customMaleRatio: 50
   });
   
   const [generatedPrompts, setGeneratedPrompts] = useState<Prompt[]>([]);
@@ -265,6 +267,79 @@ const SeasonalBatchPanel: React.FC<SeasonalBatchPanelProps> = ({
         </div>
       </div>
 
+      {/* 男女比設定 */}
+      <div className="mb-6">
+        <label className={`block text-sm font-medium mb-3 ${darkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+          👫 男女比設定
+        </label>
+        <div className="space-y-3">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+            {[
+              { value: 'equal', label: '1:1 (半々)', icon: '⚖️' },
+              { value: 'auto', label: 'おまかせ', icon: '🎲' },
+              { value: 'female-only', label: '女性のみ', icon: '👩' },
+              { value: 'male-only', label: '男性のみ', icon: '👨' },
+              { value: 'custom', label: 'カスタム', icon: '⚙️' }
+            ].map(option => (
+              <button
+                key={option.value}
+                onClick={() => setBatchSettings(prev => ({ 
+                  ...prev, 
+                  genderRatio: option.value as any 
+                }))}
+                className={`p-2 rounded text-xs font-medium transition-all ${
+                  batchSettings.genderRatio === option.value
+                    ? darkMode
+                      ? 'bg-blue-900 border-blue-600 text-white'
+                      : 'bg-blue-50 border-blue-400 text-blue-700'
+                    : darkMode
+                    ? 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                } border`}
+              >
+                <div className="text-center">
+                  <div className="text-lg mb-1">{option.icon}</div>
+                  <div>{option.label}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+          
+          {batchSettings.genderRatio === 'custom' && (
+            <div className="mt-3">
+              <label className={`block text-sm mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                男性の比率: {batchSettings.customMaleRatio}%
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                step="10"
+                value={batchSettings.customMaleRatio}
+                onChange={(e) => setBatchSettings(prev => ({ 
+                  ...prev, 
+                  customMaleRatio: parseInt(e.target.value) 
+                }))}
+                className="w-full"
+              />
+              <div className="flex justify-between text-xs text-gray-500 mt-1">
+                <span>0% (女性のみ)</span>
+                <span>50% (半々)</span>
+                <span>100% (男性のみ)</span>
+              </div>
+            </div>
+          )}
+          
+          <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            {batchSettings.genderRatio === 'equal' && '男女を交互に生成します（完全に半々）'}
+            {batchSettings.genderRatio === 'auto' && '自動調整（女性寄り 70:30）'}
+            {batchSettings.genderRatio === 'female-only' && '全て女性モデルで生成します'}
+            {batchSettings.genderRatio === 'male-only' && '全て男性モデルで生成します'}
+            {batchSettings.genderRatio === 'custom' && `男性${batchSettings.customMaleRatio}%、女性${100-batchSettings.customMaleRatio}%の比率でランダム生成`}
+          </p>
+        </div>
+      </div>
+
       {/* 生成ボタン */}
       <div className="mb-6">
         <button
@@ -347,6 +422,7 @@ const SeasonalBatchPanel: React.FC<SeasonalBatchPanelProps> = ({
                 </p>
                 <div className={`text-xs mt-1 ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
                   {prompt.metadata?.season} | {prompt.metadata?.genre}
+                  {prompt.metadata?.gender && ` | ${prompt.metadata.gender === 'male' ? '👨 男性' : '👩 女性'}`}
                 </div>
               </div>
             ))}
