@@ -39,6 +39,58 @@ export const artisticTechniques = [
   }
 ];
 
+// SNS映えする撮影スタイル
+export const socialMediaStyles = [
+  {
+    id: "instagram-worthy",
+    name: "インスタ映え",
+    description: "Instagram投稿に最適化された鮮やかで印象的なビジュアル",
+    keywords: ["instagram-worthy", "photogenic", "vibrant colors", "perfect lighting", "eye-catching"]
+  },
+  {
+    id: "pinterest-aesthetic",
+    name: "Pinterest風エステティック",
+    description: "Pinterestで人気の洗練された美的感覚のビジュアル",
+    keywords: ["pinterest-aesthetic", "curated look", "dreamy atmosphere", "aesthetic composition"]
+  },
+  {
+    id: "golden-hour",
+    name: "ゴールデンアワー",
+    description: "夕暮れ時の温かい光で撮影したような雰囲気",
+    keywords: ["golden hour lighting", "warm glow", "sunset vibes", "magical light"]
+  },
+  {
+    id: "mirror-selfie",
+    name: "ミラーセルフィー風",
+    description: "鏡を使ったセルフィーのような親近感のある構図",
+    keywords: ["mirror selfie style", "intimate perspective", "casual authentic", "relatable"]
+  },
+  {
+    id: "flat-lay",
+    name: "フラットレイ",
+    description: "アイテムを平置きした俯瞰撮影スタイル",
+    keywords: ["flat lay photography", "overhead shot", "organized layout", "styled arrangement"]
+  },
+  {
+    id: "bokeh-background",
+    name: "ボケ背景",
+    description: "背景を美しくぼかした被写界深度の浅い撮影",
+    keywords: ["bokeh effect", "shallow depth of field", "blurred background", "professional look"]
+  },
+  {
+    id: "neon-glow",
+    name: "ネオングロー",
+    description: "ネオンライトの輝きを活かした都会的な雰囲気",
+    keywords: ["neon lights", "urban glow", "cyberpunk vibes", "night photography"]
+  },
+  {
+    id: "minimalist-feed",
+    name: "ミニマリストフィード",
+    description: "統一感のあるシンプルで洗練されたフィード構成",
+    keywords: ["minimalist aesthetic", "cohesive feed", "clean composition", "neutral tones"]
+  }
+];
+
 export const naturalElements = [
   {
     id: "wildflowers-botanicals",
@@ -218,6 +270,17 @@ export const surrealElements = [
     keywords: ["time fragments", "temporal overlays", "chronological collage"]
   }
 ];
+
+// クリエイティブデータのエクスポート
+export const getCreativeData = () => ({
+  artisticTechniques,
+  naturalElements,
+  overlayEffects,
+  colorMoods,
+  surrealElements,
+  artistReferences,
+  socialMediaStyles
+});
 
 export const artistReferences = [
   {
