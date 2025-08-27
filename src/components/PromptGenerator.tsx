@@ -11,6 +11,7 @@ import ElementSelector from './ElementSelector';
 import CompatibilityIndicator from './CompatibilityIndicator';
 import CreativeModePanel from './CreativeMode/CreativeModePanel';
 import MixedModePanel from './MixedMode/MixedModePanel';
+import SeasonalBatchPanel from './SeasonalBatch/SeasonalBatchPanel';
 
 const PromptGenerator: React.FC = () => {
   const [prompts, setPrompts] = useState<Prompt[]>([]);
@@ -403,6 +404,18 @@ const PromptGenerator: React.FC = () => {
                 🌟 Creative
               </button>
               <button
+                onClick={() => setSettings(prev => ({ ...prev, generationMode: 'seasonal' }))}
+                className={`px-3 py-3 rounded-md font-medium transition-colors ${
+                  settings.generationMode === 'seasonal'
+                    ? 'bg-gradient-to-r from-green-500 to-teal-500 text-white shadow-md'
+                    : settings.darkMode
+                    ? 'text-gray-300 hover:text-white hover:bg-gray-700'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+                }`}
+              >
+                🌍 季節バッチ
+              </button>
+              <button
                 onClick={() => setSettings(prev => ({ ...prev, generationMode: 'mixed' }))}
                 className={`px-3 py-3 rounded-md font-medium transition-colors ${
                   settings.generationMode === 'mixed'
@@ -425,6 +438,8 @@ const PromptGenerator: React.FC = () => {
               ? 'Chanel、Dior、Comme des Garçonsなど43の有名ブランドスタイルでプロンプトを生成'
               : settings.generationMode === 'creative'
               ? 'アーティスティックで実験的なファッションプロンプトを生成。ミクストメディアコラージュとアート技法を活用'
+              : settings.generationMode === 'seasonal'
+              ? '季節とジャンルを複数選択して、大量のプロンプトを一括生成。SS/AWに適した素材を自動選択'
               : '3つのモード（要素ベース・ブランドベース・Creative）をバランスよく組み合わせて多様なプロンプトを生成'}
           </p>
         </div>
@@ -604,6 +619,16 @@ const PromptGenerator: React.FC = () => {
                 onGenerate={generatePrompts}
                 onClearSettings={() => setCreativeSettings({ randomizeAll: true })}
                 isGenerating={isGenerating}
+                darkMode={settings.darkMode}
+              />
+            ) : settings.generationMode === 'seasonal' ? (
+              // 季節別バッチモード
+              <SeasonalBatchPanel
+                appSettings={settings}
+                onGeneratedPrompts={(newPrompts) => {
+                  setPrompts(prev => [...prev, ...newPrompts]);
+                  setLastGeneratedPrompts(newPrompts);
+                }}
                 darkMode={settings.darkMode}
               />
             ) : settings.generationMode === 'mixed' ? (
