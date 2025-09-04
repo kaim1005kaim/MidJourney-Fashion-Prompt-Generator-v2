@@ -93,6 +93,15 @@ export function generateCreativePrompt(
   // 設定に基づいてサフィックスを追加
   let fullPrompt = promptText;
   
+  // アスペクト比と版番号を追加
+  if (settings.includeAspectRatio && settings.aspectRatio) {
+    fullPrompt += ` ${settings.aspectRatio}`;
+  }
+  
+  if (settings.includeVersion && settings.version) {
+    fullPrompt += ` ${settings.version}`;
+  }
+  
   if (settings.customSuffix) {
     fullPrompt += ` ${settings.customSuffix}`;
   }
@@ -109,7 +118,7 @@ export function generateCreativePrompt(
   
   return {
     id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-    text: promptText,
+    text: fullPrompt,  // アスペクト比と版番号を含む完全なプロンプト
     fullPrompt: fullPrompt,
     timestamp: new Date(),
     isFavorite: false,

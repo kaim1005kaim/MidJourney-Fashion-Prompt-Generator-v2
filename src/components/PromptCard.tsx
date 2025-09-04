@@ -23,7 +23,7 @@ export default function PromptCard({
   // コピー機能
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(prompt.fullPrompt);
+      await navigator.clipboard.writeText(prompt.text || prompt.fullPrompt);
       // 簡単なフィードバック表示（必要に応じて）
     } catch (err) {
       console.error('コピーに失敗しました:', err);
@@ -90,7 +90,7 @@ export default function PromptCard({
         <p className={`flex-grow mr-4 break-words ${
           darkMode ? 'text-gray-200' : 'text-gray-800'
         }`}>
-          {prompt.fullPrompt}
+          {prompt.text || prompt.fullPrompt}
         </p>
         <button
           onClick={handleCopy}

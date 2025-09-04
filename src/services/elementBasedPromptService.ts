@@ -310,11 +310,13 @@ export function generateElementBasedPrompt(
     // プロンプトオブジェクトの作成
     const now = new Date();
     const prompt: Prompt = {
-      id: now.getTime() + Math.floor(Math.random() * 1000),
+      id: String(now.getTime() + Math.floor(Math.random() * 1000)),
+      text: promptText, // textフィールドも設定
       fullPrompt: promptText,
       timestamp: now,
       rating: 0,
       isFavorite: false,
+      notes: '',
       material: selectedMaterial.name,
       silhouette: selectedSilhouette.name,
       lighting: lighting,
@@ -322,7 +324,7 @@ export function generateElementBasedPrompt(
       era: '', // 年代は削除
       styleElements: [trendChar, materialChar, silhouetteChar],
       atmosphereMood: mood,
-      generationMode: 'elements',
+      mode: 'elements',
       selectedMaterial: selectedMaterial,
       selectedSilhouette: selectedSilhouette,
       selectedStyleTrend: selectedTrend
@@ -336,12 +338,15 @@ export function generateElementBasedPrompt(
     // フォールバック：基本的なプロンプトを生成
     const now = new Date();
     const cameraAngle = getCameraAngle('random'); // フォールバック時はランダム
+    const fallbackPrompt = `A ${cameraAngle} of model wearing modern clothing, clean professional styling, fashion photography --ar 3:4 --v 6.1`;
     return {
-      id: now.getTime() + Math.floor(Math.random() * 1000),
-      fullPrompt: `A ${cameraAngle} of model wearing modern clothing, clean professional styling, fashion photography --ar 3:4 --v 6.1`,
+      id: String(now.getTime() + Math.floor(Math.random() * 1000)),
+      text: fallbackPrompt,
+      fullPrompt: fallbackPrompt,
       timestamp: now,
       rating: 0,
       isFavorite: false,
+      notes: '',
       material: 'modern fabric',
       silhouette: 'contemporary fit',
       lighting: 'professional lighting',
@@ -349,7 +354,7 @@ export function generateElementBasedPrompt(
       era: '',
       styleElements: ['modern', 'stylish', 'professional'],
       atmosphereMood: 'confident',
-      generationMode: 'elements'
+      mode: 'elements'
     };
   }
 }

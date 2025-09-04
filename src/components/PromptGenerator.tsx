@@ -229,7 +229,7 @@ const PromptGenerator: React.FC = () => {
     try {
       // 最新生成分のプロンプトテキストのみを結合（番号付き）
       const latestPromptsText = lastGeneratedPrompts
-        .map((prompt, index) => `${index + 1}. ${prompt.fullPrompt}`)
+        .map((prompt, index) => `${index + 1}. ${prompt.text || prompt.fullPrompt}`)
         .join('\n\n');
       
       await navigator.clipboard.writeText(latestPromptsText);
@@ -250,7 +250,7 @@ const PromptGenerator: React.FC = () => {
     try {
       // プロンプトテキストのみを結合（番号付き）
       const allPromptsText = prompts
-        .map((prompt, index) => `${index + 1}. ${prompt.fullPrompt}`)
+        .map((prompt, index) => `${index + 1}. ${prompt.text || prompt.fullPrompt}`)
         .join('\n\n');
       
       await navigator.clipboard.writeText(allPromptsText);
@@ -272,7 +272,7 @@ const PromptGenerator: React.FC = () => {
     
     try {
       const favoritePromptsText = favoritePrompts
-        .map((prompt, index) => `${index + 1}. ${prompt.fullPrompt}`)
+        .map((prompt, index) => `${index + 1}. ${prompt.text || prompt.fullPrompt}`)
         .join('\n\n');
       
       await navigator.clipboard.writeText(favoritePromptsText);
@@ -294,7 +294,7 @@ const PromptGenerator: React.FC = () => {
     
     try {
       const highRatedPromptsText = highRatedPrompts
-        .map((prompt, index) => `${index + 1}. ★${prompt.rating} ${prompt.fullPrompt}`)
+        .map((prompt, index) => `${index + 1}. ★${prompt.rating} ${prompt.text || prompt.fullPrompt}`)
         .join('\n\n');
       
       await navigator.clipboard.writeText(highRatedPromptsText);

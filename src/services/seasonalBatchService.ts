@@ -143,8 +143,8 @@ export const generateSeasonalBatchPrompts = (
         appSettings // AppSettingsをそのまま渡す
       );
       
-      // promptフィールドを追加（fullPromptからコピー）
-      const promptText = promptData.fullPrompt;
+      // textフィールドを使用（アスペクト比と版番号が含まれている）
+      const promptText = promptData.text || promptData.fullPrompt;
       
       // 性別をプロンプトに反映（モデルが含まれる場合のみ）
       const finalPromptText = appSettings.includeModels 
@@ -154,7 +154,8 @@ export const generateSeasonalBatchPrompts = (
       // メタデータを追加
       const enhancedPrompt: Prompt = {
         ...promptData,
-        prompt: finalPromptText, // promptフィールドを追加
+        text: finalPromptText, // textフィールドを更新（アスペクト比と版番号を含む）
+        prompt: finalPromptText, // promptフィールドを追加（互換性のため）
         fullPrompt: finalPromptText, // fullPromptも更新
         mode: 'seasonal', // モードを'seasonal'に設定
         metadata: {

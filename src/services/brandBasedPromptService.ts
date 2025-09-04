@@ -209,6 +209,7 @@ export async function generateBrandBasedPrompt(
     const now = new Date();
     const prompt: Prompt = {
       id: now.getTime() + Math.floor(Math.random() * 1000),
+      text: promptText,  // textフィールドを追加（アスペクト比と版番号を含む）
       fullPrompt: promptText,
       timestamp: now,
       rating: 0,
@@ -234,9 +235,11 @@ export async function generateBrandBasedPrompt(
     
     // フォールバック: 基本的なプロンプトを生成
     const now = new Date();
+    const fallbackPrompt = `A fashion portrait of model wearing contemporary designer clothing, elegant styling, professional fashion photography ${settings.includeAspectRatio && settings.aspectRatio ? settings.aspectRatio : ''} ${settings.includeVersion && settings.version ? settings.version : ''}`;
     return {
       id: now.getTime() + Math.floor(Math.random() * 1000),
-      fullPrompt: `A fashion portrait of model wearing contemporary designer clothing, elegant styling, professional fashion photography ${settings.aspectRatio || ''} ${settings.version || ''}`,
+      text: fallbackPrompt,  // textフィールドを追加
+      fullPrompt: fallbackPrompt,
       timestamp: now,
       rating: 0,
       isFavorite: false,
