@@ -22,7 +22,7 @@ const PromptGenerator: React.FC = () => {
     darkMode: false,
     promptCount: 3,
     includeAspectRatio: true,
-    aspectRatio: '--ar 3:4',
+    aspectRatio: '--ar 4:5',  // Instagram推奨の縦長
     includeVersion: true,
     version: '--v 6.1',
     includeStylize: false,

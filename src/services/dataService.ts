@@ -14,7 +14,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   includeAspectRatio: true,
   aspectRatio: "--ar 4:5",
   includeVersion: true,
-  version: "--v 7.0",
+  version: "--v 6.1",
   includeStylize: true,
   stylize: "s100",
   customSuffix: '',
