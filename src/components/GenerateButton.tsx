@@ -83,19 +83,21 @@ const GenerateButton: React.FC<GenerateButtonProps> = ({
         {isGenerating && (
           <div className="mt-4 max-w-md mx-auto">
             <div className="h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-              <div className="h-full bg-gradient-to-r from-purple-600 to-blue-600 rounded-full animate-pulse" 
-                   style={{ width: '100%', animation: 'slide 1.5s ease-in-out infinite' }} />
+              <div className="h-full bg-gradient-to-r from-purple-600 to-blue-600 rounded-full" 
+                   style={{ 
+                     width: '100%', 
+                     animation: 'slide 1.5s ease-in-out infinite'
+                   }} />
             </div>
+            <style>{`
+              @keyframes slide {
+                0% { transform: translateX(-100%); }
+                100% { transform: translateX(100%); }
+              }
+            `}</style>
           </div>
         )}
       </div>
-      
-      <style jsx>{`
-        @keyframes slide {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-      `}</style>
     </div>
   );
 };

@@ -135,12 +135,14 @@ export const generateSeasonalBatchPrompts = (
       const gender = determineGender(i, appSettings);
       
       const promptData = generateElementBasedPrompt(
+        appSettings, // AppSettingsを第1引数として渡す
         {
-          material: selectedMaterial,
-          silhouette: selectedSilhouette,
-          styleTrend: selectedStyle
-        },
-        appSettings // AppSettingsをそのまま渡す
+          // FilterOptionsとして第2引数を渡す
+          selectedMaterials: selectedMaterial ? [selectedMaterial.id] : [],
+          selectedSilhouettes: selectedSilhouette ? [selectedSilhouette.id] : [],
+          selectedStyleTrends: selectedStyle ? [selectedStyle.id] : []
+        }
+        // 第3引数は省略してデフォルトのfashionContextを使用
       );
       
       // textフィールドを使用（アスペクト比と版番号が含まれている）
