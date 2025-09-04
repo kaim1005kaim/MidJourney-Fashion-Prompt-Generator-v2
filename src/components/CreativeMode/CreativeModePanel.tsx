@@ -214,33 +214,17 @@ const CreativeModePanel: React.FC<CreativeModePanelProps> = ({
             )}
           </div>
 
-          {/* アクションボタン */}
-          <div className="flex gap-3 pt-4 border-t border-gray-200 dark:border-gray-600">
-            <button
-              onClick={onGenerate}
-              disabled={isGenerating}
-              className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-3 rounded-md hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 transition-all duration-200 font-medium flex items-center justify-center gap-2"
-            >
-              {isGenerating ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-                  生成中...
-                </>
-              ) : (
-                <>
-                  🚀 Creative生成
-                </>
-              )}
-            </button>
+          {/* リセットボタンのみ */}
+          <div className="flex justify-end pt-4 border-t border-gray-200 dark:border-gray-600">
             <button
               onClick={onClearSettings}
-              className={`px-4 py-3 border rounded-md transition-colors ${
+              className={`px-4 py-2 text-sm border rounded-md transition-colors ${
                 darkMode
                   ? 'border-gray-600 hover:bg-gray-700 text-gray-300'
                   : 'border-gray-300 hover:bg-gray-50 text-gray-600'
               }`}
             >
-              リセット
+              設定をリセット
             </button>
           </div>
         </div>

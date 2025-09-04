@@ -79,24 +79,8 @@ const SeasonalBatchPanel: React.FC<SeasonalBatchPanelProps> = ({
     }
   };
 
-  const handleGenerate = async () => {
-    if (batchSettings.seasons.length === 0 || batchSettings.genres.length === 0) {
-      alert('少なくとも1つの季節と1つのジャンルを選択してください。');
-      return;
-    }
-    
-    setIsGenerating(true);
-    
-    // 生成を非同期でシミュレート
-    setTimeout(() => {
-      // 設定パネルのpromptCountを使用
-      const updatedSettings = { ...batchSettings, count: appSettings.promptCount };
-      const prompts = generateSeasonalBatchPrompts(updatedSettings, appSettings);
-      setGeneratedPrompts(prompts);
-      onGeneratedPrompts(prompts); // メインリストに追加
-      setIsGenerating(false);
-    }, 500);
-  };
+  // handleGenerateは不要になったので削除
+  // 生成処理はPromptGenerator側で行う
 
   const copyAllPrompts = () => {
     const allText = generatedPrompts.map(p => p.prompt).join('\n\n');
@@ -244,30 +228,6 @@ const SeasonalBatchPanel: React.FC<SeasonalBatchPanelProps> = ({
         </p>
       </div>
 
-      {/* 生成ボタン */}
-      <div className="mb-6">
-        <button
-          onClick={handleGenerate}
-          disabled={isGenerating || batchSettings.seasons.length === 0 || batchSettings.genres.length === 0}
-          className={`w-full py-3 px-4 rounded-lg font-medium transition-all flex items-center justify-center ${
-            isGenerating || batchSettings.seasons.length === 0 || batchSettings.genres.length === 0
-              ? 'bg-gray-400 cursor-not-allowed'
-              : 'bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white'
-          }`}
-        >
-          {isGenerating ? (
-            <>
-              <RefreshCw className="mr-2 animate-spin" size={20} />
-              生成中...
-            </>
-          ) : (
-            <>
-              <Zap className="mr-2" size={20} />
-              {appSettings.promptCount}個のプロンプトを生成
-            </>
-          )}
-        </button>
-      </div>
 
       {/* 生成結果（一時的なプレビュー用） */}
       {false && generatedPrompts.length > 0 && (
