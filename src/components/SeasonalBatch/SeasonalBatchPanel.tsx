@@ -1,30 +1,34 @@
 import React, { useState } from 'react';
-import { SeasonalBatchSettings, generateSeasonalBatchPrompts, seasonalBatchPresets } from '../../services/seasonalBatchService';
-import { AppSettings, Prompt } from '../../types';
+import { generateSeasonalBatchPrompts, seasonalBatchPresets } from '../../services/seasonalBatchService';
+import { AppSettings, Prompt, SeasonalBatchSettings } from '../../types';
 import { Copy, Download, RefreshCw, Zap, Package, CheckSquare, Square } from 'lucide-react';
 
 interface SeasonalBatchPanelProps {
   appSettings: AppSettings;
+  seasonalSettings: SeasonalBatchSettings;
+  onSeasonalSettingsChange: (settings: SeasonalBatchSettings) => void;
   onGeneratedPrompts: (prompts: Prompt[]) => void;
   darkMode: boolean;
 }
 
 const SeasonalBatchPanel: React.FC<SeasonalBatchPanelProps> = ({
   appSettings,
+  seasonalSettings,
+  onSeasonalSettingsChange,
   onGeneratedPrompts,
   darkMode
 }) => {
-  const [batchSettings, setBatchSettings] = useState<SeasonalBatchSettings>({
-    seasons: ['spring-summer'],
-    genres: ['street'],
-    count: 10,
-    includeColors: true,
-    includeLighting: true,
-    includeBackground: false,
-    includeModels: false,
-    genderRatio: 'equal',
-    customMaleRatio: 50
-  });
+  const [batchSettings, setBatchSettings] = useState<SeasonalBatchSettings>(seasonalSettings);
+  
+  // seasonalSettingsが変更されたら同期
+  React.useEffect(() => {
+    setBatchSettings(seasonalSettings);
+  }, [seasonalSettings]);
+  
+  // batchSettingsが変更されたら親コンポーネントに通知
+  React.useEffect(() => {
+    onSeasonalSettingsChange(batchSettings);
+  }, [batchSettings, onSeasonalSettingsChange]);
   
   const [generatedPrompts, setGeneratedPrompts] = useState<Prompt[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -220,124 +224,42 @@ const SeasonalBatchPanel: React.FC<SeasonalBatchPanelProps> = ({
         </div>
       </div>
 
-      {/* 生成数と追加オプション */}
-      <div className="mb-6 space-y-4">
-        <div>
-          <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-700'}`}>
-            生成数: {batchSettings.count}
-          </label>
-          <input
-            type="range"
-            min="5"
-            max="50"
-            step="5"
-            value={batchSettings.count}
-            onChange={(e) => setBatchSettings(prev => ({ ...prev, count: parseInt(e.target.value) }))}
-            className="w-full"
-          />
-        </div>
-        
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-          {[
-            { key: 'includeColors', label: '🎨 色彩' },
-            { key: 'includeLighting', label: '💡 照明' },
-            { key: 'includeBackground', label: '🏞️ 背景' },
-            { key: 'includeModels', label: '👤 モデル' }
-          ].map(option => (
-            <label
-              key={option.key}
-              className={`flex items-center p-2 rounded cursor-pointer ${
-                darkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-100 hover:bg-gray-200'
-              }`}
-            >
-              <input
-                type="checkbox"
-                checked={batchSettings[option.key as keyof SeasonalBatchSettings] as boolean}
-                onChange={(e) => setBatchSettings(prev => ({ 
-                  ...prev, 
-                  [option.key]: e.target.checked 
-                }))}
-                className="mr-2"
-              />
-              <span className={`text-sm ${darkMode ? 'text-gray-200' : 'text-gray-700'}`}>
-                {option.label}
-              </span>
-            </label>
-          ))}
+      {/* 生成数 */}
+      <div className="mb-6">
+        <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+          生成数: {batchSettings.count}
+        </label>
+        <input
+          type="range"
+          min="5"
+          max="50"
+          step="5"
+          value={batchSettings.count}
+          onChange={(e) => setBatchSettings(prev => ({ ...prev, count: parseInt(e.target.value) }))}
+          className="w-full"
+        />
+        <div className="flex justify-between text-xs text-gray-500 mt-1">
+          <span>5</span>
+          <span>25</span>
+          <span>50</span>
         </div>
       </div>
 
-      {/* 男女比設定 */}
-      <div className="mb-6">
-        <label className={`block text-sm font-medium mb-3 ${darkMode ? 'text-gray-200' : 'text-gray-700'}`}>
-          👫 男女比設定
-        </label>
-        <div className="space-y-3">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-            {[
-              { value: 'equal', label: '1:1 (半々)', icon: '⚖️' },
-              { value: 'auto', label: 'おまかせ', icon: '🎲' },
-              { value: 'female-only', label: '女性のみ', icon: '👩' },
-              { value: 'male-only', label: '男性のみ', icon: '👨' },
-              { value: 'custom', label: 'カスタム', icon: '⚙️' }
-            ].map(option => (
-              <button
-                key={option.value}
-                onClick={() => setBatchSettings(prev => ({ 
-                  ...prev, 
-                  genderRatio: option.value as any 
-                }))}
-                className={`p-2 rounded text-xs font-medium transition-all ${
-                  batchSettings.genderRatio === option.value
-                    ? darkMode
-                      ? 'bg-blue-900 border-blue-600 text-white'
-                      : 'bg-blue-50 border-blue-400 text-blue-700'
-                    : darkMode
-                    ? 'bg-gray-700 hover:bg-gray-600 text-gray-300'
-                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                } border`}
-              >
-                <div className="text-center">
-                  <div className="text-lg mb-1">{option.icon}</div>
-                  <div>{option.label}</div>
-                </div>
-              </button>
-            ))}
-          </div>
-          
-          {batchSettings.genderRatio === 'custom' && (
-            <div className="mt-3">
-              <label className={`block text-sm mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                男性の比率: {batchSettings.customMaleRatio}%
-              </label>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                step="10"
-                value={batchSettings.customMaleRatio}
-                onChange={(e) => setBatchSettings(prev => ({ 
-                  ...prev, 
-                  customMaleRatio: parseInt(e.target.value) 
-                }))}
-                className="w-full"
-              />
-              <div className="flex justify-between text-xs text-gray-500 mt-1">
-                <span>0% (女性のみ)</span>
-                <span>50% (半々)</span>
-                <span>100% (男性のみ)</span>
-              </div>
-            </div>
-          )}
-          
-          <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-            {batchSettings.genderRatio === 'equal' && '男女を交互に生成します（完全に半々）'}
-            {batchSettings.genderRatio === 'auto' && '自動調整（女性寄り 70:30）'}
-            {batchSettings.genderRatio === 'female-only' && '全て女性モデルで生成します'}
-            {batchSettings.genderRatio === 'male-only' && '全て男性モデルで生成します'}
-            {batchSettings.genderRatio === 'custom' && `男性${batchSettings.customMaleRatio}%、女性${100-batchSettings.customMaleRatio}%の比率でランダム生成`}
-          </p>
+      {/* 設定情報表示 */}
+      <div className="mb-6 p-3 rounded-lg ${darkMode ? 'bg-gray-700' : 'bg-gray-100'}">
+        <p className={`text-xs ${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-2`}>
+          🔧 現在の設定：
+        </p>
+        <div className="grid grid-cols-2 gap-2 text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}">
+          <div>モデル: {appSettings.includeModels ? '有効' : '無効'}</div>
+          <div>男女比: {appSettings.genderRatio === 'custom' ? `カスタム(${appSettings.customMaleRatio}%)` : appSettings.genderRatio}</div>
+          <div>色彩: {appSettings.includeColors ? '有効' : '無効'}</div>
+          <div>照明: {appSettings.includeLighting ? '有効' : '無効'}</div>
+          <div>背景: {appSettings.includeBackground ? '有効' : '無効'}</div>
         </div>
+        <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} mt-2`}>
+          ※ モデル・男女比・表示要素の設定は「設定」パネルで調整してください
+        </p>
       </div>
 
       {/* 生成ボタン */}
@@ -422,7 +344,7 @@ const SeasonalBatchPanel: React.FC<SeasonalBatchPanelProps> = ({
                 </p>
                 <div className={`text-xs mt-1 ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
                   {prompt.metadata?.season} | {prompt.metadata?.genre}
-                  {prompt.metadata?.gender && ` | ${prompt.metadata.gender === 'male' ? '👨 男性' : '👩 女性'}`}
+                  {appSettings.includeModels && prompt.metadata?.gender && ` | ${prompt.metadata.gender === 'male' ? '👨 男性' : '👩 女性'}`}
                 </div>
               </div>
             ))}

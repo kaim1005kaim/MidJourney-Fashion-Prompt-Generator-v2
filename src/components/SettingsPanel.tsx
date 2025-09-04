@@ -17,6 +17,7 @@ export default function SettingsPanel({ settings, onSettingsChange, onDatabaseUp
   const [isDbManagerOpen, setIsDbManagerOpen] = useState(false);
   const [expandedSections, setExpandedSections] = useState({
     generation: true,
+    models: false,
     colors: false,
     camera: false,
     options: false
@@ -155,6 +156,16 @@ export default function SettingsPanel({ settings, onSettingsChange, onDatabaseUp
                     >
                       ミックス
                     </button>
+                    <button
+                      onClick={() => handleSettingChange('generationMode', 'seasonal')}
+                      className={`px-3 py-2 text-sm rounded-md transition-colors col-span-2 ${
+                        settings.generationMode === 'seasonal'
+                          ? 'bg-gradient-to-r from-green-500 to-teal-500 text-white'
+                          : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                      }`}
+                    >
+                      🌸 季節バッチ
+                    </button>
                   </div>
                   <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                     {settings.generationMode === 'elements' 
@@ -163,7 +174,9 @@ export default function SettingsPanel({ settings, onSettingsChange, onDatabaseUp
                       ? 'ファッションブランドベースで生成'
                       : settings.generationMode === 'creative'
                       ? 'アーティスティックで実験的なプロンプトを生成'
-                      : '3つのモードをバランスよく組み合わせて生成'}
+                      : settings.generationMode === 'mixed'
+                      ? '3つのモードをバランスよく組み合わせて生成'
+                      : '季節とジャンルに基づいて大量生成'}
                   </p>
                 </div>
 
@@ -242,6 +255,147 @@ export default function SettingsPanel({ settings, onSettingsChange, onDatabaseUp
                     </div>
                   </div>
                 )}
+              </div>
+            )}
+          </div>
+
+          {/* モデル・表示設定セクション */}
+          <div className="border rounded-lg border-gray-300 dark:border-gray-600">
+            <button
+              onClick={() => toggleSection('models')}
+              className="w-full px-4 py-3 text-left rounded-t-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <svg className="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  <span className="font-semibold text-gray-700 dark:text-gray-300">モデル・表示設定</span>
+                </div>
+                {expandedSections.models ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+              </div>
+            </button>
+            
+            {expandedSections.models && (
+              <div className="px-4 py-3 border-t border-gray-300 dark:border-gray-600 space-y-4">
+                {/* モデル表示設定 */}
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="include-models"
+                    checked={settings.includeModels}
+                    onChange={(e) => handleSettingChange('includeModels', e.target.checked)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
+                  />
+                  <label htmlFor="include-models" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                    モデルを含める
+                  </label>
+                </div>
+                
+                {/* 男女比設定 */}
+                {settings.includeModels && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      👫 男女比設定
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[
+                        { value: 'equal', label: '1:1 (半々)' },
+                        { value: 'auto', label: 'おまかせ' },
+                        { value: 'female-only', label: '女性のみ' },
+                        { value: 'male-only', label: '男性のみ' },
+                        { value: 'custom', label: 'カスタム' }
+                      ].map(option => (
+                        <button
+                          key={option.value}
+                          onClick={() => handleSettingChange('genderRatio', option.value as any)}
+                          className={`px-3 py-2 text-xs rounded transition-all ${
+                            settings.genderRatio === option.value
+                              ? 'bg-blue-500 text-white'
+                              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                          } ${option.value === 'custom' ? 'col-span-2' : ''}`}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                    
+                    {settings.genderRatio === 'custom' && (
+                      <div className="mt-3">
+                        <label className="block text-sm mb-2 text-gray-600 dark:text-gray-400">
+                          男性の比率: {settings.customMaleRatio}%
+                        </label>
+                        <input
+                          type="range"
+                          min="0"
+                          max="100"
+                          step="10"
+                          value={settings.customMaleRatio}
+                          onChange={(e) => handleSettingChange('customMaleRatio', parseInt(e.target.value))}
+                          className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                        />
+                        <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                          <span>0% (女性のみ)</span>
+                          <span>50% (半々)</span>
+                          <span>100% (男性のみ)</span>
+                        </div>
+                      </div>
+                    )}
+                    
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                      {settings.genderRatio === 'equal' && '男女を交互に生成します'}
+                      {settings.genderRatio === 'auto' && '自動調整（女性寄り 70:30）'}
+                      {settings.genderRatio === 'female-only' && '全て女性モデルで生成'}
+                      {settings.genderRatio === 'male-only' && '全て男性モデルで生成'}
+                      {settings.genderRatio === 'custom' && `男性${settings.customMaleRatio}%、女性${100-settings.customMaleRatio}%の比率`}
+                    </p>
+                  </div>
+                )}
+                
+                {/* その他の表示要素 */}
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    追加要素
+                  </label>
+                  <div className="space-y-2">
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="include-colors"
+                        checked={settings.includeColors}
+                        onChange={(e) => handleSettingChange('includeColors', e.target.checked)}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
+                      />
+                      <label htmlFor="include-colors" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                        🎨 色彩を含める
+                      </label>
+                    </div>
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="include-lighting"
+                        checked={settings.includeLighting}
+                        onChange={(e) => handleSettingChange('includeLighting', e.target.checked)}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
+                      />
+                      <label htmlFor="include-lighting" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                        💡 照明を含める
+                      </label>
+                    </div>
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="include-background"
+                        checked={settings.includeBackground}
+                        onChange={(e) => handleSettingChange('includeBackground', e.target.checked)}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
+                      />
+                      <label htmlFor="include-background" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                        🏞️ 背景を含める
+                      </label>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
           </div>

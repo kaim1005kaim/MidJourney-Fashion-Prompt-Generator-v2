@@ -1,20 +1,8 @@
 // 季節別バッチ生成サービス
 import { materials, silhouettes, styleTrends } from '../data/initialData';
-import { Material, Silhouette, StyleTrend, Prompt } from '../types';
+import { Material, Silhouette, StyleTrend, Prompt, SeasonalBatchSettings } from '../types';
 import { generateElementBasedPrompt } from './elementBasedPromptService';
 import { AppSettings } from '../types';
-
-export interface SeasonalBatchSettings {
-  seasons: string[];  // ['spring-summer', 'autumn-winter']
-  genres: string[];   // 複数のスタイルジャンル
-  count: number;      // 生成数
-  includeColors: boolean;
-  includeLighting: boolean;
-  includeBackground: boolean;
-  includeModels: boolean;
-  genderRatio: 'auto' | 'equal' | 'female-only' | 'male-only' | 'custom'; // 男女比設定
-  customMaleRatio: number; // カスタム時の男性比率（0-100）
-}
 
 // 季節に適した素材を取得
 const getSeasonalMaterials = (season: string): Material[] => {
@@ -83,8 +71,8 @@ function getRandomItem<T>(array: T[]): T | undefined {
 }
 
 // 性別決定ロジック
-function determineGender(index: number, settings: SeasonalBatchSettings): 'male' | 'female' {
-  switch (settings.genderRatio) {
+function determineGender(index: number, appSettings: AppSettings): 'male' | 'female' {
+  switch (appSettings.genderRatio) {
     case 'male-only':
       return 'male';
     case 'female-only':
@@ -92,7 +80,7 @@ function determineGender(index: number, settings: SeasonalBatchSettings): 'male'
     case 'equal':
       return index % 2 === 0 ? 'male' : 'female';
     case 'custom':
-      const maleChance = settings.customMaleRatio / 100;
+      const maleChance = appSettings.customMaleRatio / 100;
       return Math.random() < maleChance ? 'male' : 'female';
     case 'auto':
     default:
@@ -143,34 +131,33 @@ export const generateSeasonalBatchPrompts = (
     
     // 要素が揃っていればプロンプト生成
     if (selectedMaterial || selectedSilhouette || selectedStyle) {
-      // 性別を決定
-      const gender = determineGender(i, settings);
+      // 性別を決定（AppSettingsから）
+      const gender = determineGender(i, appSettings);
       
-      const prompt = generateElementBasedPrompt(
+      const promptData = generateElementBasedPrompt(
         {
           material: selectedMaterial,
           silhouette: selectedSilhouette,
           styleTrend: selectedStyle
         },
-        {
-          ...appSettings,
-          includeColors: settings.includeColors,
-          includeLighting: settings.includeLighting,
-          includeBackground: settings.includeBackground,
-          includeModels: settings.includeModels
-        }
+        appSettings // AppSettingsをそのまま渡す
       );
       
+      // promptフィールドを追加（fullPromptからコピー）
+      const promptText = promptData.fullPrompt;
+      
       // 性別をプロンプトに反映（モデルが含まれる場合のみ）
-      const genderAwarePrompt = settings.includeModels 
-        ? { ...prompt, prompt: addGenderToPrompt(prompt.prompt, gender) }
-        : prompt;
+      const finalPromptText = appSettings.includeModels 
+        ? addGenderToPrompt(promptText, gender)
+        : promptText;
       
       // メタデータを追加
       const enhancedPrompt: Prompt = {
-        ...genderAwarePrompt,
+        ...promptData,
+        prompt: finalPromptText, // promptフィールドを追加
+        fullPrompt: finalPromptText, // fullPromptも更新
+        mode: 'seasonal', // モードを'seasonal'に設定
         metadata: {
-          ...genderAwarePrompt.metadata,
           season: selectedSeason,
           genre: settings.genres.join(', '),
           gender: gender,
@@ -190,45 +177,21 @@ export const seasonalBatchPresets = {
   ss_casual: {
     seasons: ['spring-summer'],
     genres: ['street', 'vintage'],
-    count: 10,
-    includeColors: true,
-    includeLighting: true,
-    includeBackground: false,
-    includeModels: false,
-    genderRatio: 'equal' as const,
-    customMaleRatio: 50
+    count: 10
   },
   aw_luxury: {
     seasons: ['autumn-winter'],
     genres: ['luxury', 'tech'],
-    count: 10,
-    includeColors: true,
-    includeLighting: true,
-    includeBackground: false,
-    includeModels: false,
-    genderRatio: 'equal' as const,
-    customMaleRatio: 50
+    count: 10
   },
   all_romantic: {
     seasons: ['spring-summer', 'autumn-winter'],
     genres: ['romantic', 'lolita'],
-    count: 15,
-    includeColors: true,
-    includeLighting: true,
-    includeBackground: true,
-    includeModels: false,
-    genderRatio: 'auto' as const,
-    customMaleRatio: 30
+    count: 15
   },
   instagram_mix: {
     seasons: ['spring-summer', 'autumn-winter'],
     genres: ['street', 'vintage', 'luxury', 'romantic'],
-    count: 20,
-    includeColors: true,
-    includeLighting: true,
-    includeBackground: true,
-    includeModels: true,
-    genderRatio: 'equal' as const,
-    customMaleRatio: 50
+    count: 20
   }
 };

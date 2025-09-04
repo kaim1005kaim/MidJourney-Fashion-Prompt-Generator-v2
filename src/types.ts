@@ -126,10 +126,20 @@ export interface Prompt {
   selectedMaterial?: Material;
   selectedSilhouette?: Silhouette;
   selectedStyleTrend?: StyleTrend;
-  mode: 'brand' | 'elements' | 'creative' | 'mixed'; // 生成モード（Creativeモード、ミックスモード追加）
+  mode: 'brand' | 'elements' | 'creative' | 'mixed' | 'seasonal'; // 生成モード（seasonalモード追加）
   elements?: any; // 選択された要素全体
   creativeElements?: CreativeElements; // Creativeモード用要素
   settings?: AppSettings; // 生成時の設定
+  // バッチ生成用メタデータ
+  metadata?: {
+    season?: string;
+    genre?: string;
+    gender?: 'male' | 'female';
+    batchGenerated?: boolean;
+    [key: string]: any;
+  };
+  // 季節バッチモード用にpromptフィールドを追加
+  prompt?: string;
 }
 
 // Creativeモード用の要素定義
@@ -204,7 +214,7 @@ export interface AppSettings {
   stylize: string; // 選択されたスタイライズ値
   customSuffix: string;
   // 新しいV2設定
-  generationMode: 'brand' | 'elements' | 'creative' | 'mixed'; // 生成モード（Creativeモード、ミックスモード追加）
+  generationMode: 'brand' | 'elements' | 'creative' | 'mixed' | 'seasonal'; // 生成モード（seasonalモード追加）
   includeSeasonalConsistency: boolean; // 季節的一貫性を考慮
   includeColorHarmony: boolean; // カラーハーモニーを考慮
   creativityLevel: 'conservative' | 'balanced' | 'experimental' | 'maximum'; // 創造性レベル（maximum追加）
@@ -214,6 +224,14 @@ export interface AppSettings {
   useColorPalette: boolean; // カラーパレットを使用するか
   selectedColorPalette?: string; // 選択されたカラーパレットID
   customColors: string[]; // カスタムカラー（最大5色）
+  // 共通モデル設定
+  includeModels: boolean; // モデルを含めるか
+  genderRatio: 'auto' | 'equal' | 'female-only' | 'male-only' | 'custom'; // 男女比設定
+  customMaleRatio: number; // カスタム時の男性比率（0-100）
+  // 追加の表示設定
+  includeColors: boolean; // 色彩を含めるか
+  includeLighting: boolean; // 照明を含めるか
+  includeBackground: boolean; // 背景を含めるか
 }
 
 // Creativeモード用の設定
@@ -236,4 +254,11 @@ export interface MixedModeSettings {
   creativeRatio: number; // Creativeモードの割合 (0-100)
   balanceMode: 'equal' | 'custom' | 'random'; // バランスモード
   shuffleOrder: boolean; // 生成順をシャッフルするか
+}
+
+// 季節バッチ設定
+export interface SeasonalBatchSettings {
+  seasons: string[];  // ['spring-summer', 'autumn-winter']
+  genres: string[];   // 複数のスタイルジャンル
+  count: number;      // 生成数
 }

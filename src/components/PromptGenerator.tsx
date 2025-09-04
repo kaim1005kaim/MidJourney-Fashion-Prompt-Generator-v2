@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Prompt, AppSettings, FilterOptions, Material, Silhouette, StyleTrend, CreativeSettings, MixedModeSettings } from '../types';
+import { Prompt, AppSettings, FilterOptions, Material, Silhouette, StyleTrend, CreativeSettings, MixedModeSettings, SeasonalBatchSettings } from '../types';
 import { fashionContext } from '../data/initialData';
 import { generateElementBasedPrompt, generateMultipleElementBasedPrompts, checkElementCompatibility, getPopularCombinations } from '../services/elementBasedPromptService';
 import { generateBrandBasedPrompt, generateMultipleBrandBasedPrompts, getAvailableBrands } from '../services/brandBasedPromptService';
 import { generateCreativePrompt, generateMultipleCreativePrompts } from '../services/creativePromptService';
 import { generateMixedModePrompts, getDefaultMixedSettings } from '../services/mixedModeService';
+import { generateSeasonalBatchPrompts } from '../services/seasonalBatchService';
 import PromptCard from './PromptCard';
 import SettingsPanel from './SettingsPanel';
 import ElementSelector from './ElementSelector';
@@ -33,7 +34,15 @@ const PromptGenerator: React.FC = () => {
     cameraAngle: 'random',
     useColorPalette: false,
     selectedColorPalette: undefined,
-    customColors: []
+    customColors: [],
+    // 共通モデル設定
+    includeModels: false,
+    genderRatio: 'auto',
+    customMaleRatio: 50,
+    // 追加の表示設定
+    includeColors: true,
+    includeLighting: true,
+    includeBackground: false
   });
   
   const [filters, setFilters] = useState<FilterOptions>({
@@ -74,6 +83,13 @@ const PromptGenerator: React.FC = () => {
   
   // ミックスモード用の状態
   const [mixedSettings, setMixedSettings] = useState<MixedModeSettings>(getDefaultMixedSettings());
+  
+  // 季節バッチモード用の状態
+  const [seasonalSettings, setSeasonalSettings] = useState<SeasonalBatchSettings>({
+    seasons: ['spring-summer'],
+    genres: ['street'],
+    count: 10
+  });
   
   // データ整合性チェック
   useEffect(() => {
@@ -158,6 +174,12 @@ const PromptGenerator: React.FC = () => {
           creativeSettings,
           mixedSettings,
           settings.promptCount
+        );
+      } else if (settings.generationMode === 'seasonal') {
+        // 季節バッチモード生成
+        newPrompts = generateSeasonalBatchPrompts(
+          seasonalSettings,
+          settings
         );
       } else {
         // 要素ベース生成
@@ -625,6 +647,8 @@ const PromptGenerator: React.FC = () => {
               // 季節別バッチモード
               <SeasonalBatchPanel
                 appSettings={settings}
+                seasonalSettings={seasonalSettings}
+                onSeasonalSettingsChange={setSeasonalSettings}
                 onGeneratedPrompts={(newPrompts) => {
                   setPrompts(prev => [...prev, ...newPrompts]);
                   setLastGeneratedPrompts(newPrompts);
