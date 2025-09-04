@@ -13,6 +13,7 @@ import CompatibilityIndicator from './CompatibilityIndicator';
 import CreativeModePanel from './CreativeMode/CreativeModePanel';
 import MixedModePanel from './MixedMode/MixedModePanel';
 import SeasonalBatchPanel from './SeasonalBatch/SeasonalBatchPanel';
+import GenerateButton from './GenerateButton';
 
 const PromptGenerator: React.FC = () => {
   const [prompts, setPrompts] = useState<Prompt[]>([]);
@@ -376,7 +377,7 @@ const PromptGenerator: React.FC = () => {
         ? 'bg-gray-900 text-gray-100' 
         : 'bg-gray-50 text-gray-900'
     }`}>
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 pb-32">
         {/* ヘッダー */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold mb-4">
@@ -518,20 +519,13 @@ const PromptGenerator: React.FC = () => {
                   />
                 )}
                 
-                {/* アクションボタン */}
-                <div className="flex gap-2 mt-4">
-                  <button
-                    onClick={generatePrompts}
-                    disabled={isGenerating}
-                    className="flex-1 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 disabled:opacity-50 transition-colors"
-                  >
-                    {isGenerating ? '生成中...' : 'プロンプト生成'}
-                  </button>
+                {/* クリアボタンのみ */}
+                <div className="flex justify-end mt-4">
                   <button
                     onClick={clearElements}
-                    className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors"
+                    className="px-4 py-2 text-sm border border-gray-300 rounded-md hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors"
                   >
-                    クリア
+                    選択をクリア
                   </button>
                 </div>
               </div>
@@ -617,20 +611,13 @@ const PromptGenerator: React.FC = () => {
                   </div>
                 </div>
                 
-                {/* アクションボタン */}
-                <div className="flex gap-2 mt-6">
-                  <button
-                    onClick={generatePrompts}
-                    disabled={isGenerating}
-                    className="flex-1 bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-purple-600 disabled:opacity-50 transition-colors"
-                  >
-                    {isGenerating ? '生成中...' : 'ブランドベース生成'}
-                  </button>
+                {/* リセットボタンのみ */}
+                <div className="flex justify-end mt-6">
                   <button
                     onClick={() => setFilters({ brands: [], eras: [], styles: [], materials: [], silhouettes: [] })}
-                    className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors"
+                    className="px-4 py-2 text-sm border border-gray-300 rounded-md hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors"
                   >
-                    リセット
+                    選択をリセット
                   </button>
                 </div>
               </div>
@@ -639,9 +626,9 @@ const PromptGenerator: React.FC = () => {
               <CreativeModePanel
                 creativeSettings={creativeSettings}
                 onCreativeSettingsChange={setCreativeSettings}
-                onGenerate={generatePrompts}
+                onGenerate={() => {}}
                 onClearSettings={() => setCreativeSettings({ randomizeAll: true })}
-                isGenerating={isGenerating}
+                isGenerating={false}
                 darkMode={settings.darkMode}
               />
             ) : settings.generationMode === 'seasonal' ? (
@@ -661,9 +648,9 @@ const PromptGenerator: React.FC = () => {
               <MixedModePanel
                 mixedSettings={mixedSettings}
                 onMixedSettingsChange={setMixedSettings}
-                onGenerate={generatePrompts}
+                onGenerate={() => {}}
                 onClearSettings={() => setMixedSettings(getDefaultMixedSettings())}
-                isGenerating={isGenerating}
+                isGenerating={false}
                 darkMode={settings.darkMode}
                 totalCount={settings.promptCount}
               />
@@ -817,6 +804,15 @@ const PromptGenerator: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      {/* 統一された生成ボタン */}
+      <GenerateButton
+        onClick={generatePrompts}
+        isGenerating={isGenerating}
+        disabled={false}
+        promptCount={settings.promptCount}
+        mode={settings.generationMode}
+      />
     </div>
   );
 };
