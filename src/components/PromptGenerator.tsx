@@ -176,11 +176,8 @@ const PromptGenerator: React.FC = () => {
           settings.promptCount
         );
       } else if (settings.generationMode === 'seasonal') {
-        // 季節バッチモード生成
-        newPrompts = generateSeasonalBatchPrompts(
-          seasonalSettings,
-          settings
-        );
+        // 季節バッチモードはSeasonalBatchPanel内で処理するのでここでは何もしない
+        return;
       } else {
         // 要素ベース生成
         const updatedFilters = { ...filters };
@@ -649,10 +646,7 @@ const PromptGenerator: React.FC = () => {
                 appSettings={settings}
                 seasonalSettings={seasonalSettings}
                 onSeasonalSettingsChange={setSeasonalSettings}
-                onGeneratedPrompts={(newPrompts) => {
-                  setPrompts(prev => [...prev, ...newPrompts]);
-                  setLastGeneratedPrompts(newPrompts);
-                }}
+                onGeneratedPrompts={() => {}} // メインリストに追加しない
                 darkMode={settings.darkMode}
               />
             ) : settings.generationMode === 'mixed' ? (

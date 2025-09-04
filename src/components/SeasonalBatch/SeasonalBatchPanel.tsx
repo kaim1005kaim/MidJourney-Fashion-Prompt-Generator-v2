@@ -91,7 +91,7 @@ const SeasonalBatchPanel: React.FC<SeasonalBatchPanelProps> = ({
     setTimeout(() => {
       const prompts = generateSeasonalBatchPrompts(batchSettings, appSettings);
       setGeneratedPrompts(prompts);
-      onGeneratedPrompts(prompts);
+      // onGeneratedPrompts(prompts); // メインリストには追加しない
       setIsGenerating(false);
     }, 500);
   };
