@@ -89,9 +89,11 @@ const SeasonalBatchPanel: React.FC<SeasonalBatchPanelProps> = ({
     
     // 生成を非同期でシミュレート
     setTimeout(() => {
-      const prompts = generateSeasonalBatchPrompts(batchSettings, appSettings);
+      // 設定パネルのpromptCountを使用
+      const updatedSettings = { ...batchSettings, count: appSettings.promptCount };
+      const prompts = generateSeasonalBatchPrompts(updatedSettings, appSettings);
       setGeneratedPrompts(prompts);
-      // onGeneratedPrompts(prompts); // メインリストには追加しない
+      onGeneratedPrompts(prompts); // メインリストに追加
       setIsGenerating(false);
     }, 500);
   };
@@ -224,26 +226,6 @@ const SeasonalBatchPanel: React.FC<SeasonalBatchPanelProps> = ({
         </div>
       </div>
 
-      {/* 生成数 */}
-      <div className="mb-6">
-        <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-700'}`}>
-          生成数: {batchSettings.count}
-        </label>
-        <input
-          type="range"
-          min="5"
-          max="50"
-          step="5"
-          value={batchSettings.count}
-          onChange={(e) => setBatchSettings(prev => ({ ...prev, count: parseInt(e.target.value) }))}
-          className="w-full"
-        />
-        <div className="flex justify-between text-xs text-gray-500 mt-1">
-          <span>5</span>
-          <span>25</span>
-          <span>50</span>
-        </div>
-      </div>
 
       {/* 設定情報表示 */}
       <div className="mb-6 p-3 rounded-lg ${darkMode ? 'bg-gray-700' : 'bg-gray-100'}">
@@ -281,14 +263,14 @@ const SeasonalBatchPanel: React.FC<SeasonalBatchPanelProps> = ({
           ) : (
             <>
               <Zap className="mr-2" size={20} />
-              {batchSettings.count}個のプロンプトを生成
+              {appSettings.promptCount}個のプロンプトを生成
             </>
           )}
         </button>
       </div>
 
-      {/* 生成結果 */}
-      {generatedPrompts.length > 0 && (
+      {/* 生成結果（一時的なプレビュー用） */}
+      {false && generatedPrompts.length > 0 && (
         <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
           <div className="flex justify-between items-center mb-4">
             <h4 className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>
