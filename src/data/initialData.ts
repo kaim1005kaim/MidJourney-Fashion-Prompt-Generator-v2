@@ -2251,8 +2251,100 @@ export const styleTrends = [
     popularity: 35,
     formality: ["regenerative_casual", "earth_positive"],
     mood: ["healing", "restorative", "earth-conscious", "positive-impact", "regenerative", "caring"]
+  },
+
+  // === 日本のストリートファッション・カルチャー ===
+  {
+    id: "k-pop-fashion",
+    name: "K-POPファッション",
+    description: "韓国のアイドル文化から派生した、トレンディでカラフル、大胆なファッションスタイル。ストリートとハイファッションの融合。",
+    keywords: ["k-pop", "idol-fashion", "korean-street", "bold", "colorful", "trendy", "edgy", "youthful", "statement-pieces"],
+    era: "2010s-2020s",
+    seasons: ["all"],
+    occasions: ["streetwear", "concerts", "casual", "urban", "youth_culture", "social_media"],
+    colors: ["neon-colors", "pastel-pink", "electric-blue", "bright-purple", "lime-green", "hot-pink", "black", "white"],
+    materials: ["denim", "leather", "pleather", "nylon", "jersey", "metallic-fabric", "vinyl", "tech-fabric"],
+    compatibility: ["oversized-hoodies", "crop-tops", "baggy-pants", "mini-skirts", "platform-sneakers", "bucket-hats", "chunky-jewelry"],
+    popularity: 92,
+    formality: ["casual", "streetwear", "performance"],
+    mood: ["bold", "confident", "youthful", "expressive", "energetic", "trendy", "playful"]
+  },
+  {
+    id: "harajuku-street",
+    name: "原宿ストリート",
+    description: "東京・原宿から発信される、個性的で多様なストリートファッションの総称。カワイイ文化とアバンギャルドの融合。",
+    keywords: ["harajuku", "tokyo-street", "kawaii", "eclectic", "colorful", "layered", "unique", "creative", "experimental"],
+    era: "1990s-2020s",
+    seasons: ["all"],
+    occasions: ["streetwear", "creative_expression", "youth_culture", "urban", "social_gathering", "fashion_events"],
+    colors: ["rainbow-colors", "pastel-palette", "bright-pink", "baby-blue", "lavender", "mint", "neon-yellow", "black"],
+    materials: ["cotton", "tulle", "lace", "denim", "vinyl", "fur", "plaid", "character-prints"],
+    compatibility: ["platform-shoes", "colorful-wigs", "layered-accessories", "oversized-bows", "knee-socks", "statement-bags"],
+    popularity: 75,
+    formality: ["casual", "streetwear", "artistic"],
+    mood: ["playful", "creative", "unique", "expressive", "kawaii", "bold", "free-spirited"]
+  },
+  {
+    id: "grunge-revival",
+    name: "グランジ",
+    description: "1990年代シアトルのグランジロックシーンから生まれた、反体制的で無造作なファッションスタイル。",
+    keywords: ["grunge", "90s", "rock", "rebellious", "distressed", "layered", "casual", "anti-fashion", "alternative"],
+    era: "1990s (revival in 2020s)",
+    seasons: ["autumn", "winter", "all"],
+    occasions: ["casual", "concerts", "streetwear", "urban", "alternative_scene"],
+    colors: ["black", "grey", "dark-brown", "olive-drab", "burgundy", "faded-denim", "charcoal", "rust"],
+    materials: ["flannel", "distressed-denim", "leather", "cotton-tee", "worn-knit", "ripped-fabric", "canvas"],
+    compatibility: ["flannel-shirts", "ripped-jeans", "combat-boots", "oversized-sweaters", "band-tees", "beanies", "layered-chains"],
+    popularity: 70,
+    formality: ["casual", "alternative", "anti-establishment"],
+    mood: ["rebellious", "edgy", "laid-back", "grungy", "non-conformist", "cool", "authentic"]
+  },
+  {
+    id: "heisei-retro",
+    name: "平成レトロ",
+    description: "1989-2019年の平成時代のファッションやカルチャーを懐かしむレトロスタイル。90年代後半から2000年代初頭の日本のポップカルチャーが中心。",
+    keywords: ["heisei", "japanese-retro", "90s-japan", "2000s-japan", "nostalgic", "pop-culture", "vintage-japan", "playful"],
+    era: "1990s-2000s (revival in 2020s)",
+    seasons: ["all"],
+    occasions: ["casual", "nostalgic_events", "streetwear", "youth_culture", "retro_parties"],
+    colors: ["pastel-pink", "baby-blue", "mint-green", "lavender", "cream", "soft-yellow", "sky-blue"],
+    materials: ["cotton", "polyester", "denim", "jersey", "pleated-fabric", "character-prints", "logo-wear"],
+    compatibility: ["mini-skirts", "loose-socks", "platform-sandals", "crop-tops", "cardigan", "hair-accessories", "chunky-sneakers"],
+    popularity: 68,
+    formality: ["casual", "nostalgic", "youth_fashion"],
+    mood: ["nostalgic", "playful", "cute", "youthful", "fun", "innocent", "bubbly"]
+  },
+  {
+    id: "gyaru-gal",
+    name: "ギャル",
+    description: "日本独自の女性ファッション文化。派手なメイク、明るい髪色、大胆な露出が特徴。複数のサブカテゴリーが存在する。",
+    keywords: ["gyaru", "gal", "japanese-girl-fashion", "glamorous", "bold", "tanned", "flashy", "sexy", "rebellious"],
+    era: "1990s-2010s",
+    seasons: ["summer", "all"],
+    occasions: ["casual", "clubwear", "parties", "social_gathering", "nightlife"],
+    colors: ["hot-pink", "leopard-print", "gold", "silver", "bright-white", "neon-colors", "animal-prints"],
+    materials: ["denim", "leather", "fur", "rhinestones", "metallic-fabric", "lace", "mesh"],
+    compatibility: ["mini-skirts", "platform-heels", "crop-tops", "short-shorts", "big-hair", "false-lashes", "statement-jewelry"],
+    popularity: 55,
+    formality: ["casual", "party_wear", "nightlife"],
+    mood: ["bold", "confident", "sexy", "rebellious", "glamorous", "expressive", "playful"]
+  },
+  {
+    id: "fancy-kawaii",
+    name: "ファンシー",
+    description: "可愛らしさを極めた、メルヘンチックでカラフルなスタイル。パステルカラー、リボン、フリル、キャラクターモチーフが特徴。",
+    keywords: ["fancy", "kawaii", "cute", "pastel", "ribbons", "frills", "whimsical", "dreamy", "sweet", "fairy-tale"],
+    era: "1980s-2020s",
+    seasons: ["all"],
+    occasions: ["casual", "parties", "themed_events", "photo_sessions", "kawaii_culture", "creative_expression"],
+    colors: ["pastel-pink", "baby-blue", "lavender", "mint-green", "soft-yellow", "white", "cream", "rainbow-pastels"],
+    materials: ["tulle", "satin", "lace", "ribbon", "chiffon", "cotton", "velvet", "organza"],
+    compatibility: ["frilly-dresses", "bows", "ribbon-accessories", "mary-janes", "knee-socks", "character-bags", "headbands"],
+    popularity: 65,
+    formality: ["casual", "kawaii_fashion", "fancy_dress"],
+    mood: ["cute", "dreamy", "sweet", "whimsical", "playful", "innocent", "magical", "fairy-tale"]
   }
-  // Phase 2完了: 合計50種類のスタイルトレンド
+  // 合計56種類のスタイルトレンド（日本・アジアのストリートファッション追加）
 ];
 
 // その他のファッション要素 (既存のまま、または必要に応じて拡充)

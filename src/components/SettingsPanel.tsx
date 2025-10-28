@@ -292,65 +292,125 @@ export default function SettingsPanel({ settings, onSettingsChange, onDatabaseUp
                   </label>
                 </div>
                 
-                {/* 男女比設定 */}
-                {settings.includeModels && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      👫 男女比設定
+                {/* 人種設定 */}
+                <div>
+                  <div className="flex items-center mb-2">
+                    <input
+                      type="checkbox"
+                      id="include-ethnicity"
+                      checked={settings.includeEthnicity}
+                      onChange={(e) => handleSettingChange('includeEthnicity', e.target.checked)}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
+                    />
+                    <label htmlFor="include-ethnicity" className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                      🌏 人種を指定
                     </label>
-                    <div className="grid grid-cols-2 gap-2">
+                  </div>
+                  {settings.includeEthnicity && (
+                    <div className="ml-6 grid grid-cols-2 gap-2">
                       {[
-                        { value: 'equal', label: '1:1 (半々)' },
-                        { value: 'auto', label: 'おまかせ' },
-                        { value: 'female-only', label: '女性のみ' },
-                        { value: 'male-only', label: '男性のみ' },
-                        { value: 'custom', label: 'カスタム' }
+                        { value: 'アジア人（ランダム）', label: 'アジア人（ランダム）' },
+                        { value: '日本人', label: '日本人' },
+                        { value: '韓国人', label: '韓国人' },
+                        { value: '中国人', label: '中国人' },
+                        { value: 'アジア人', label: 'アジア人' },
+                        { value: '白人', label: '白人' },
+                        { value: '黒人', label: '黒人' },
+                        { value: 'ランダム', label: 'ランダム' }
                       ].map(option => (
                         <button
                           key={option.value}
-                          onClick={() => handleSettingChange('genderRatio', option.value as any)}
-                          className={`px-3 py-2 text-xs rounded transition-all ${
-                            settings.genderRatio === option.value
+                          onClick={() => handleSettingChange('ethnicity', option.value)}
+                          className={`px-2 py-1.5 text-xs rounded transition-all ${
+                            settings.ethnicity === option.value
                               ? 'bg-blue-500 text-white'
                               : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
-                          } ${option.value === 'custom' ? 'col-span-2' : ''}`}
+                          }`}
                         >
                           {option.label}
                         </button>
                       ))}
                     </div>
-                    
-                    {settings.genderRatio === 'custom' && (
-                      <div className="mt-3">
-                        <label className="block text-sm mb-2 text-gray-600 dark:text-gray-400">
-                          男性の比率: {settings.customMaleRatio}%
-                        </label>
-                        <input
-                          type="range"
-                          min="0"
-                          max="100"
-                          step="10"
-                          value={settings.customMaleRatio}
-                          onChange={(e) => handleSettingChange('customMaleRatio', parseInt(e.target.value))}
-                          className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
-                        />
-                        <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
-                          <span>0% (女性のみ)</span>
-                          <span>50% (半々)</span>
-                          <span>100% (男性のみ)</span>
-                        </div>
-                      </div>
-                    )}
-                    
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                      {settings.genderRatio === 'equal' && '男女を交互に生成します'}
-                      {settings.genderRatio === 'auto' && '自動調整（女性寄り 70:30）'}
-                      {settings.genderRatio === 'female-only' && '全て女性モデルで生成'}
-                      {settings.genderRatio === 'male-only' && '全て男性モデルで生成'}
-                      {settings.genderRatio === 'custom' && `男性${settings.customMaleRatio}%、女性${100-settings.customMaleRatio}%の比率`}
-                    </p>
+                  )}
+                </div>
+
+                {/* 性別設定 */}
+                <div>
+                  <div className="flex items-center mb-2">
+                    <input
+                      type="checkbox"
+                      id="include-gender"
+                      checked={settings.includeGender}
+                      onChange={(e) => handleSettingChange('includeGender', e.target.checked)}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
+                    />
+                    <label htmlFor="include-gender" className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                      👤 性別を指定
+                    </label>
                   </div>
-                )}
+                  {settings.includeGender && (
+                    <div className="ml-6 grid grid-cols-3 gap-2">
+                      {[
+                        { value: '女', label: '女性' },
+                        { value: '男', label: '男性' },
+                        { value: 'ランダム', label: 'ランダム' }
+                      ].map(option => (
+                        <button
+                          key={option.value}
+                          onClick={() => handleSettingChange('gender', option.value)}
+                          className={`px-3 py-2 text-xs rounded transition-all ${
+                            settings.gender === option.value
+                              ? 'bg-blue-500 text-white'
+                              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                          }`}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* 年齢範囲設定 */}
+                <div>
+                  <div className="flex items-center mb-2">
+                    <input
+                      type="checkbox"
+                      id="include-age-range"
+                      checked={settings.includeAgeRange}
+                      onChange={(e) => handleSettingChange('includeAgeRange', e.target.checked)}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
+                    />
+                    <label htmlFor="include-age-range" className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                      🎂 年齢範囲を指定
+                    </label>
+                  </div>
+                  {settings.includeAgeRange && (
+                    <div className="ml-6 grid grid-cols-3 gap-2">
+                      {[
+                        { value: '10-20代', label: '10-20代' },
+                        { value: '10代', label: '10代' },
+                        { value: '20代', label: '20代' },
+                        { value: '30代', label: '30代' },
+                        { value: '40代', label: '40代' }
+                      ].map(option => (
+                        <button
+                          key={option.value}
+                          onClick={() => handleSettingChange('ageRange', option.value)}
+                          className={`px-2 py-1.5 text-xs rounded transition-all ${
+                            settings.ageRange === option.value
+                              ? 'bg-blue-500 text-white'
+                              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                          }`}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* 男女比設定（廃止予定のため削除） */}
                 
                 {/* その他の表示要素 */}
                 <div className="space-y-2">

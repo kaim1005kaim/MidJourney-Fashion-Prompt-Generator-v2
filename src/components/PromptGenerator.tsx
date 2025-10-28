@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Prompt, AppSettings, FilterOptions, Material, Silhouette, StyleTrend, CreativeSettings, MixedModeSettings, SeasonalBatchSettings } from '../types';
+import { Prompt, AppSettings, FilterOptions, Material, Silhouette, StyleTrend, CreativeSettings, MixedModeSettings, SeasonalBatchSettings, TrendSelectSettings } from '../types';
 import { fashionContext } from '../data/initialData';
 import { generateElementBasedPrompt, generateMultipleElementBasedPrompts, checkElementCompatibility, getPopularCombinations } from '../services/elementBasedPromptService';
 import { generateBrandBasedPrompt, generateMultipleBrandBasedPrompts, getAvailableBrands } from '../services/brandBasedPromptService';
 import { generateCreativePrompt, generateMultipleCreativePrompts } from '../services/creativePromptService';
 import { generateMixedModePrompts, getDefaultMixedSettings } from '../services/mixedModeService';
 import { generateSeasonalBatchPrompts } from '../services/seasonalBatchService';
+import { generateTrendSelectPrompts } from '../services/trendSelectService';
 import PromptCard from './PromptCard';
 import SettingsPanel from './SettingsPanel';
 import ElementSelector from './ElementSelector';
@@ -13,6 +14,7 @@ import CompatibilityIndicator from './CompatibilityIndicator';
 import CreativeModePanel from './CreativeMode/CreativeModePanel';
 import MixedModePanel from './MixedMode/MixedModePanel';
 import SeasonalBatchPanel from './SeasonalBatch/SeasonalBatchPanel';
+import TrendSelectPanel from './TrendSelect/TrendSelectPanel';
 import GenerateButton from './GenerateButton';
 
 const PromptGenerator: React.FC = () => {
@@ -40,6 +42,13 @@ const PromptGenerator: React.FC = () => {
     includeModels: false,
     genderRatio: 'auto',
     customMaleRatio: 50,
+    // モデルの人種・年齢設定（デフォルト：アジア人女性10-20代）
+    includeEthnicity: true,
+    ethnicity: 'アジア人（ランダム）',
+    includeGender: true,
+    gender: '女',
+    includeAgeRange: true,
+    ageRange: '10-20代',
     // 追加の表示設定
     includeColors: true,
     includeLighting: true,
@@ -90,6 +99,13 @@ const PromptGenerator: React.FC = () => {
     seasons: ['spring-summer'],
     genres: ['street'],
     count: 10
+  });
+
+  // トレンドセレクトモード用の状態
+  const [trendSelectSettings, setTrendSelectSettings] = useState<TrendSelectSettings>({
+    selectedTrends: [],
+    randomizeMaterials: true,
+    randomizeSilhouettes: true
   });
   
   // データ整合性チェック
@@ -182,6 +198,16 @@ const PromptGenerator: React.FC = () => {
         newPrompts = generateSeasonalBatchPrompts(
           updatedSeasonalSettings,
           settings
+        );
+      } else if (settings.generationMode === 'trend-select') {
+        // トレンドセレクトモード生成
+        if (!trendSelectSettings.selectedTrends || trendSelectSettings.selectedTrends.length === 0) {
+          throw new Error('少なくとも1つのトレンドを選択してください');
+        }
+        newPrompts = generateTrendSelectPrompts(
+          settings,
+          trendSelectSettings,
+          settings.promptCount
         );
       } else {
         // 要素ベース生成
@@ -428,6 +454,18 @@ const PromptGenerator: React.FC = () => {
                 🌟 Creative
               </button>
               <button
+                onClick={() => setSettings(prev => ({ ...prev, generationMode: 'trend-select' }))}
+                className={`px-3 py-3 rounded-md font-medium transition-colors ${
+                  settings.generationMode === 'trend-select'
+                    ? 'bg-gradient-to-r from-pink-500 to-orange-500 text-white shadow-md'
+                    : settings.darkMode
+                    ? 'text-gray-300 hover:text-white hover:bg-gray-700'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+                }`}
+              >
+                🎯 トレンドセレクト
+              </button>
+              <button
                 onClick={() => setSettings(prev => ({ ...prev, generationMode: 'seasonal' }))}
                 className={`px-3 py-3 rounded-md font-medium transition-colors ${
                   settings.generationMode === 'seasonal'
@@ -456,12 +494,14 @@ const PromptGenerator: React.FC = () => {
           
           {/* モード説明 */}
           <p className="text-sm opacity-70">
-            {settings.generationMode === 'elements' 
-              ? '素材・シルエット・トレンドを自由に組み合わせてユニークなプロンプトを作成' 
+            {settings.generationMode === 'elements'
+              ? '素材・シルエット・トレンドを自由に組み合わせてユニークなプロンプトを作成'
               : settings.generationMode === 'brand'
               ? 'Chanel、Dior、Comme des Garçonsなど43の有名ブランドスタイルでプロンプトを生成'
               : settings.generationMode === 'creative'
               ? 'アーティスティックで実験的なファッションプロンプトを生成。ミクストメディアコラージュとアート技法を活用'
+              : settings.generationMode === 'trend-select'
+              ? '複数のスタイルトレンドを選択して、それらからランダムに生成。K-POP、原宿、グランジなどお好みのトレンドを組み合わせ'
               : settings.generationMode === 'seasonal'
               ? '季節とジャンルを複数選択して、大量のプロンプトを一括生成。SS/AWに適した素材を自動選択'
               : '3つのモード（要素ベース・ブランドベース・Creative）をバランスよく組み合わせて多様なプロンプトを生成'}
@@ -629,6 +669,13 @@ const PromptGenerator: React.FC = () => {
                 onGenerate={() => {}}
                 onClearSettings={() => setCreativeSettings({ randomizeAll: true })}
                 isGenerating={false}
+                darkMode={settings.darkMode}
+              />
+            ) : settings.generationMode === 'trend-select' ? (
+              // トレンドセレクトモード用UI
+              <TrendSelectPanel
+                trendSelectSettings={trendSelectSettings}
+                onTrendSelectSettingsChange={setTrendSelectSettings}
                 darkMode={settings.darkMode}
               />
             ) : settings.generationMode === 'seasonal' ? (

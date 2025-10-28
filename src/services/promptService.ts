@@ -116,11 +116,11 @@ function filterBrands(brands: Brand[], filters?: FilterOptions): Brand[] {
 }
 
 /**
- * 人種のテキストを取得する
+ * 人種のテキストを取得する（アジア人の詳細指定対応）
  */
 function getEthnicityText(includeEthnicity: boolean, ethnicity: string): string {
   if (!includeEthnicity) return '';
-  
+
   switch (ethnicity) {
     case '白人':
       return 'Caucasian';
@@ -128,6 +128,15 @@ function getEthnicityText(includeEthnicity: boolean, ethnicity: string): string 
       return 'African American';
     case 'アジア人':
       return 'Asian';
+    case '日本人':
+      return 'Japanese';
+    case '韓国人':
+      return 'Korean';
+    case '中国人':
+      return 'Chinese';
+    case 'アジア人（ランダム）':
+      const asianEthnicities = ['Japanese', 'Korean', 'Chinese'];
+      return getRandomElement(asianEthnicities);
     case 'ランダム':
       const ethnicities = ['Caucasian', 'African American', 'Asian', 'Hispanic', 'Middle Eastern'];
       return getRandomElement(ethnicities);
@@ -141,7 +150,7 @@ function getEthnicityText(includeEthnicity: boolean, ethnicity: string): string 
  */
 function getGenderText(includeGender: boolean, gender: string): string {
   if (!includeGender) return '';
-  
+
   switch (gender) {
     case '男':
       return 'male';
@@ -149,6 +158,28 @@ function getGenderText(includeGender: boolean, gender: string): string {
       return 'female';
     case 'ランダム':
       return Math.random() > 0.5 ? 'male' : 'female';
+    default:
+      return '';
+  }
+}
+
+/**
+ * 年齢範囲のテキストを取得する
+ */
+function getAgeRangeText(includeAgeRange: boolean, ageRange: string): string {
+  if (!includeAgeRange) return '';
+
+  switch (ageRange) {
+    case '10代':
+      return 'teenage';
+    case '20代':
+      return 'in her 20s';
+    case '10-20代':
+      return 'young woman aged 15-25';
+    case '30代':
+      return 'in her 30s';
+    case '40代':
+      return 'in her 40s';
     default:
       return '';
   }
@@ -298,18 +329,19 @@ export function generateSinglePrompt(options: GenerateOptions): Prompt {
       background = "with a clean professional background";
     }
     
-    // プロンプトの基本部分を構築 - 人種・性別を反映
-    // 人種と性別の設定を取得
+    // プロンプトの基本部分を構築 - 人種・性別・年齢を反映
+    // 人種、性別、年齢範囲の設定を取得
     const ethnicityText = getEthnicityText(settings.includeEthnicity, settings.ethnicity);
     const genderText = getGenderText(settings.includeGender, settings.gender);
-    
+    const ageRangeText = getAgeRangeText(settings.includeAgeRange, settings.ageRange);
+
     // 人物描写を作成
     let personDescription = '';
-    if (ethnicityText || genderText) {
-      const parts = [ethnicityText, genderText].filter(Boolean);
+    if (ethnicityText || genderText || ageRangeText) {
+      const parts = [ethnicityText, ageRangeText, genderText].filter(Boolean);
       personDescription = parts.length > 0 ? `${parts.join(' ')} ` : '';
     }
-    
+
     // 修正: 文頭に年代、次に"A full-body shot of"、人物情報を配置
     let promptBase = `${era}, A full-body shot of ${personDescription}${brand.name} style, featuring ${element} ${silhouette} made of ${material}`;
     

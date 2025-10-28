@@ -214,7 +214,7 @@ export interface AppSettings {
   stylize: string; // 選択されたスタイライズ値
   customSuffix: string;
   // 新しいV2設定
-  generationMode: 'brand' | 'elements' | 'creative' | 'mixed' | 'seasonal'; // 生成モード（seasonalモード追加）
+  generationMode: 'brand' | 'elements' | 'creative' | 'mixed' | 'seasonal' | 'trend-select'; // 生成モード（trend-selectモード追加）
   includeSeasonalConsistency: boolean; // 季節的一貫性を考慮
   includeColorHarmony: boolean; // カラーハーモニーを考慮
   creativityLevel: 'conservative' | 'balanced' | 'experimental' | 'maximum'; // 創造性レベル（maximum追加）
@@ -228,6 +228,13 @@ export interface AppSettings {
   includeModels: boolean; // モデルを含めるか
   genderRatio: 'auto' | 'equal' | 'female-only' | 'male-only' | 'custom'; // 男女比設定
   customMaleRatio: number; // カスタム時の男性比率（0-100）
+  // モデルの人種・年齢設定
+  includeEthnicity: boolean; // 人種を指定するか
+  ethnicity: string; // 人種（'白人', '黒人', 'アジア人', '日本人', '韓国人', '中国人', 'アジア人（ランダム）', 'ランダム'）
+  includeGender: boolean; // 性別を指定するか
+  gender: string; // 性別（'男', '女', 'ランダム'）
+  includeAgeRange: boolean; // 年齢範囲を指定するか
+  ageRange: string; // 年齢範囲（'10代', '20代', '10-20代', '30代', '40代'）
   // 追加の表示設定
   includeColors: boolean; // 色彩を含めるか
   includeLighting: boolean; // 照明を含めるか
@@ -261,4 +268,11 @@ export interface SeasonalBatchSettings {
   seasons: string[];  // ['spring-summer', 'autumn-winter']
   genres: string[];   // 複数のスタイルジャンル
   count: number;      // 生成数
+}
+
+// トレンドセレクトモード用の設定
+export interface TrendSelectSettings {
+  selectedTrends: string[]; // 選択されたスタイルトレンドのIDリスト
+  randomizeMaterials: boolean; // 素材をランダムにするか
+  randomizeSilhouettes: boolean; // シルエットをランダムにするか
 }
