@@ -1797,23 +1797,8 @@ export const styleTrends = [
     formality: ["alternative", "subcultural"],
     mood: ["futuristic", "rebellious", "tech-oriented", "edgy", "innovative"]
   },
-  
-  // テック系スタイル
-  {
-    id: "techwear",
-    name: "テックウェア",
-    description: "機能性と未来的デザインを融合させた都市型アウトドアファッション。防水性、通気性、多機能ポケットなどが特徴。",
-    keywords: ["techwear", "urban-tech", "functional", "tactical", "waterproof", "modular", "cyberpunk-inspired"],
-    era: "2010s-2020s",
-    seasons: ["all"],
-    occasions: ["urban", "outdoor", "tech-events", "functional-fashion"],
-    colors: ["black", "charcoal", "olive", "tactical-green", "grey", "neon-accents"],
-    materials: ["gore-tex", "cordura", "ripstop-nylon", "waterproof-zippers", "reflective-materials"],
-    compatibility: ["cargo-pants", "tactical-vest", "performance-sneakers", "modular-bags"],
-    popularity: 75,
-    formality: ["streetwear", "casual_tech"],
-    mood: ["functional", "futuristic", "urban", "tactical", "innovative"]
-  },
+
+  // テック系スタイル (techwearは重複のため削除 - 1423行目に既存)
   {
     id: "tech-minimalism",
     name: "テックミニマリズム",
@@ -2034,51 +2019,9 @@ export const styleTrends = [
   },
   
   // サブカルチャー・ライフスタイル
-  {
-    id: "cottagecore",
-    name: "コテージコア",
-    description: "田舎暮らしと手作りライフスタイルに憧れる、牧歌的でノスタルジックなスタイル。",
-    keywords: ["cottagecore", "rural-life", "handmade", "pastoral", "nostalgic", "countryside", "traditional-crafts"],
-    era: "2020s_revival",
-    seasons: ["spring", "summer", "early_autumn"],
-    occasions: ["countryside", "handcraft_activities", "garden_parties", "pastoral_events"],
-    colors: ["wildflower-colors", "meadow-green", "honey-yellow", "soft-pink", "cream", "earth-tones"],
-    materials: ["linen", "cotton", "wool", "natural-fibers", "handwoven-textures", "floral-prints"],
-    compatibility: ["straw-accessories", "handmade-jewelry", "vintage-aprons", "comfortable-boots"],
-    popularity: 72,
-    formality: ["rural_casual", "handcraft"],
-    mood: ["peaceful", "nostalgic", "romantic", "simple", "natural", "handmade"]
-  },
-  {
-    id: "dark-academia",
-    name: "ダークアカデミア",
-    description: "ゴシック建築の大学や古典文学にインスパイアされた、ダークで知的なアカデミックスタイル。",
-    keywords: ["dark-academia", "gothic-university", "literary", "mysterious", "intellectual-dark", "classical"],
-    era: "timeless_gothic",
-    seasons: ["autumn", "winter"],
-    occasions: ["academic_gothic", "literary_events", "mysterious_gatherings", "intellectual_circles"],
-    colors: ["black", "deep-burgundy", "forest-green", "charcoal", "antique-gold", "dark-brown"],
-    materials: ["wool-blend", "leather", "corduroy", "tweed", "vintage-textures", "dark-fabrics"],
-    compatibility: ["vintage-glasses", "leather-bags", "dark-scarves", "oxford-shoes", "antique-jewelry"],
-    popularity: 68,
-    formality: ["academic_dark", "mysterious"],
-    mood: ["mysterious", "intellectual", "gothic", "sophisticated", "contemplative", "dark"]
-  },
-  {
-    id: "indie-sleaze",
-    name: "インディースリーズ",
-    description: "2000年代後半のインディーロック文化に根ざした、故意に荒廃したシックなスタイル。",
-    keywords: ["indie-sleaze", "2000s-revival", "disheveled-chic", "alternative", "music-inspired", "grungy-cool"],
-    era: "2000s_revival",
-    seasons: ["all"],
-    occasions: ["music_events", "alternative_scenes", "indie_gatherings", "artistic_communities"],
-    colors: ["black", "grey", "faded-colors", "vintage-wash", "muted-tones", "distressed-colors"],
-    materials: ["distressed-denim", "vintage-band-tees", "leather-jackets", "worn-textures", "faded-fabrics"],
-    compatibility: ["vintage-accessories", "worn-boots", "band-merchandise", "alternative-jewelry"],
-    popularity: 55,
-    formality: ["alternative", "indie"],
-    mood: ["rebellious", "artistic", "cool", "alternative", "independent", "grungy"]
-  },
+  // 田舎・牧歌系スタイル (cottagecore は重複のため削除 - 1393行目に既存)
+  // ゴシック・アカデミック系スタイル (dark-academia は重複のため削除 - 1408行目に既存)
+  // インディー系スタイル (indie-sleaze は重複のため削除 - 1438行目に既存)
   {
     id: "fairy-grunge",
     name: "フェアリーグランジ",
