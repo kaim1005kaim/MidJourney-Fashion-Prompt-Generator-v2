@@ -126,7 +126,7 @@ export interface Prompt {
   selectedMaterial?: Material;
   selectedSilhouette?: Silhouette;
   selectedStyleTrend?: StyleTrend;
-  mode: 'brand' | 'elements' | 'creative' | 'mixed' | 'seasonal'; // 生成モード（seasonalモード追加）
+  mode: 'brand' | 'elements' | 'creative' | 'mixed' | 'seasonal' | 'trend-select'; // 生成モード
   elements?: any; // 選択された要素全体
   creativeElements?: CreativeElements; // Creativeモード用要素
   settings?: AppSettings; // 生成時の設定

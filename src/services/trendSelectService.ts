@@ -184,19 +184,24 @@ function generateSingleTrendSelectPrompt(
   // プロンプトオブジェクトの作成
   const now = new Date();
   const prompt: Prompt = {
-    id: now.getTime() + Math.floor(Math.random() * 10000),
+    id: `trend-select-${now.getTime()}-${Math.floor(Math.random() * 10000)}`,
     fullPrompt: promptText,
     text: promptText,
-    createdDate: now.toISOString(),
+    timestamp: now,
     rating: 0,
     isFavorite: false,
+    notes: '',
     material: material.name,
     silhouette: silhouette.name,
     lighting: lighting,
     background: background,
     styleElements: [trend.name],
     atmosphereMood: trend.mood && trend.mood.length > 0 ? getRandomElement(trend.mood) : undefined,
-    cameraShotType: cameraAngle
+    cameraShotType: cameraAngle,
+    mode: 'trend-select',
+    selectedMaterial: material,
+    selectedSilhouette: silhouette,
+    selectedStyleTrend: trend
   };
 
   return prompt;
