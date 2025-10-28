@@ -148,9 +148,14 @@ function generateSingleTrendSelectPrompt(
     personDescription = parts.length > 0 ? `${parts.join(' ')} ` : '';
   }
 
+  // キーワードから英語名を取得（日本語固有の文化名詞は保持）
+  const trendKeyword = trend.keywords && trend.keywords.length > 0 ? trend.keywords[0] : trend.name;
+  const silhouetteKeyword = silhouette.keywords && silhouette.keywords.length > 0 ? silhouette.keywords[0] : silhouette.name;
+  const materialKeyword = material.keywords && material.keywords.length > 0 ? material.keywords[0] : material.name;
+
   // プロンプトの構築
-  let promptText = `A ${cameraAngle} of ${personDescription}wearing ${trend.name} style fashion, `;
-  promptText += `${silhouette.name} silhouette made of ${material.name}, `;
+  let promptText = `A ${cameraAngle} of ${personDescription}wearing ${trendKeyword} style fashion, `;
+  promptText += `${silhouetteKeyword} silhouette made of ${materialKeyword}, `;
   promptText += `${colors} color palette, `;
   promptText += `${background}, `;
   promptText += `${lighting}`;
@@ -191,11 +196,11 @@ function generateSingleTrendSelectPrompt(
     rating: 0,
     isFavorite: false,
     notes: '',
-    material: material.name,
-    silhouette: silhouette.name,
+    material: materialKeyword,
+    silhouette: silhouetteKeyword,
     lighting: lighting,
     background: background,
-    styleElements: [trend.name],
+    styleElements: [trendKeyword],
     atmosphereMood: trend.mood && trend.mood.length > 0 ? getRandomElement(trend.mood) : undefined,
     cameraShotType: cameraAngle,
     mode: 'trend-select',
