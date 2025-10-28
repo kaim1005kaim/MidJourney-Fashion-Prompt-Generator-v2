@@ -209,6 +209,7 @@ const PromptGenerator: React.FC = () => {
           trendSelectSettings,
           settings.promptCount
         );
+        console.log('Generated trend-select prompts:', newPrompts);
       } else {
         // 要素ベース生成
         const updatedFilters = { ...filters };

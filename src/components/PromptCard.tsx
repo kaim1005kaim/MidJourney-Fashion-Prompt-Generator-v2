@@ -417,7 +417,11 @@ export default function PromptCard({
       <div className={`mt-3 text-xs ${
         darkMode ? 'text-gray-400' : 'text-gray-500'
       }`}>
-        {prompt.timestamp.toLocaleString()}
+        {prompt.timestamp ? (
+          typeof prompt.timestamp === 'string'
+            ? new Date(prompt.timestamp).toLocaleString()
+            : prompt.timestamp.toLocaleString()
+        ) : 'No timestamp'}
       </div>
     </div>
   );
